@@ -26,17 +26,17 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.curriki</groupId>
-    <artifactId>curriki-parent</artifactId>
+    <artifactId>curriki-nea-parent</artifactId>
       <version>1.14-SNAPSHOT</version>
   </parent>
-  <artifactId>curriki-database</artifactId>
+  <artifactId>curriki-nea-database</artifactId>
   <name>Curriki - Database - Parent POM</name>
   <packaging>pom</packaging>
   <description>Curriki - Database - Parent POM</description>
   <dependencies>
     <dependency>
       <groupId>org.curriki</groupId>
-      <artifactId>curriki-wiki</artifactId>
+      <artifactId>curriki-nea-wiki</artifactId>
       <version>${pom.version}</version>
       <type>xar</type>
     </dependency>
@@ -69,7 +69,7 @@
           <version>1.7</version>
           <configuration>
             <groupId>org.curriki</groupId>
-            <artifactId>curriki-wiki</artifactId>
+            <artifactId>curriki-nea-wiki</artifactId>
             <outputDirectory>${project.build.directory}/xar</outputDirectory>
           </configuration>
           <executions>

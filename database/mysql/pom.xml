@@ -26,10 +26,10 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.curriki</groupId>
-    <artifactId>curriki-database</artifactId>
+    <artifactId>curriki-nea-database</artifactId>
     <version>1.14-SNAPSHOT</version>
   </parent>
-  <artifactId>curriki-database-mysql</artifactId>
+  <artifactId>curriki-nea-database-mysql</artifactId>
   <name>Curriki - Database - MySQL</name>
   <packaging>pom</packaging>
   <description>Curriki - Database - MySQL</description>
