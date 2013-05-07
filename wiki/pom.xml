@@ -27,13 +27,13 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.curriki</groupId>
-    <artifactId>curriki-parent</artifactId>
+    <artifactId>curriki-nea-parent</artifactId>
       <version>1.14-SNAPSHOT</version>
   </parent>
-  <artifactId>curriki-wiki</artifactId>
-  <name>XWiki Products - Curriki - Wiki</name>
+  <artifactId>curriki-nea-wiki</artifactId>
+  <name>XWiki Products - CurrikiNEA - Wiki</name>
   <packaging>xar</packaging>
-  <description>XWiki Products - Curriki - Wiki</description>
+  <description>XWiki Products - CurrikiNEA - Wiki</description>
   <dependencies>
     <dependency>
       <groupId>org.xwiki.platform</groupId>

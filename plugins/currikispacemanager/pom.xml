@@ -28,10 +28,10 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.curriki</groupId>
-    <artifactId>curriki-plugins</artifactId>
+    <artifactId>curriki-nea-plugins</artifactId>
       <version>1.14-SNAPSHOT</version>
   </parent>
-  <artifactId>curriki-plugin-spacemanager</artifactId>
+  <artifactId>curriki-nea-plugin-spacemanager</artifactId>
   <name>XWiki Products - Curriki - Plugins - Space Manager</name>
   <packaging>jar</packaging>
   <description>XWiki Products - Curriki - Plugins - Space Manager</description>

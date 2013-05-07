@@ -31,11 +31,11 @@
     <version>30</version>
   </parent>
   <groupId>org.curriki</groupId>
-  <artifactId>curriki-plugins</artifactId>
+  <artifactId>curriki-nea-plugins</artifactId>
   <version>1.14-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <name>XWiki Products - Curriki - Plugins - Parent POM</name>
-  <description>XWiki Products - Curriki - Plugins - Parent POM</description>
+  <name>XWiki Products - CurrikiNEA - Plugins - Parent POM</name>
+  <description>XWiki Products - CurrikiNEA - Plugins - Parent POM</description>
   <properties>
     <platform.version>3.5</platform.version>
     <platform.plugins.invitationmanager.version>1.0.1</platform.plugins.invitationmanager.version>
@@ -52,7 +52,6 @@
     <module>asset</module>
     <module>licence</module>
     <module>framework</module>
-    <module>googlecheckout</module>
     <module>mimetype</module>
     <module>metadata</module>
     <module>spacemanager</module>
@@ -60,7 +59,6 @@
     <module>currikiactivitystream</module>
     <module>curriki</module>
     <module>servlet</module>
-    <module>lucene</module>
   </modules>
   <build>
     <pluginManagement>

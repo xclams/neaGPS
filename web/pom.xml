@@ -26,11 +26,11 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.curriki</groupId>
-    <artifactId>curriki-parent</artifactId>
+    <artifactId>curriki-nea-parent</artifactId>
       <version>1.14-SNAPSHOT</version>
   </parent>
-  <artifactId>curriki-web</artifactId>
-  <name>XWiki Products - Curriki - Web</name>
+  <artifactId>curriki-neaweb</artifactId>
+  <name>XWiki Products - CurrikiNEA - Web</name>
   <packaging>war</packaging>
   <description>The standard Curriki WAR</description>
   <dependencies>

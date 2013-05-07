@@ -30,7 +30,7 @@
      <artifactId>xwiki-plugins</artifactId>
      <version>30</version> -->
       <groupId>org.curriki</groupId>
-      <artifactId>curriki-plugins</artifactId>
+      <artifactId>curriki-nea-plugins</artifactId>
       <version>1.14-SNAPSHOT</version>
   </parent>
   <artifactId>xwiki-plugin-spacemanager</artifactId>

@@ -26,13 +26,13 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.curriki</groupId>
-    <artifactId>curriki-plugins</artifactId>
+    <artifactId>curriki-nea-plugins</artifactId>
       <version>1.14-SNAPSHOT</version>
   </parent>
-  <artifactId>curriki-plugin-asset</artifactId>
-  <name>XWiki Products - Curriki - Plugins - Asset Plugin</name>
+  <artifactId>curriki-nea-plugin-asset</artifactId>
+  <name>XWiki Products - CurrikiNEA - Plugins - Asset Plugin</name>
   <packaging>jar</packaging>
-  <description>XWiki Products - Curriki - Plugins - Asset Plugin</description>
+  <description>XWiki Products - CurrikiNEA - Plugins - Asset Plugin</description>
   <dependencies>
           <dependency>
               <groupId>org.xwiki.platform</groupId>
@@ -41,17 +41,17 @@
           </dependency>
       <dependency>
       <groupId>org.curriki</groupId>
-      <artifactId>curriki-plugin-licence</artifactId>
+      <artifactId>curriki-nea-plugin-licence</artifactId>
       <version>${pom.version}</version>
     </dependency>
     <dependency>
       <groupId>org.curriki</groupId>
-      <artifactId>curriki-plugin-framework</artifactId>
+      <artifactId>curriki-nea-plugin-framework</artifactId>
       <version>${pom.version}</version>
     </dependency>
     <dependency>
       <groupId>org.curriki</groupId>
-      <artifactId>curriki-plugin-mimetype</artifactId>
+      <artifactId>curriki-nea-plugin-mimetype</artifactId>
       <version>${pom.version}</version>
     </dependency>
 
