@@ -35,9 +35,8 @@
             <img id="video_img_${video_id}_image" alt="$escapetool.xml($msg.get('video.player.loading'))"
                     src="http://$xwiki.curriki.getPublicCurrikiConfig('mediahost','-missing-media-host-')/media/deliver/${video_id}-lq.jpg" width="474">
         </div>
-        <script type="text/javascript">videoInsert("$video_id", "$escapetool.javascript($asset.displayTitle)");</script>
+        <script type="text/javascript">videoInsert("$video_id", "$escapetool.javascript($asset.displayTitle)", "$asset.fullName");</script>
     </div>
-    <p><a href="#" onclick="videoDisplayEmbedCode('$doc.fullName'); return false;" alt="$msg.get('video.embed.link.tooltip')">$msg.get("video.embed.link.text")</a></p>
 </div>
 
 <div class="asset-display-download" id="download_original_${video_id}_div" style="display:none">

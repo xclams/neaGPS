@@ -610,26 +610,27 @@ if(false&&!g){var f=Ext.fly(document.body).getAlignToXY(d)[0];e.setLeft(f);c.set
 this.wrap.addClass("x-item-disabled")},onEnable:function(){Curriki.ui.Rating.superclass.onEnable.call(this);
 this.wrap.removeClass("x-item-disabled")},onHide:function(){this.wrap.addClass("x-hidden")
 },onShow:function(){this.wrap.removeClass("x-hidden")}});Ext.reg("rating",Curriki.ui.Rating)
-})();function videoInsert(b,c){var d=document.createElement("script");d.type="text/javascript";
-d.src=window.videoPrefixToDownload+b+"-sizes.js";var a=document.getElementsByTagName("script")[0];
-a.parentNode.insertBefore(d,a);if(typeof(window.videoTitles)!="object"){window.videoTitles=new Object()
-}window.videoTitles[b]=c;window.setTimeout("videoWatchSizesArrived('"+b+"');",50)
+})();function videoInsert(c,d,a){var e=document.createElement("script");e.type="text/javascript";
+e.src=window.videoPrefixToDownload+c+"-sizes.js";var b=document.getElementsByTagName("script")[0];
+b.parentNode.insertBefore(e,b);if(typeof(window.videoTitles)!="object"){window.videoTitles=new Object()
+}if(typeof(window.videoFullNames)!="object"){window.videoFullNames=new Object()}window.videoTitles[c]=d;
+window.videoFullNames[c]=a;window.setTimeout("videoWatchSizesArrived('"+c+"');",50)
 }function videoWatchSizesArrived(c){var b=window["video_"+c+"_sizes"];window.numWatches=window.numWatchers||new Object();
 if(typeof(window.numWatches[c])!="number"){window.numWatches[c]=0}if(b){videoNotifyVideoSizeArrived(c,b)
 }else{if(window.numWatches[c]<500){var a=50;window.numWatches[c]=window.numWatches[c]+1;
 if(window.numWatches[c]>200){a=a*5}window.setTimeout("videoWatchSizesArrived('"+c+"');",a)
-}}}function videoNotifyVideoSizeArrived(f,b){var a=Ext.get("video_img_"+f+"_image");
+}}}function videoNotifyVideoSizeArrived(h,b){var l=Ext.get("video_img_"+h+"_image");
 if(typeof(b)=="string"){if(console){console.log("size is still a string, display it: "+b)
-}if(a){a=a.parent();a.setSize(320,80);a.update("<div width='320' height='240'><p>"+_(b)+"</p></div>")
-}}else{if(typeof(b)=="object"){if(a){a.setSize(b[0].width,b[0].height);a.dom.setAttribute("src",window.videoPrefixToDownload+b[0].image)
-}for(var c=0;c<b.length;c++){var d=b[c];d.file=window.videoPrefixToDownload+d.file
-}jwplayer("video_div_"+f).setup({playlist:[{image:window.videoPrefixToDownload+b[0].image,sources:b,width:b[0].width,height:b[0].height}]})
-}}var e=window["video_"+f+"_originalName"];if(e){Ext.get("download_original_"+f+"_div").setVisible(true);
-var g=e.substring(e.lastIndexOf(".")+1);Ext.get("download_original_"+f+"_div").addClass("filetype-"+g);
-Ext.get("video_download_link_"+f).dom.setAttribute("href",window.videoPrefixToDownload.replace("/deliver/","/original/")+e+"?forceDownload=1");
-Ext.get("video_download_link_"+f+"_text").dom.setAttribute("href",window.videoPrefixToDownload.replace("/deliver/","/original/")+e+"?forceDownload=1")
+}if(l){l=l.parent();l.setSize(320,80);var d=_(b);var a="mailto:"+_("video.errors.reportErrorsToEmail")+"?subject="+encodeURI(_(d))+"&body="+encodeURI(_(b+".details",[h,a]));
+if(b.startsWith("video.errors.")||b.startsWith("video.processingMessages")){}d=d+"</p><p style='font-size:small'>"+_(b+".details",[h,a]);
+l.update("<div width='320' height='240'><p>"+d+"</p></div>")}}else{if(typeof(b)=="object"){if(l){l.setSize(b[0].width,b[0].height);
+l.dom.setAttribute("src",window.videoPrefixToDownload+b[0].image)}for(var e=0;e<b.length;
+e++){var o=b[e];o.file=window.videoPrefixToDownload+o.file}var k=window.videoFullNames[h];
+var c="http://"+location.host+"/xwiki/bin/view/"+k.replace(".","/")+"?viewer=embed";
+var g="<iframe width='558' height='490' \n src='"+c+"'></iframe>";jwplayer("video_div_"+h).setup({playlist:[{image:window.videoPrefixToDownload+b[0].image,sources:b,width:b[0].width,height:b[0].height}],ga:{},sharing:{code:encodeURI(g),link:c,title:_("video.sharing.title")}})
+}}var f=window["video_"+h+"_originalName"];if(f){Ext.get("download_original_"+h+"_div").setVisible(true);
+var n=f.substring(f.lastIndexOf(".")+1);Ext.get("download_original_"+h+"_div").addClass("filetype-"+n);
+Ext.get("video_download_link_"+h).dom.setAttribute("href",window.videoPrefixToDownload.replace("/deliver/","/original/")+f+"?forceDownload=1");
+Ext.get("video_download_link_"+h+"_text").dom.setAttribute("href",window.videoPrefixToDownload.replace("/deliver/","/original/")+f+"?forceDownload=1")
 }}function videoDownloadOriginal(b){var a=window["video_"+b+"_originalName"];location.href=window.videoPrefixToDownload.replace("/deliver/","/original/")+a+"?forceDownload=1";
-return false}function videoDisplayEmbedCode(a){var b="  <iframe width='558' height='490' \n src='http://"+location.host+"/xwiki/bin/view/"+a.replace("\\.","/")+"?viewer=embed'></iframe>";
-b="<div style='margin:1em'><h1>"+_("video.embed.title")+"</h1><p>"+_("video.embed.intro")+"</p><code>\n"+b.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")+"</code><p align='right'><span><input type='button' class='button-grey' value='"+_("video.embed.okButton")+"' style='padding: 3pt 6pt; font-size: 11px;' onclick='window.embedDialog.close()'/></span></span></p></div>";
-window.embedDialog=new Ext.Window({title:_("video.embed.title"),border:false,id:"embedDialog",scrollbars:false,modal:true,width:720,minWidth:500,minHeight:400,maxHeight:575,autoScroll:false,constrain:true,collapsible:false,closable:true,resizable:true,shadow:false,defaults:{border:false},html:b});
-window.embedDialog.show();return false};
+return false};
