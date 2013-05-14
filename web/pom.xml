@@ -495,7 +495,7 @@ practice to put them here since they are real dependencies -->
     <dependency>
       <groupId>org.xwiki.platform</groupId>
       <artifactId>xwiki-platform-activitystream</artifactId>
-      <version>3.5-SNAPSHOT</version>
+      <version>3.5.1</version>
       <scope>runtime</scope>
     </dependency>
     <!-- Event & Message Stream Modules -->
@@ -539,13 +539,6 @@ practice to put them here since they are real dependencies -->
       <version>${platform.version}</version>
       <scope>runtime</scope>
     </dependency>
-    <!-- Search -->
-    <!-- <dependency>
-      <groupId>org.xwiki.platform</groupId>
-      <artifactId>xwiki-platform-search-lucene</artifactId>
-      <version>${platform.version}</version>
-      <scope>runtime</scope>
-    </dependency> -->
     <!-- JODA Time -->
     <dependency>
       <groupId>org.xwiki.platform</groupId>
@@ -599,33 +592,23 @@ practice to put them here since they are real dependencies -->
   	  <version>${platform.plugins.invitationmanager.version}</version>
     </dependency> 
     <dependency>
-      <groupId>org.curriki</groupId>
-      <artifactId>curriki-plugin-lucene</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-      <dependency>
-          <groupId>org.curriki</groupId>
-          <artifactId>curriki-plugin-googlecheckout</artifactId>
-          <version>${project.version}</version>
-      </dependency>
-    <dependency>
 	    <groupId>org.curriki</groupId>
-	    <artifactId>curriki-plugin-spacemanager</artifactId>
+	    <artifactId>curriki-nea-plugin-spacemanager</artifactId>
 	    <version>${project.version}</version>
     </dependency>
     <dependency>
   	  <groupId>org.curriki</groupId>
-	    <artifactId>curriki-plugin-activitystream</artifactId>
+	    <artifactId>curriki-nea-plugin-activitystream</artifactId>
 	    <version>${project.version}</version>
     </dependency>    
     <dependency>
 	    <groupId>org.curriki</groupId>
-	    <artifactId>curriki-plugin-curriki</artifactId>
+	    <artifactId>curriki-nea-plugin-curriki</artifactId>
 	    <version>${project.version}</version>
     </dependency>
     <dependency>
 	    <groupId>org.curriki</groupId>
-	    <artifactId>curriki-plugin-servlet</artifactId>
+	    <artifactId>curriki-nea-plugin-servlet</artifactId>
 	    <version>${project.version}</version>
             <exclusions><exclusion><groupId>javax.servlet</groupId><artifactId>servlet-api</artifactId></exclusion></exclusions>
     </dependency>
@@ -713,7 +696,6 @@ practice to put them here since they are real dependencies -->
                     com.xpn.xwiki.plugin.usertools.XWikiUserManagementToolsImpl,\
                     com.xpn.xwiki.plugin.zipexplorer.ZipExplorerPlugin,\
                     com.xpn.xwiki.plugin.autotag.AutoTagPlugin,\
-                    com.xpn.xwiki.plugin.lucene.LucenePlugin,\
                     com.xpn.xwiki.plugin.diff.DiffPlugin,\
                     com.xpn.xwiki.plugin.rightsmanager.RightsManagerPlugin,\
                     com.xpn.xwiki.plugin.jodatime.JodaTimePlugin,\
