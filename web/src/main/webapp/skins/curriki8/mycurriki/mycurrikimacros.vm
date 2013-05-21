@@ -724,6 +724,11 @@ $response.sendRedirect($xwiki.getURL("Registration.CleanLogout", "logout", "xred
     #if($member_type == '---' || $member_type == '0') ##{
     #set($member_type = "")
     #end ##}
+    #set($neaoccupation = "")
+    #set($neaoccupation = $!userobj.getProperty("neaoccupation").getValue())
+    #if($neaoccupation == '---' || $neaoccupation == '0') ##{
+    #set($neaoccupation = "")
+    #end ##}
     
 <fieldset>
 <h3>$msg.get('view_profile.account_info.header')</h3>
@@ -769,6 +774,19 @@ $response.sendRedirect($xwiki.getURL("Registration.CleanLogout", "logout", "xred
 		**$msg.get("view_profile.account_info.member_since")**
 		$xwiki.formatDate($userdoc.creationDate,$msg.get("mycurriki.dateFormat"))
 	</li>
+    #*
+	#if("$!member_type" != "") ##{
+    <li>
+    **$msg.get("view_profile.interests.member_type.title")**
+	#mycurriki_dashifempty($userdoc.display("member_type", $userobj))##
+    #set($donationObj=$userdoc.getObject("Registration.DonationTrack"))##
+	#if($donationObj && $hasGlobalAdmin)
+     <br/> This user has donated &#36;${donationObj.get("totalDonated")}.
+         #if("corporation"==$userobj.getProperty("member_type").getValue())<br/>Last corporate membership fee of
+         &#36;$donationObj.get("lastCorpMembershipDonated") made on $donationObj.get("lastCorpMembershipDate").#end
+    #end ##
+    </li>
+    *#
 	<li>
 		#set($neamember=$userdoc.getValue("neamember"))
 		**$msg.get("view_profile.account_info.neamember")**
@@ -779,23 +797,15 @@ $response.sendRedirect($xwiki.getURL("Registration.CleanLogout", "logout", "xred
 			**$msg.get("view_profile.account_info.neaaffiliate")**
 			#mycurriki_dashifempty($userdoc.display("neaaffiliate", $userobj))
 		</li>
-		    #if("$!member_type" != "") ##{
+		    #if("$!neaoccupation" != "") ##{
     		<li>
-    			**$msg.get("view_profile.interests.member_type.title")**
-		    	#mycurriki_dashifempty($userdoc.display("member_type", $userobj))##
-        		#*
-        		#set($donationObj=$userdoc.getObject("Registration.DonationTrack"))##
-	        	#if($donationObj && $hasGlobalAdmin)
-    	        	<br/> This user has donated &#36;${donationObj.get("totalDonated")}.
-        	    	#if("corporation"==$userobj.getProperty("member_type").getValue())<br/>Last corporate membership fee of
-            	    	&#36;$donationObj.get("lastCorpMembershipDonated") made on $donationObj.get("lastCorpMembershipDate").#end
-        		#end ##
-        		*#
+    			**$msg.get("view_profile.account_info.neaoccupation")**
+		    	#mycurriki_dashifempty($userdoc.display("neaoccupation", $userobj))##
     		</li>
-        	#if("$!member_type" == "support") ##{
+        	#if("$!neaoccupation" == "support") ##{
 			<li>
-				**$msg.get("view_profile.account_info.neaprofessiontitle")**
-				#mycurriki_dashifempty($userdoc.display("neaprofessiontitle", $userobj))
+				**$msg.get("view_profile.account_info.neaprofession")**
+				#mycurriki_dashifempty($userdoc.display("neaprofession", $userobj))
 			</li>
 	    	#end ##}
 	    #end ##}

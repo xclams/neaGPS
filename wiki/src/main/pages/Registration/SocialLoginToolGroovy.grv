@@ -29,6 +29,7 @@ public class SocialLoginToolGroovy {
     String city="", state="", country="";
     List warningFields=new ArrayList(), okFields=new ArrayList();
     String username, password, firstName, lastName, email, memberType, postalCode="", longitude="", latitude="", agree;
+    String neamember, neaaffiliate, neaoccupation, neaprofession;
     String validKey = null;
     String nowTarget = null;
     boolean hasReadProviderProfile = false;
@@ -299,14 +300,24 @@ public class SocialLoginToolGroovy {
         memberType = request.getParameter("member_type");
         if(memberType==null) memberType="-";
 
+        // BEGIN NEA FIELDS
+        neamember = request.getParameter("neamember");
+        if(neamember==null) neamember="0";
+        neaaffiliate = request.getParameter("neaaffiliate");
+        if(neaaffiliate==null) neaaffiliate="-";
+        neaoccupation = request.getParameter("neaoccupation");
+        if(neaoccupation==null) neaoccupation="-";
+        neaprofession = request.getParameter("neaprofession");
+        if(neaprofession==null) neaprofession="-";
+        // END NEA FIELDS
+        
         if(request.getParameter("country")) country= request.getParameter("country");
         if(request.getParameter("city")) city  = request.getParameter("city");
         if(request.getParameter("state")) state = request.getParameter("state");
         if(request.getParameter("postalCode"))    postalCode = request.getParameter("postalCode");
         if(request.getParameter("longitude"))     longitude = request.getParameter("longitude");
         if(request.getParameter("latitude"))      longitude = request.getParameter("latitude");
-
-
+    
         boolean passed = validation.isValidEmail(email, true);
         passed = validation.isValidUsername(username, true) & passed;
         passed = validation.isValidPassword(password, true) & passed;
@@ -388,6 +399,12 @@ public class SocialLoginToolGroovy {
         userObj.set("email",      email);
         userObj.set("email",      email);
         userObj.set("member_type",memberType);
+        // BEGIN NEA FIELDS
+        userObj.set("neamember",neamember);
+        userObj.set("neaaffiliate",neaaffiliate);
+        userObj.set("neaoccupation",neaoccupation);
+        userObj.set("neaprofession",neaprofession);
+        // END NEA FIELDS
         userObj.set("i_agree",   "1");
         if(city) userObj.set("city",       city);
         if(country) userObj.set('country',    country);

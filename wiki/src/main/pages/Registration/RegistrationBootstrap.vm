@@ -41,11 +41,11 @@ body { min-width: 0pt; }
     height: 2em;
     padding: 3px 20px 6px 10px;
 }
-.registrationTable p.textfield {
+.registrationTable p.textfield, .registrationTable p.radiofield {
     margin: 2pt;
     padding: 2pt;
 }
-.registrationTable p.textfield label b, .registrationTable p label b {
+.registrationTable p.textfield label b, .registrationTable p.radiofield label b, .registrationTable p label b {
     float: left;
     padding: 5px;
     text-align: right;
@@ -54,11 +54,16 @@ body { min-width: 0pt; }
 }
 .registrationTable p.textfield input {
     float: left;
-    width: 20em;
+    width: 22em;
 }
+.registrationTable p.radiofield input {
+   margin-left: 10px;
+   margin-top: 2px;
+}
+
 select#memberType_input {
     float: left;
-    width: 20em;
+    width: 22em;
 }
 .warningField {
     background: url("/xwiki/skins/curriki8/warning.png") no-repeat scroll right center transparent;
@@ -182,7 +187,7 @@ fieldset h3 {
                  onmouseover="#if($tool.providerId)Curriki.ui.login.displayInstruction('join.member_social_prefilled_tooltip',['${tool.providerId}']);#else Curriki.ui.login.displayInstruction(''); #end">
                   <label for="${f}_input"><b>$msg.get("join.member.country.title")</b></label>
                   #set($propVals=$xwiki.getClass("XWiki.XWikiUsers").get("country").getPropertyClass().getList($context.context))
-                  <select name="${f}" id="${f}_input" onchange="Curriki.ui.login.countryChanged()" style="width:20em; max-width: 20em">##
+                  <select name="${f}" id="${f}_input" onchange="Curriki.ui.login.countryChanged()" style="width:22em; max-width: 22em">##
                       #foreach($val in $propVals)#if($val!="0" && "$val"!="---")##
                           <option value="$val" #if($val==$!tool.country)selected="selected"#end>$msg.get("XWiki.XWikiUsers_country_${val}")</option>##
                       #end#end
@@ -201,24 +206,58 @@ fieldset h3 {
               <p class="textfield  #if($isInUS)#else hidden#end #computeTrClasses($f) " id="extraLocationSectionNonUS">
                   <label for="${f}_input"><b>$msg.get("join.member.province.title")</b></label>
                   <input id="${f}_input" name="${f}" value="$!tool.state">
+                  <input type="hidden" name="city" id="city_input" value="$!tool.city">
+                  <input type="hidden" name="latitude" id="latitude_input" value="$!tool.latitude">
+                  <input type="hidden" name="longitude" id="longitude_input" value="$!tool.longitude">
               </p>
-              <input type="hidden" name="city" id="city_input" value="$!tool.city">
-              <input type="hidden" name="latitude" id="latitude_input" value="$!tool.latitude">
-              <input type="hidden" name="longitude" id="longitude_input" value="$!tool.longitude">
-          ##
-          ##
-          #set($f="memberType")
-          <p class="textfield #computeTrClasses($f)" onmouseover="Curriki.ui.login.displayInstruction('join.member_type_instructions');">
-              <label for="${f}_input"><b>$msg.get("join.member_type")</b></label>
-              #set($propVals=$xwiki.getClass("XWiki.XWikiUsers").get("member_type").getPropertyClass().getList($context.context))
-              <select name="member_type" id="${f}_input" onchange="Curriki.ui.login.memberTypeChanged()">##
+              
+          ## NEA Changes begin
+          #set($f="neamember")
+          <p class="radiofield #computeTrClasses($f)" onmouseover="Curriki.ui.login.displayInstruction('join.neamember_instructions');">   
+              <label for="${f}_input"><b>$msg.get("join.neamember")</b></label>
+              <input id="${f}_input_on" type="radio" name="neamember" value="1" onchange="Curriki.ui.login.neaMemberChanged()" /> $msg.get("nea_1")
+              <input id="${f}_input_off" type="radio" name="neamember" value="0" onchange="Curriki.ui.login.neaMemberChanged()" checked /> $msg.get("nea_0")
+          </p>
+          #set($f="neaaffiliate")
+          <p id="nea-member-section" style="display:none;" class="textfield #computeTrClasses($f)" onmouseover="Curriki.ui.login.displayInstruction('join.neaaffiliate_instructions');">
+              <label for="${f}_input"><b>$msg.get("join.neaaffiliate")</b></label>
+              #set($propVals=$xwiki.getClass("XWiki.XWikiUsers").get("neaaffiliate").getPropertyClass().getList($context.context))
+              <select name="neaaffiliate" id="${f}_input" style="width:22em; max-width: 22em">##
                   #set($val="-")##
-                  <option value="$val" #if($val==$!tool.memberType)selected="selected"#end>$msg.get("join.member_type_instructions")</option>##
+                  <option value="$val" #if($val==$!tool.neaaffiliate)selected="selected"#end>$msg.get("join.neaaffiliate_instructions")</option>##
                   #foreach($val in $propVals)#if($val!="0")##
-                  <option value="$val" #if($val==$!tool.memberType)selected="selected"#end>$msg.get("XWiki.XWikiUsers_member_type_${val}")</option>##
+                  <option value="$val" #if($val==$!tool.neaaffiliate)selected="selected"#end>$msg.get("XWiki.XWikiUsers_neaaffiliate_${val}")</option>##
                   #end#end
               </select>
           </p>
+          #set($f="neaoccupation")
+          <p class="textfield #computeTrClasses($f)" onmouseover="Curriki.ui.login.displayInstruction('join.neaoccupation_instructions');">
+              <label for="${f}_input"><b>$msg.get("join.neaoccupation")</b></label>
+              #set($propVals=$xwiki.getClass("XWiki.XWikiUsers").get("neaoccupation").getPropertyClass().getList($context.context))
+              <select name="neaoccupation" id="${f}_input" onchange="Curriki.ui.login.neaOccupationChanged()" style="width:22em; max-width: 22em">##
+                  #set($val="-")##
+                  <option value="$val">$msg.get("join.neaoccupation_instructions")</option>##
+                  #foreach($val in $propVals)#if($val!="0")##
+                  <option value="$val">$msg.get("XWiki.XWikiUsers_neaoccupation_${val}")</option>##
+                  #end#end
+              </select>
+          </p>
+          
+          #set($f="neaprofession")
+          <p id="nea-profession-section" style="display:none;" class="textfield #computeTrClasses($f)" onmouseover="Curriki.ui.login.displayInstruction('join.neaprofession_instructions');">
+               <label for="${f}_input"><b>$msg.get("join.neaprofession")</b></label>
+               #set($propVals=$xwiki.getClass("XWiki.XWikiUsers").get("neaprofession").getPropertyClass().getList($context.context))
+               <select name="neaprofession" id="${f}_input" style="width:22em; max-width: 22em">##
+                  #set($val="-")##
+                  <option value="$val">$msg.get("join.neaprofession_instructions")</option>##
+                  #foreach($val in $propVals)#if($val!="0")##
+                  <option value="$val">$msg.get("XWiki.XWikiUsers_neaprofession_${val}")</option>##
+                  #end#end
+               </select>
+          </p>
+          
+          ## NEA Changes end
+          
           <p class="warning" id="memberTypeNotice">&nbsp;</p>
           ##
           ##
@@ -247,23 +286,35 @@ fieldset h3 {
     });
 
     scheduleDialogRescale(window, document, "loginIframe", 500,0);
-    Curriki.ui.login.memberTypeChanged = function () {
+    Curriki.ui.login.neaMemberChanged = function () {
         try {
-            var p = Ext.get("memberTypeNotice");
-            var s = Ext.get("memberType_input");
-            if(!p || !s) {
+            var s = Ext.get("neamember_input_on");
+            if(!s) {
                 Curriki.console.log("Can't find elements. Stopping.");
                 return;
             }
-            var text = ' ';
-            if(s && s.dom.value &&
-                    ("corporation"==s.dom.value)) {
-                text = _('join.member_type_coporate_instructions');
+            if(s && s.dom.checked) {
+               Ext.get("nea-member-section").show();  
+            } else {
+               Ext.get("nea-member-section").hide();  
             }
-            Curriki.console.log("memberTypeNotice: " + text);
-            Ext.get("memberTypeNotice").dom.innerHTML= text;
-            Curriki.logEvent(['Registration', 'member-type-changed', s.dom.value])
         } catch(e) { Curriki.console.log(e); }
+    };
+
+    Curriki.ui.login.neaOccupationChanged = function () {
+        try {
+            var s = Ext.get("neaoccupation_input");
+            if(!s) {
+                Curriki.console.log("Can't find elements. Stopping.");
+                return;
+            }
+            if(s && s.dom.value &&
+                    ("support"==s.dom.value)) {
+                Ext.get("nea-profession-section").show();  
+            } else {
+                Ext.get("nea-profession-section").hide();  
+            }
+         } catch(e) { Curriki.console.log(e); }
     };
     ##
     Curriki.ui.login.countryChanged = function () {
@@ -296,7 +347,7 @@ fieldset h3 {
     Ext.onReady(function() {
         //
         // do it after load: the warning must be displayed in case
-        Curriki.ui.login.memberTypeChanged();
+        // Curriki.ui.login.memberTypeChanged();
         Curriki.ui.login.countryChanged();
     });
 </script>
