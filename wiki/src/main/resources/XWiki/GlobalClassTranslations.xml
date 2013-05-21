@@ -6,57 +6,22 @@
 <defaultLanguage>en</defaultLanguage>
 <translation>0</translation>
 <parent></parent>
-<creator>XWiki.ShermanTank</creator>
-<author>XWiki.ShermanTank</author>
+<creator>XWiki.Admin</creator>
+<author>XWiki.Admin</author>
 <customClass></customClass>
-<contentAuthor>XWiki.ShermanTank</contentAuthor>
-<creationDate>1217886586000</creationDate>
-<date>1351115866000</date>
-<contentUpdateDate>1351115866000</contentUpdateDate>
-<version>179.1</version>
+<contentAuthor>XWiki.Admin</contentAuthor>
+<creationDate>1357027200000</creationDate>
+<date>1357027200000</date>
+<contentUpdateDate>1357027200000</contentUpdateDate>
+<version>1.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>removed a href tag from CC</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <hidden>false</hidden>
-<object>
-<class>
-<name>XWiki.TagClass</name>
-<customClass></customClass>
-<customMapping></customMapping>
-<defaultViewSheet></defaultViewSheet>
-<defaultEditSheet></defaultEditSheet>
-<defaultWeb></defaultWeb>
-<nameField></nameField>
-<validationScript></validationScript>
-<tags>
-<cache>0</cache>
-<disabled>0</disabled>
-<displayType>select</displayType>
-<multiSelect>1</multiSelect>
-<name>tags</name>
-<number>1</number>
-<prettyName>Tags</prettyName>
-<relationalStorage>1</relationalStorage>
-<separator> </separator>
-<separators> ,|</separators>
-<size>30</size>
-<unmodifiable>0</unmodifiable>
-<values></values>
-<classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
-</tags>
-</class>
-<name>XWiki.GlobalClassTranslations</name>
-<number>0</number>
-<className>XWiki.TagClass</className>
-<guid>39c152d6-14c0-497d-97f1-9b807e3a9a41</guid>
-<property>
-<tags/>
-</property>
-</object>
 <content>#
 #
 # Phrase file for Curriki for language en
@@ -664,6 +629,21 @@ XWiki.XWikiUsers_member_type_nonprofit=Non-profit Organization
 XWiki.XWikiUsers_member_type_nonprofit_education=Educational Institution
 XWiki.XWikiUsers_member_type_corporation=Corporate / Organization
 
+## OCCUPATION TYPE (Added by Todd 4/14/2013)
+XWiki.XWikiUsers_neaoccupation_parent=Parent
+XWiki.XWikiUsers_neaoccupation_student=College Student
+XWiki.XWikiUsers_neaoccupation_teacher=Teacher / Educator / Professor
+XWiki.XWikiUsers_neaoccupation_principal=Principal / Dean / Other School Admin
+XWiki.XWikiUsers_neaoccupation_counselor=Counselor / Psychologist
+XWiki.XWikiUsers_neaoccupation_librarian=School Librarian / Media Specialist
+XWiki.XWikiUsers_neaoccupation_curriculum=Curriculum Specialist
+XWiki.XWikiUsers_neaoccupation_support=Educational Support Professional 
+
+##NEA Member
+nea_0=Not a member
+nea_1=Member
+
+
 ##COUNTRY
 
 XWiki.XWikiUsers_country_AD=Andorra
@@ -1094,6 +1074,64 @@ XWiki.XWikiUsers_language_spa=Spanish
 XWiki.XWikiUsers_language_tam=Tamil
 XWiki.XWikiUsers_language_999=Other
 
+##NEA Affiliates
+XWiki.XWikiUsers_neaaffiliate_9=Alabama Education Association
+XWiki.XWikiUsers_neaaffiliate_11=Arizona Education Association
+XWiki.XWikiUsers_neaaffiliate_12=Arkansas Education Association
+XWiki.XWikiUsers_neaaffiliate_13=California Teachers Association
+XWiki.XWikiUsers_neaaffiliate_14=Colorado Education Association
+XWiki.XWikiUsers_neaaffiliate_15=Connecticut Education Association
+XWiki.XWikiUsers_neaaffiliate_17=Delaware State Education Assn
+XWiki.XWikiUsers_neaaffiliate_16=District Of Columbia
+XWiki.XWikiUsers_neaaffiliate_34=Education Minnesota
+XWiki.XWikiUsers_neaaffiliate_18=Federal Education Association
+XWiki.XWikiUsers_neaaffiliate_19=Florida Education Association
+XWiki.XWikiUsers_neaaffiliate_20=Georgia Association Of Educators
+XWiki.XWikiUsers_neaaffiliate_21=Hawaii State Teachers Association
+XWiki.XWikiUsers_neaaffiliate_23=Idaho Education Association
+XWiki.XWikiUsers_neaaffiliate_24=Illinois Education Association-Nea
+XWiki.XWikiUsers_neaaffiliate_25=Indiana State Teachers Association
+XWiki.XWikiUsers_neaaffiliate_26=Iowa State Education Association
+XWiki.XWikiUsers_neaaffiliate_27=Kansas Nea
+XWiki.XWikiUsers_neaaffiliate_28=Kentucky Education Association
+XWiki.XWikiUsers_neaaffiliate_29=Louisiana Association Of Educators
+XWiki.XWikiUsers_neaaffiliate_30=Maine Education Association
+XWiki.XWikiUsers_neaaffiliate_31=Maryland State Education Assn
+XWiki.XWikiUsers_neaaffiliate_32=Massachusetts Teachers Association
+XWiki.XWikiUsers_neaaffiliate_37=Mea-Mft
+XWiki.XWikiUsers_neaaffiliate_33=Michigan Education Association
+XWiki.XWikiUsers_neaaffiliate_35=Mississippi Association Of Educators
+XWiki.XWikiUsers_neaaffiliate_36=Missouri Nea
+XWiki.XWikiUsers_neaaffiliate_44=NEA DIRECT  MEMBERS - NEW YORK 
+XWiki.XWikiUsers_neaaffiliate_10=Nea-Alaska
+XWiki.XWikiUsers_neaaffiliate_40=Nea-New Hampshire
+XWiki.XWikiUsers_neaaffiliate_42=Nea-New Mexico
+XWiki.XWikiUsers_neaaffiliate_53=Nea-Rhode Island
+XWiki.XWikiUsers_neaaffiliate_38=Nebraska State Education Association
+XWiki.XWikiUsers_neaaffiliate_39=Nevada State Education Association
+XWiki.XWikiUsers_neaaffiliate_41=New Jersey Education Association
+XWiki.XWikiUsers_neaaffiliate_43=New York State United Teachers
+XWiki.XWikiUsers_neaaffiliate_45=North Carolina Assn Of Educators
+XWiki.XWikiUsers_neaaffiliate_46=North Dakota Education Association
+XWiki.XWikiUsers_neaaffiliate_47=Ohio Education Association
+XWiki.XWikiUsers_neaaffiliate_48=Oklahoma Education Association
+XWiki.XWikiUsers_neaaffiliate_49=Oregon Education Association
+XWiki.XWikiUsers_neaaffiliate_51=Pennsylvania State Education Assn
+XWiki.XWikiUsers_neaaffiliate_55=South Dakota Education Association
+XWiki.XWikiUsers_neaaffiliate_56=Tennessee Education Association
+XWiki.XWikiUsers_neaaffiliate_57=Texas State Teachers Association
+XWiki.XWikiUsers_neaaffiliate_54=The South Carolina Education Assn
+XWiki.XWikiUsers_neaaffiliate_22=Univ Of Hawaii Professional Assembly
+XWiki.XWikiUsers_neaaffiliate_50=Us Dependencies And Worldwide
+XWiki.XWikiUsers_neaaffiliate_58=Utah Education Association
+XWiki.XWikiUsers_neaaffiliate_56=Utah School Employees Association
+XWiki.XWikiUsers_neaaffiliate_59=Vermont-Nea
+XWiki.XWikiUsers_neaaffiliate_60=Virginia Education Association
+XWiki.XWikiUsers_neaaffiliate_61=Washington Education Association
+XWiki.XWikiUsers_neaaffiliate_62=West Virginia Education Association
+XWiki.XWikiUsers_neaaffiliate_63=Wisconsin Education Assn Council
+XWiki.XWikiUsers_neaaffiliate_64=Wyoming Education Association
+
 
 ##CRS THESE ARE NO LONGER USED - TODD
 
@@ -1111,6 +1149,7 @@ XWiki.SpaceClass_language_eng=English
 XWiki.SpaceClass_language_ind=Bahasa Indonesia
 XWiki.SpaceClass_language_zho=Chinese
 XWiki.SpaceClass_language_nld=Dutch
+XWiki.SpaceClass_language_fin=Finnish
 XWiki.SpaceClass_language_fra=French
 XWiki.SpaceClass_language_deu=German
 XWiki.SpaceClass_language_hin=Hindi
