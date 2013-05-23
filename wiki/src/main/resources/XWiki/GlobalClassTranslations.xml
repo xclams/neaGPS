@@ -630,14 +630,16 @@ XWiki.XWikiUsers_member_type_nonprofit_education=Educational Institution
 XWiki.XWikiUsers_member_type_corporation=Corporate / Organization
 
 ## OCCUPATION TYPE (Added by Todd 4/14/2013)
-XWiki.XWikiUsers_neaoccupation_parent=Parent
-XWiki.XWikiUsers_neaoccupation_student=College Student
-XWiki.XWikiUsers_neaoccupation_teacher=Teacher / Educator / Professor
-XWiki.XWikiUsers_neaoccupation_principal=Principal / Dean / Other School Admin
-XWiki.XWikiUsers_neaoccupation_counselor=Counselor / Psychologist
-XWiki.XWikiUsers_neaoccupation_librarian=School Librarian / Media Specialist
+XWiki.XWikiUsers_neaoccupation_teacher=Teacher/Educator/Professor
+XWiki.XWikiUsers_neaoccupation_support=Educational Support Professional
+XWiki.XWikiUsers_neaoccupation_principal=Principal/Dean/Other School Admin
+XWiki.XWikiUsers_neaoccupation_counselor=Counselor/Psychologist/Social Worker
+XWiki.XWikiUsers_neaoccupation_librarian=School Librarian/Media Specialist
 XWiki.XWikiUsers_neaoccupation_curriculum=Curriculum Specialist
-XWiki.XWikiUsers_neaoccupation_support=Educational Support Professional 
+XWiki.XWikiUsers_neaoccupation_student=College Student
+XWiki.XWikiUsers_neaoccupation_community=Community Member
+XWiki.XWikiUsers_neaoccupation_parent=Parent
+XWiki.XWikiUsers_neaoccupation_other=Other
 
 ##NEA Member
 nea_0=Not a member

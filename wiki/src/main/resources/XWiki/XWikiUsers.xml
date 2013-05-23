@@ -529,7 +529,7 @@ I have read, understand and agree to Curriki's Privacy Policy, the Educational P
 <unmodifiable>0</unmodifiable>
 <validationMessage></validationMessage>
 <validationRegExp></validationRegExp>
-<values>0=---|parent|student|teacher|principal|counselor|librarian|curriculum|support</values>
+<values>0=---|teacher|support|principal|counselor|librarian|curriculum|student|community|parent|other</values>
 <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
 </neaoccupation>
 <neaprofession>
