@@ -660,6 +660,12 @@ practice to put them here since they are real dependencies -->
     <artifactId>org.eclipse.egit.github.core</artifactId>
     <version>1.1.2</version>
   </dependency>
+  <dependency>
+    <groupId>org.xwiki.contrib</groupId>
+    <artifactId>xwiki-plugin-ratings</artifactId>
+    <version>1.2</version>
+  </dependency>
+ 
   </dependencies>
   <build>
       <finalName>xwiki</finalName>
@@ -725,7 +731,8 @@ practice to put them here since they are real dependencies -->
                     org.curriki.xwiki.plugin.mimetype.MimeTypePlugin,\
                     org.curriki.xwiki.plugin.curriki.CurrikiPlugin,\
                     org.curriki.plugin.spacemanager.impl.CurrikiSpaceManager,\
-                    org.curriki.plugin.activitystream.plugin.CurrikiActivityStreamPlugin
+                    org.curriki.plugin.activitystream.plugin.CurrikiActivityStreamPlugin,\
+                    com.xpn.xwiki.plugin.ratings.RatingsPlugin
                 </xwikiCfgPlugins>
                 <xwikiCfgDefaultSkin>curriki20</xwikiCfgDefaultSkin>
                 <xwikiCfgDefaultBaseSkin>colibri</xwikiCfgDefaultBaseSkin>
