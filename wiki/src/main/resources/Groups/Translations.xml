@@ -608,13 +608,13 @@ groups_members_invite_note_instruction_tooltip=The invitation will be directed t
 groups_members_invite_invitefieldtxt=I believe that {0} would really benefit from your membership. Please let me know if you have any questions. Follow the instructions below to join this group now. Thank you!
 groups_members_invite_btt=Invite
 groups_members_cancel_btt=Cancel
-groups_members_invite_sent=An invitation has been sent to *{0}*.
+groups_members_invite_sent=An invitation has been sent to **{0}**.
 groups_members_invite_inviteemissing=Please insert an email address for this invitation.
-groups_members_invite_emailinvalid=*{0}* is not a valid email address.
-groups_members_invite_alreadyinvited=*{0}* has been already invited to join *{1}*.
-groups_members_invite_alreadymember=*{0}* is already a member of *{1}*.
-groups_members_invite_failed=Failed to invite *{0}*. Please check the email address(es) for your invitee(s). If you continue to have difficulties, please contact groups@curriki.org.
-groups_members_invite_report=*{0}* of *{1}* invitations sent.
+groups_members_invite_emailinvalid=**{0}** is not a valid email address.
+groups_members_invite_alreadyinvited=**{0}** has been already invited to join *{1}*.
+groups_members_invite_alreadymember=**{0}** is already a member of **{1}**.
+groups_members_invite_failed=Failed to invite **{0}**. Please check the email address(es) for your invitee(s). If you continue to have difficulties, please contact groups@curriki.org.
+groups_members_invite_report=**{0}** of **{1}** invitations sent.
 groups_members_invite_statuslink=Group leaders can view open invitation(s) on the [[Members list&gt;&gt;Members?type=3]].
 groups_members_invite_backlink=If you want to invite more people to the group, [[click here&gt;&gt;InviteMembers]] to return to the invitation form.
 groups_members_invite_openinvitation=This is an open invitation to a mailing list. (By checking this box, you make it possible for multiple parties to use the acceptance link provided within the emailed invitation.)
@@ -645,12 +645,12 @@ download=Download
 ## Invite
 groups.invite.invite=Send Invitation
 groups.invite.title=Invite New Members for {0}
-groups.invite.message=Please enter the email address of the person you would like to invite to join *{0}*. (To invite more than one person, place a comma between each email address.)
+groups.invite.message=Please enter the email address of the person you would like to invite to join **{0}**. (To invite more than one person, place a comma between each email address.)
 groups.invite.personalize=Please personalize the invitation (optional):
 groups.invite.defaultmessage=I would like to invite you to join {0} on Curriki.
 groups.invite.openinvitation=This is an open invitation to a mailing list. (By checking this box, you make it possible for multiple parties to use the acceptance link provided within the emailed invitation.)
 groups.invite.sending=Sending invitation to {0}
-groups.invite.alreadyinvitedormember=*{0}* is already a member of *{1}* or has a pending invitation.
+groups.invite.alreadyinvitedormember=**{0}** is already a member of **{1}** or has a pending invitation.
 groups.invite.success=All invitations have been sent. Group leaders can view the status of invitations on the [[Members list&gt;&gt;Members?type=3]].
 ## How to create page
 ## Browse page
