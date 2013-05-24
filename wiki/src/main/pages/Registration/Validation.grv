@@ -124,7 +124,7 @@ public class Validation {
         addWarning("memberType");
         return false;
     }
-
+    
     public boolean isValidAgree(String ag, boolean echoErrors) {
         if(ag!=null &&
                 (ag.equalsIgnoreCase("on") || ag.equalsIgnoreCase("true") || ag.equalsIgnoreCase("checked"))) {

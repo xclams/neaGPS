@@ -395,19 +395,34 @@ $errMsg
 {{html clean=false}}
 <script type="text/javascript">
 /* <![CDATA[ */
+// this is necessary to force focus on start fields
+document.observe('xwiki:wysiwyg:loaded', function(){
+    window.scrollTo(0,0);
+    $('register')['XWiki.XWikiUsers_0_password'].focus();
+    // it is not clear why but we need to add a delay to take focus back
+    window.setTimeout(function() {
+     window.scrollTo(0,0);
+     $('register')['XWiki.XWikiUsers_0_password'].focus();
+    }, 1000);
+});
+
 document.observe('dom:loaded', function(){
 	$$('#register input[type=text]').each(function(i){i.addClassName('input-text')})
 	$$('#register input[type=password]').each(function(i){i.addClassName('input-text')})
-    $$("#register select[name=XWiki.XWikiUsers_0_member_type]").each(function(inputElt){
-        inputElt.observe("change",toggleNEAFieldsVisible);
-        toggleNEAFieldsVisible();
-    });
+    console.log("Setting events for neamember fields");
     $$("#register input[name=XWiki.XWikiUsers_0_neamember]").each(function(inputElt){
+        console.log("Setting event for neamember field");
         inputElt.observe("change",toggleNEAFieldsVisible);
-        toggleNEAFieldsVisible();
     });
+    console.log("Setting events for neaoccupation fields");
+    $$("#register select[name=XWiki.XWikiUsers_0_neaoccupation]").each(function(inputElt){
+        console.log("Setting event for neaoccupation field");
+        inputElt.observe("change",toggleNEAFieldsVisible);
+    });
+    toggleNEAFieldsVisible();
 });
 
+/*
 function toggleCorporateFieldsVisible() {
     var memberType = $('register')['XWiki.XWikiUsers_0_member_type'][0];
     memberType = memberType.options[memberType.selectedIndex].value;
@@ -431,11 +446,13 @@ function toggleCorporateFieldsVisible() {
     Ext.get("memberTypeNotice").dom.innerHTML= text;
     // Curriki.logView("/myCurriki/editProfile/changeMmeberType/" + memberType);
 }
+*/
 
 function toggleNEAFieldsVisible() {
     // specific NEA visibility
+    console.log("nea member being checked");
     var neamember = $('register')['XWiki.XWikiUsers_0_neamember'][0];
-    if (neamember.checked) {
+    if (neamember.checked==true) {
       console.log("nea member is checked");
       var i = $('nea-affiliate-section');
       if(i) i.show();
@@ -445,15 +462,16 @@ function toggleNEAFieldsVisible() {
       if(i) i.hide();      
     }
     
-    // only show profession title if the member type is education
-    var memberType = $('register')['XWiki.XWikiUsers_0_member_type'][0];
-    memberType = memberType.options[memberType.selectedIndex].value;
+    // only show profession title if the occ type is education
+    var occType = $('register')['XWiki.XWikiUsers_0_neaoccupation'][0];
+    occType = occType.options[occType.selectedIndex].value;
     var i;
-    if(memberType=="support") {
-        i = $('nea-professiontitle-section');
+    console.log("nea occupation is checked: " + occType);
+    if(occType=="support") {
+        i = $('nea-profession-section');
         if(i) i.show();
     } else {
-        i = $('nea-professiontitle-section');
+        i = $('nea-profession-section');
         if(i) i.hide();
     }
 }
@@ -522,13 +540,14 @@ function toggleNEAFieldsVisible() {
 			#set($i = $pfx+'.email2')#registrationformtextfielddup($i 'email')
 			#set($i = $pfx+'.name1')#registrationformtextfield($i 'first_name')
 			#set($i = $pfx+'.name2')#registrationformtextfield($i 'last_name')
+            ##set($i = $pfx+'.member_type')#registrationformtextfield($i 'member_type')   
             #set($i = $pfx+'.neamember')#registrationformtextfield($i 'neamember')
             <div id="nea-affiliate-section" style="display: none;">       
             #set($i = $pfx+'.neaaffiliate')#registrationformtextfield($i 'neaaffiliate')   
-            #set($i = $g_RegType+'.interests.member_type')#registrationformtextfield($i 'member_type')
-            <div id="nea-professiontitle-section" style="display: none;">       
-            #set($i = $pfx+'.neaprofessiontitle')#registrationformtextfield($i 'neaprofessiontitle')          
             </div>
+            #set($i = $pfx+'.neaoccupation')#registrationformtextfield($i 'neaoccupation')
+            <div id="nea-profession-section" style="display: none;">       
+            #set($i = $pfx+'.neaprofession')#registrationformtextfield($i 'neaprofession')          
             </div>
 		</ul>
         <p id="memberTypeNotice">&nbsp;</p>

@@ -203,8 +203,8 @@
     #verbatim_end
   #end
     <div class="right mgn-vrt-15">
-      <input type="button" class="button button-cancel mgn-rt" value="$msg.get("groups_home_editwelcome_cancel_btt")" onclick="cancelEditWelcomeBlock('${spaceName}','${pageName}','${divid}');" />
-      <input type="submit" class="button button-confirm" value="$msg.get("groups_home_editwelcome_submit_btt")" onclick="beforeSubmitEditWelcomeBlock();" />
+      <input type="button" class="button button-grey button-cancel mgn-rt" value="$msg.get("groups_home_editwelcome_cancel_btt")" onclick="cancelEditWelcomeBlock('${spaceName}','${pageName}','${divid}');" />
+      <input type="submit" class="button button-orange button-confirm" value="$msg.get("groups_home_editwelcome_submit_btt")" onclick="beforeSubmitEditWelcomeBlock();" />
     </div>
   </p>
   </form>
@@ -638,7 +638,9 @@ $msg.get("groups_creategroup_needaccount", [$url])
     <tr>
     <td width="50%">
     $newspace.display("topic","edit")
-    <input type="hidden" name="XWiki.CurrikiSpaceClass_0_topic" value="FW_masterFramework.WebHome" id="XWiki.CurrikiSpaceClass_0_topic"/>
+    ## CURRIKI-6109 We had to remove this otherwise it would not create the topic field properly because the hidden field is included twice
+    ## I'm leaving the comment because it's not clear why we have this issue
+    ## <input type="hidden" name="XWiki.CurrikiSpaceClass_0_topic" value="FW_masterFramework.WebHome" id="XWiki.CurrikiSpaceClass_0_topic"/>
     </td>
     <td width="50%">
 	        $newspace.display("educationLevel","edit")
@@ -761,17 +763,19 @@ $msg.get("groups_home_firsttimewelcome_title")
   #set($ok = $sm.updateSpaceFromRequest($s))
 #end
 #if($ok)
-  #if($!filename != "" && $filedata)
+  ## CURRIKI-6078 need to ignore if no filename as otherwise 
+  ## you cannot update the title and desc without uploading a new logo
+  ##if($!filename != "" && $filedata)
     #set ($spaceHome = $xwiki.getDocument("${spaceName}.WebHome"))
     #set($attach = $spaceHome.addAttachment($filename, $filedata))
     #if($attach)
       $s.set("logo", $attach.filename)
       #set($filename = $attach.filename)
+    #end
       $spaceHome.save()
       $s.save()
       $response.sendRedirect($s.getHomeURL())
-    #end
-  #end
+  ##end
 #else
 <div class="frame">
 <form class="CreateNewGroup" action="#" enctype="multipart/form-data" method="post" onsubmit="if (!checkFileExtension()) return false; else return true;">
