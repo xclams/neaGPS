@@ -7,14 +7,14 @@
 <translation>0</translation>
 <parent></parent>
 <creator></creator>
-<author>XWiki.adminPolx</author>
+<author>XWiki.LudovicDubost</author>
 <customClass></customClass>
-<contentAuthor>XWiki.adminPolx</contentAuthor>
+<contentAuthor>XWiki.LudovicDubost</contentAuthor>
 <creationDate>1198857568000</creationDate>
-<date>1291854011000</date>
-<contentUpdateDate>1291854011000</contentUpdateDate>
-<version>7.1</version>
-<title>Welcome to $space.displayTitle on Curriki!</title>
+<date>1369944288000</date>
+<contentUpdateDate>1369944288000</contentUpdateDate>
+<version>9.1</version>
+<title>Welcome to $space.displayTitle on GPS Network!</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
@@ -52,7 +52,7 @@
 <name>Groups.MailTemplateAcceptRequest</name>
 <number>0</number>
 <className>XWiki.TagClass</className>
-<guid></guid>
+<guid>7a255d32-9208-48ef-a8b8-6e5ecf7a8866</guid>
 <property>
 <tags/>
 </property>
@@ -77,19 +77,19 @@
 
 Dear $memberName,
 
-Congratulations on becoming a member of $groupName on Curriki!
+Congratulations on becoming a member of $groupName on GPS Network!
 
 When you are logged in, you can access the group here:
 
 $groupURL
 
-You can also access this group from My Groups in My Curriki.
+You can also access this group from My Groups in My GPS Network.
 
 If you wish to edit your settings for this group (such as email notification for group messages), or if you wish to remove yourself from this group, you can do both of these things by visiting the Members tab for $groupName. On that tab, find yourself in the list of members, then click Edit Settings to the right of your name.
 
-Here's to your productive collaboration on Curriki as part of $groupName!
+Here's to your productive collaboration on GPS Network as part of $groupName!
 
 Sincerely,
 
-Curriki
+GPS Network
 </content></xwikidoc>

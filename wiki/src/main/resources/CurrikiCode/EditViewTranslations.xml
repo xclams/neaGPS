@@ -7,18 +7,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.ShermanTank</creator>
-<author>XWiki.ShermanTank</author>
+<author>XWiki.LudovicDubost</author>
 <customClass></customClass>
-<contentAuthor>XWiki.ShermanTank</contentAuthor>
+<contentAuthor>XWiki.LudovicDubost</contentAuthor>
 <creationDate>1228767053000</creationDate>
-<date>1338237934000</date>
-<contentUpdateDate>1338237934000</contentUpdateDate>
-<version>141.1</version>
+<date>1369944303000</date>
+<contentUpdateDate>1369944303000</contentUpdateDate>
+<version>10.1</version>
 <title>Edit And View Resources Translations</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Updated editor comp text</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <hidden>false</hidden>
@@ -52,7 +52,7 @@
 <name>CurrikiCode.EditViewTranslations</name>
 <number>0</number>
 <className>XWiki.TagClass</className>
-<guid>5628c78c-2e10-4f29-96cf-1a09515a36b0</guid>
+<guid>aaf83c6e-2aae-4b0d-b82a-92dfa69eb5a0</guid>
 <property>
 <tags/>
 </property>
@@ -61,7 +61,6 @@
 #
 # Phrase file for Curriki for language en
 # ---- please do not edit here
-# ---- please edit at http://demo:gelc@current.dev.curriki.org//xwiki/bin/view/Translations/CurrikiCode/EditViewTranslations?language=en
 # 
 ## Translation file for Resource View/Edit (RVE)
 
@@ -84,7 +83,7 @@ rve.toc.title=Table of Contents
 rve.title.function.favorite=Favorite
 rve.title.function.favorite.icon.rollover=Add this resource to Favorites
 rve.title.function.flag=Flag
-rve.title.function.flag.icon.rollover=Flag this resource for evaluation by Curriki
+rve.title.function.flag.icon.rollover=Flag this resource for evaluation by GPS Network
 rve.title.function.print=Print
 rve.title.function.print.icon.rollover=Print this resource
 rve.title.function.email=Share
@@ -94,10 +93,10 @@ rve.title.attribution.group=From:
 rve.title.attribution.contributor=Contributed By:
 
 rve.title.rating.function.nominate=Nominate for Review
-rve.title.rating.crs.info=About Curriki Review
+rve.title.rating.crs.info=About GPS Network Review
 rve.title.rating.crs.info.url=http://www.curriki.org/xwiki/bin/view/Main/AboutCurrikiReviewSystem
-curriki.crs.rating=About Curriki Review
-curriki.crs.rating.unrated=About Curriki Review
+curriki.crs.rating=About GPS Network Review
+curriki.crs.rating.unrated=About GPS Network Review
 
 rve.title.member.rating.function.add_rating=Add a Rating
 rve.title.member.rating.info=About Member Rating
@@ -166,7 +165,7 @@ rve.content.downarrow_icon_rollover=Hide
 
 rve.content.empty.loggedin=&lt;strong&gt;This collection or folder is currently empty, or contains only resources that are unavailable due to rights.&lt;/strong&gt;&lt;br&gt;&lt;br&gt;Members, if this resource has &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/AccessPrivileges?bc=;Coll_curriki.CurrikiHelp;Coll_curriki.AbouttheResourceRepository;Coll_curriki.AccessPrivileges" target="_blank"&gt;Access Privileges&lt;/a&gt; of Public, you can click &amp;#34;Build Up&amp;#34; to add resources here.
 
-rve.content.empty.notloggedin=&lt;strong&gt;This collection or folder is currently empty, or contains only resources that are unavailable due to rights.&lt;/strong&gt;&lt;br&gt;&lt;br&gt;&lt;a href="/xwiki/bin/view/Main/JoinCurriki"&gt;Join Curriki&lt;/a&gt; or &lt;a href="/xwiki/bin/login/XWiki/XWikiLogin"&gt;log in&lt;/a&gt; to build up this collection or folder, to comment on or flag it.
+rve.content.empty.notloggedin=&lt;strong&gt;This collection or folder is currently empty, or contains only resources that are unavailable due to rights.&lt;/strong&gt;&lt;br&gt;&lt;br&gt;&lt;a href="/xwiki/bin/view/Main/JoinCurriki"&gt;Join GPS Network&lt;/a&gt; or &lt;a href="/xwiki/bin/login/XWiki/XWikiLogin"&gt;log in&lt;/a&gt; to build up this collection or folder, to comment on or flag it.
 
 
 ## CONTENT TAB VIEW FILE RESOURCES***************************************
@@ -185,10 +184,35 @@ rve.content.view.start_button=Start
 rve.content.view.hide_button=Hide Files
 rve.content.view.show_button=Show Files
 rve.content.view.link.instruction_title=Navigate to This External Web Link:
-rve.content.view.link.instruction_tooltip=This resource is an external web link that will take you away from Curriki&amp;#39;s site. Use the link to download the file or navigate to the site.
+rve.content.view.link.instruction_tooltip=This resource is an external web link that will take you away from GPS Network&amp;#39;s site. Use the link to download the file or navigate to the site.
 rve.content.view.go_button=Go
 
 rve.content.view.video.viditalk.unavailable=Video replacement uploading is not available while we transition to a new service. Thank you for your patience.
+
+# VIDEOS
+
+## Progress
+video.player.loading = Loading video player...
+
+## Downloads
+##rve.content.view.download.instruction_title.single_file
+##rve.content.view.download.instruction_tooltip.viditalk
+##rve.content.view.download.viditalk.download_button_original
+##rve.content.view.download.download_button
+
+## Error messages
+video.errors.missing = Video not found.
+video.errors.missing.details = The video with key '{1}' cannot be found&lt;br/&gt;&lt;br/&gt;You may report it &lt;a href='{2}'&gt;webmaster&lt;/a&gt;.
+video.processingMessages.starting = Starting to encode.
+video.processingMessages.processingLow = The video is being processed for playback. Please refresh/reload the page in five minutes.
+video.processingMessages.error = Encoding error.
+video.processingMessages.errorDetails = The video with key '{1}' could not be processed.&lt;br/&gt;&lt;br/&gt;You may upload a new version or report it to &lt;a href='{2}'&gt;webmaster&lt;/a&gt;.
+
+video.errors.reportErrorsToEmail = contactgpsnetwork@nea.org
+
+video.sharing.title = Share this video...
+
+
 
 ## CONTENT TAB EDIT FILE RESOURCES****************************************
 
@@ -304,7 +328,7 @@ rve.information.hidefromsearch_no=No
 rve.information.rightsholder_title=Rights Holder:
 
 rve.information.licensedeed_title=License Deed:
-rve.information.license_to_curriki_title=License to Curriki:
+rve.information.license_to_curriki_title=License to GPS Network:
 
 ## INFORMATION TAB EDITABLE**************************************
 
@@ -332,7 +356,7 @@ rve.information.edlevel.edit_txt=Update the selected educational level(s) for th
 rve.information.edlevel.edit_tooltip=Please make sure the resource is correlated only to appropriate educational levels; applying too many levels makes it harder for people to find what they need in search results.
 
 rve.information.ict.edit_title=Instructional Component Type:
-rve.information.ict.edit_txt=Scroll to find and update the selected type(s). Select multiple types by hitting the Ctrl (PC) or Apple (Mac) key as you click to select. Click &lt;a href="http://www.curriki.org/xwiki/bin/view/Coll_curriki/InstructionalComponentTypeICT" target="_blank"&gt;here&lt;/a&gt; for definitions.
+rve.information.ict.edit_txt=Scroll to find and update the selected type(s). Select multiple types by hitting the Ctrl (PC) or Apple (Mac) key as you click to select. Click &lt;a href="http://www.GPS Network.org/xwiki/bin/view/Coll_curriki/InstructionalComponentTypeICT" target="_blank"&gt;here&lt;/a&gt; for definitions.
 rve.information.ict.edit_tooltip=Help users understand the type or format for your resource in an instructional setting
 
 rve.information.keywords.edit_title=Key Words:
@@ -345,7 +369,7 @@ rve.information.language.edit_tooltip=Select a language for this resource. If yo
 
 rve.information.hidefromsearch.edit_title=Hide from Search:
 rve.information.hidefromsearch.edit_txt=Some content is not suitable for display in search results, because it does not offer value to the community as a standalone element. &lt;br&gt;&lt;br&gt;If this is such an element (for instance, a chart) that only makes sense within the context of a larger resource (like a lesson plan), make sure this option is selected so this element does not appear in search results.
-rve.information.hidefromsearch.edit_tooltip=Use this feature to help make Curriki&amp;#39;s search results work better for everyone!
+rve.information.hidefromsearch.edit_tooltip=Use this feature to help make GPS Network&amp;#39;s search results work better for everyone!
 rve.information.hidefromsearch.edit_instruction=Do not show this element in search results.
 
 rve.information.rightsholder.edit_title=Rights Holder:
@@ -380,7 +404,7 @@ rve.information.revision.list.action_title=Action
 rve.information.revision.list.compare_button=Compare Versions
 rve.information.revision.list.rollback_button=Rollback
 
-history.rollback.exception=An exception occurred while rolling back this resource. Please try again. If you continue to have problems, please contact webmaster@curriki.org.
+history.rollback.exception=An exception occurred while rolling back this resource. Please try again. If you continue to have problems, please contact contactgpsnetwork@nea.org.
 
 ## INFORMATION TAB COMPARE VERSIONS************************************
 
@@ -423,7 +447,7 @@ rve.comments.review.review_rollover=Open the Review Form for this resource
 
 
 rve.comments.review.nominate_link=Nominate for Review
-rve.comments.review.nominate_rollover=Submit this resource for evaluation by the Curriki Review System
+rve.comments.review.nominate_rollover=Submit this resource for evaluation by the GPS Network Review System
 
 rve.comments.comment.addcomment_link=Add a Comment &amp; Rating
 rve.comments.comment.addcomment_rollover=Provide your ideas or feedback for this resource
@@ -432,9 +456,9 @@ rve.comments.comment.addcomment_rollover=Provide your ideas or feedback for this
 
 ##PLEASE NOTE: This tab uses -- for any CRS values displayed within the interface -- the trans at /xwiki/bin/view/CRS/Translations
 
-rve.comments.review.header=CURRIKI REVIEW
+rve.comments.review.header=GPS NETWORK REVIEW
 
-rve.comments.review.reviewed.default_text=This resource was reviewed using the rubric for {0} and received an overall &lt;a href="http://www.curriki.org/xwiki/bin/view/Main/AboutCurrikiReviewSystem" target="_blank"&gt;Curriki Review System&lt;/a&gt; rating of &lt;strong&gt;{1}, as of {2}.&lt;/strong&gt;
+rve.comments.review.reviewed.default_text=This resource was reviewed using the rubric for {0} and received an overall &lt;a href="http://www.curriki.org/xwiki/bin/view/Main/AboutCurrikiReviewSystem" target="_blank"&gt;GPS Network Review System&lt;/a&gt; rating of &lt;strong&gt;{1}, as of {2}.&lt;/strong&gt;
 rve.comments.review.reviewed.component_title=Component Ratings:
 rve.comments.review.reviewed.component1=Technical Completeness:
 rve.comments.review.reviewed.component2=Content Accuracy:
@@ -443,13 +467,13 @@ rve.comments.review.reviewed.reviewtext_title=Reviewer Comments:
 
 rve.comments.review.update_link=Update This Review
 
-rve.comments.review.empty.loggedin_message=&lt;strong&gt;This resource has not yet been reviewed by the &lt;a href="http://www.curriki.org/xwiki/bin/view/Main/AboutCurrikiReviewSystem" target="_blank"&gt;Curriki Review System&lt;/a&gt; (CRS).&lt;/strong&gt; &lt;br&gt;&lt;br&gt;Expert reviewers apply CRS criteria to help you find high quality resources. &lt;br&gt;&lt;br&gt;Click “Nominate for Review” above to submit this resource for Curriki Review now.
+rve.comments.review.empty.loggedin_message=&lt;strong&gt;This resource has not yet been reviewed by the &lt;a href="http://www.curriki.org/xwiki/bin/view/Main/AboutCurrikiReviewSystem" target="_blank"&gt;GPS Network Review System&lt;/a&gt; (CRS).&lt;/strong&gt; &lt;br&gt;&lt;br&gt;Expert reviewers apply CRS criteria to help you find high quality resources. &lt;br&gt;&lt;br&gt;Click “Nominate for Review” above to submit this resource for GPS Network Review now.
 
-rve.comments.review.empty.notloggedin_message=&lt;strong&gt;This resource has not yet been reviewed by the &lt;a href="http://www.curriki.org/xwiki/bin/view/Main/AboutCurrikiReviewSystem" target="_blank"&gt;Curriki Review System&lt;/a&gt; (CRS).&lt;/strong&gt; &lt;br&gt;&lt;br&gt;Expert reviewers apply CRS criteria to help users find high quality resources.&lt;br&gt;&lt;br&gt;&lt;a href="http://www.curriki.org/xwiki/bin/view/Main/JoinCurriki"&gt;Join Curriki&lt;/a&gt; or &lt;a href="http://www.curriki.org/xwiki/bin/login/XWiki/XWikiLogin"&gt;log in&lt;/a&gt; so you can nominate a resource for Curriki Review.
+rve.comments.review.empty.notloggedin_message=&lt;strong&gt;This resource has not yet been reviewed by the &lt;a href="http://www.curriki.org/xwiki/bin/view/Main/AboutCurrikiReviewSystem" target="_blank"&gt;GPS Network Review System&lt;/a&gt; (CRS).&lt;/strong&gt; &lt;br&gt;&lt;br&gt;Expert reviewers apply CRS criteria to help users find high quality resources.&lt;br&gt;&lt;br&gt;&lt;a href="http://www.curriki.org/xwiki/bin/view/Main/JoinCurriki"&gt;Join GPS Network&lt;/a&gt; or &lt;a href="http://www.curriki.org/xwiki/bin/login/XWiki/XWikiLogin"&gt;log in&lt;/a&gt; so you can nominate a resource for GPS Network Review.
 
-rve.comments.review.empty.nominated_message=This resource has been nominated for evaluation by the &lt;a href="http://www.curriki.org/xwiki/bin/view/Main/AboutCurrikiReviewSystem" target="_blank"&gt;Curriki Review System&lt;/a&gt; (CRS).&lt;br&gt;&lt;br&gt;Check back soon for this resource’s CRS rating and review!
+rve.comments.review.empty.nominated_message=This resource has been nominated for evaluation by the &lt;a href="http://www.curriki.org/xwiki/bin/view/Main/AboutCurrikiReviewSystem" target="_blank"&gt;GPS Network Review System&lt;/a&gt; (CRS).&lt;br&gt;&lt;br&gt;Check back soon for this resource’s CRS rating and review!
 
-rve.comments.review.asterix.rating_message=This resource has received a special * rating because it is part of a reviewed resource. Check the Member Comments section below for more information from a Curriki editor.&lt;br&gt;&lt;br&gt;(This resource can still be nominated for a complete review. If no review is pending and you want this resource to receive a complete review, click "Nominate for Review" above.)
+rve.comments.review.asterix.rating_message=This resource has received a special * rating because it is part of a reviewed resource. Check the Member Comments section below for more information from a GPS Network editor.&lt;br&gt;&lt;br&gt;(This resource can still be nominated for a complete review. If no review is pending and you want this resource to receive a complete review, click "Nominate for Review" above.)
 
 
 
@@ -461,7 +485,7 @@ rve.comments.comment.header=MEMBER COMMENTS &amp; RATINGS
 ##DEFAULT NONE EXISTING MESSAGE DISPLAY
 rve.comments.comment.empty.loggedin_message:&lt;strong&gt;No one has commented on or rated this resource.&lt;/strong&gt;&lt;br&gt;&lt;br&gt;Click &amp;#34;Add a Comment &amp; Rating&amp;#34; at the top of this tab to submit your feedback.
 
-rve.comments.comment.empty.notloggedin_message:&lt;strong&gt;No one has commented on or rated this resource.&lt;/strong&gt;&lt;br&gt;&lt;br&gt;Members can submit comments and ratings for resources. &lt;a href="/xwiki/bin/view/Main/JoinCurriki"&gt;Join Curriki&lt;/a&gt; or &lt;a href="/xwiki/bin/login/XWiki/XWikiLogin"&gt;log in&lt;/a&gt; so you can add a comment and rating here.
+rve.comments.comment.empty.notloggedin_message:&lt;strong&gt;No one has commented on or rated this resource.&lt;/strong&gt;&lt;br&gt;&lt;br&gt;Members can submit comments and ratings for resources. &lt;a href="/xwiki/bin/view/Main/JoinCurriki"&gt;Join GPS Network&lt;/a&gt; or &lt;a href="/xwiki/bin/login/XWiki/XWikiLogin"&gt;log in&lt;/a&gt; so you can add a comment and rating here.
 
 
 
@@ -579,7 +603,7 @@ rve.noaccess.goback_link=Go Back
 rve.noaccess.goback_url=javascript:history.go(-1)
 rve.noaccess.login_link=Log In
 rve.noaccess.login_url=/xwiki/bin/login/XWiki/XWikiLogin
-rve.noaccess.home_link=Curriki Home
+rve.noaccess.home_link=GPS Network Home
 rve.noaccess.home_url=/xwiki/bin/view/Main/WebHome
 rve.noaccess.help_link=Help
 rve.noaccess.help_url=/xwiki/bin/view/Coll_curriki/CurrikiHelp
@@ -589,7 +613,7 @@ rve.notfound.header=NO PAGE OR RESOURCE FOUND
 rve.notfound.message=No page or resource exists at this location. Please check the URL and try again.
 rve.notfound.goback_link=Go Back
 rve.notfound.goback_url=javascript:history.go(-1)
-rve.notfound.home_link=Curriki Home
+rve.notfound.home_link=GPS Network Home
 rve.notfound.home_url=/xwiki/bin/view/Main/WebHome
 rve.notfound.help_link=Help
 rve.notfound.help_url=/xwiki/bin/view/Coll_curriki/CurrikiHelp
@@ -606,7 +630,7 @@ rve.notfound.help_url=/xwiki/bin/view/Coll_curriki/CurrikiHelp
 params.iconsurl=/xwiki/skins/curriki8/icons/
 params.template.defaultimageurl=templatedefault.gif
 ## Translations
-main.curriki=Curriki
+main.curriki=GPS Network
 main.login_first=You must be logged in to use that feature. Please log in or click &amp;#34;Become a Member&amp;#34; to register.
 main.missing_rights=You don't have the necessary rights for this action.
 main.error=error
@@ -639,5 +663,4 @@ Dec
 
 PDT
 PST
-
 </content></xwikidoc>

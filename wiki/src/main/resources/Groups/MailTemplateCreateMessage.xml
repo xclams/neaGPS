@@ -7,13 +7,13 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.mflorea</creator>
-<author>XWiki.adminPolx</author>
+<author>XWiki.LudovicDubost</author>
 <customClass></customClass>
-<contentAuthor>XWiki.adminPolx</contentAuthor>
+<contentAuthor>XWiki.LudovicDubost</contentAuthor>
 <creationDate>1202458831000</creationDate>
-<date>1291854014000</date>
-<contentUpdateDate>1291854014000</contentUpdateDate>
-<version>7.1</version>
+<date>1369944288000</date>
+<contentUpdateDate>1369944288000</contentUpdateDate>
+<version>9.1</version>
 <title>Message Notification for $s.displayTitle -- $msgdoc.get('title')</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -52,7 +52,7 @@
 <name>Groups.MailTemplateCreateMessage</name>
 <number>0</number>
 <className>XWiki.TagClass</className>
-<guid></guid>
+<guid>ce7e3e77-523d-467d-bc98-1cda8d481c81</guid>
 <property>
 <tags/>
 </property>
@@ -71,7 +71,7 @@ You have received a message from $xwiki.getUserName($context.user, "$first_name 
 
 The title of this message is "$msgdoc.get('title')".
 
-To view the message, click the URL below or paste it into your browser. (Remember, you must be logged in to Curriki to see this message.) 
+To view the message, click the URL below or paste it into your browser. (Remember, you must be logged in to GPS Network to see this message.) 
 
 $msgdoc.getExternalURL("view")
 
@@ -81,5 +81,5 @@ $xwiki.getDocument("${spaceName}.Members").getExternalURL("view")
 
 Sincerely,
 
-Curriki, for $s.displayTitle
+GPS Network, for $s.displayTitle
 {/pre}</content></xwikidoc>

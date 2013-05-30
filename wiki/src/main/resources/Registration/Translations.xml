@@ -6,22 +6,57 @@
 <defaultLanguage>en</defaultLanguage>
 <translation>0</translation>
 <parent></parent>
-<creator>XWiki.Admin</creator>
-<author>XWiki.Admin</author>
+<creator>XWiki.dward</creator>
+<author>XWiki.ShermanTankNEA</author>
 <customClass></customClass>
-<contentAuthor>XWiki.Admin</contentAuthor>
-<creationDate>1357027200000</creationDate>
-<date>1357027200000</date>
-<contentUpdateDate>1357027200000</contentUpdateDate>
-<version>1.1</version>
+<contentAuthor>XWiki.ShermanTankNEA</contentAuthor>
+<creationDate>1192830919000</creationDate>
+<date>1369949593000</date>
+<contentUpdateDate>1369949593000</contentUpdateDate>
+<version>16.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>Branding tweaks.</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <hidden>false</hidden>
+<object>
+<class>
+<name>XWiki.TagClass</name>
+<customClass></customClass>
+<customMapping></customMapping>
+<defaultViewSheet></defaultViewSheet>
+<defaultEditSheet></defaultEditSheet>
+<defaultWeb></defaultWeb>
+<nameField></nameField>
+<validationScript></validationScript>
+<tags>
+<cache>0</cache>
+<disabled>0</disabled>
+<displayType>select</displayType>
+<multiSelect>1</multiSelect>
+<name>tags</name>
+<number>1</number>
+<prettyName>Tags</prettyName>
+<relationalStorage>1</relationalStorage>
+<separator> </separator>
+<separators> ,|</separators>
+<size>30</size>
+<unmodifiable>0</unmodifiable>
+<values></values>
+<classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+</tags>
+</class>
+<name>Registration.Translations</name>
+<number>0</number>
+<className>XWiki.TagClass</className>
+<guid>32704d9a-8213-493e-b247-209d1c928020</guid>
+<property>
+<tags/>
+</property>
+</object>
 <content>#
 #
 # Phrase file for Curriki for language en
@@ -252,7 +287,7 @@ join.member.cancel_button=Cancel
 
 ##NEA MEMBERSHIP AND OCCUPATION ALSO USED IN PROFILE, EDIT PROFILE, PUBLIC PROFILE (Todd added 04/14/13)
 join.nea.member.title=NEA Member:
-join.nea.member.yes=Member
+join.nea.member.yes=Yes
 join.nea.member.no=Not a Member
 join.nea.member.affiliate.title=NEA Affiliate:
 join.nea.member.affiliate.drop.list=Select your Affiliate
@@ -274,7 +309,14 @@ join.instructions.password=Passwords must be at least five characters long, must
 join.instructions.email=Please enter a valid email address. Directions on how to complete the registration process will be sent to this address.
 join.instructions.email_confirm=Confirm your email address to make sure you entered it correctly in both instances.
 join.instructions.first_name=The name you enter will be viewable by all GPS Network members as your first name.
-join.instructions.last_name=The name you enter will be viewable by all Curriki members as your last name.
+join.instructions.last_name=The name you enter will be viewable by all GPS Network members as your last name.
+
+##NEA SPECIFIC INSTRUCTIONS
+
+join_neamember_instructions=Select if you are currently an NEA member. 
+join_neaaffiliate_instructions=Select your affiliate. 
+join_neaoccupation_instructions=Select your occupation. 
+join_neaprofession_instructions=Select your profession. 
 
 
 #JOIN DIALOG FORM ERRORS PRESENTED AFTER SUBMIT IS SELECTED (1.10.6)
@@ -316,7 +358,7 @@ join.validate.email.header2=Enter Validation Key:
 join.validate.email.login_button=Submit
 
 join.validate.email.help_instructions_header=If you do not receive the email:
-join.validate.email.help_instructions_text1=Check your Spam folder and be sure to add GPS Network "webmaster@curriki.org" to your "safe senders" list or address book.
+join.validate.email.help_instructions_text1=Check your Spam folder and be sure to add GPS Network "contactgpsnetwork@nea.org" to your "safe senders" list or address book.
 join.validate.email.help_instructions_text2=Click this link to
 join.validate.email.help_instructions_text3=If you still do not receive an email
 join.validate.email.send_email_button=resend the activation email
@@ -362,7 +404,7 @@ email_not_received.cancel_button=Cancel
 #CORPORATE MEMBERSHIP SELECT PAYMENT FORM 1.10.6
 
 join.complete.corporate.title=Corporate Membership
-join.complete.corporate.text=Thank you for joining Curriki. Corporate members are asked to donate at least $75 to Curriki. With your fee you are supporting a global community of teachers, students, administrators and parents with free, high-quality curricula and learning resources. &lt;p&gt;Curriki is a 501(c)(3) not-for-profit organization; fees are tax deductible.&lt;/p&gt; 
+join.complete.corporate.text=Thank you for joining GPS Network. Corporate members are asked to donate at least $75 to GPS Network. With your fee you are supporting a global community of teachers, students, administrators and parents with free, high-quality curricula and learning resources. &lt;p&gt;GPS Network is a 501(c)(3) not-for-profit organization; fees are tax deductible.&lt;/p&gt; 
 join.complete.corporate.header=Select your desired donation:
 join.complet.corporate.later_button=Edit Profile
 join.complet.corporate.cancel_button=Log-Out &amp; Pay Later
@@ -371,23 +413,24 @@ join.complete.corporate.membertype.link=Change Membership Type
 join.complete.donate.let-others-pay = If you want to make a payment from another browser or computer,&lt;br/&gt; please right-click on the payment button and copy the link. &lt;br/&gt;Then use that link at the location where you want to make a payment.
 join.complete.corporate.warningNotLoggedIn=Warning: Please login before contributing a corporate membership.
 
-#MEMBER (NOT CORPORATE) DONATE FORM 1.10.6
+#MEMBER (NOT CORPORATE) DONATE FORM 1.10.6 UPDATES TEXT FOR GPS NETWORK
 
-join.complete.donate.title=Please Donate
-join.complete.donate.text=Thank you for joining Curriki. Your donations support Curriki's mission of providing free resources to members like you.
-join.complete.donate.header=Please select your optional donation
-join.complete.donate.later_button=Maybe Later
+join.complete.donate.title=Registration Complete
+join.complete.donate.text=Thank you for joining GPS Network.
+join.complete.donate.header=We look forward to seeing your participation.
+join.complete.donate.later_button=Close
+
 join.complete.donate.other_method=Please see the &lt;a href="../Main/Donate" target="_top"&gt;Donate page&lt;/a&gt; to pay by other means.
 
 ## GOOGLE CHECKOUT CARTS (1.10.6)
 ## Corporation (1.10.6)
-googlecheckout.cart.corporate-membership.title=Curriki Corporate Membership
-googlecheckout.cart.corporate-membership.details=Curriki membership payment of user {0} on the platform {1}
+googlecheckout.cart.corporate-membership.title=GPS Network Corporate Membership
+googlecheckout.cart.corporate-membership.details=GPS Network membership payment of user {0} on the platform {1}
 
 ##Member (Non-Corporate) (1.10.6)
-googlecheckout.cart.donation.title=Donation to Curriki
-googlecheckout.cart.donation.details=Donation to Curriki for user {0} to sustain the online platform {1}
-googlecheckout.cart.donation.details.anonymous=Donation to Curriki to sustain the online platform {0}
+googlecheckout.cart.donation.title=Donation to GPS Network
+googlecheckout.cart.donation.details=Donation to GPS Network for user {0} to sustain the online platform {1}
+googlecheckout.cart.donation.details.anonymous=Donation to GPS Network to sustain the online platform {0}
 
 googlecheckout.cart.finished-transaction=Thank you for your transaction. Select the below link to return to Currik.
 
@@ -395,7 +438,7 @@ googlecheckout.cart.finished-transaction=Thank you for your transaction. Select 
 ### donate pages (Main.Donate) outside of the registration process
 main.donate.title=Education Is Hope. Make a Difference.
 main.donate.subtitle=Help a teacher teach, help a student learn, donate today!
-main.donate.intro=Your donations support Curriki's mission of providing free resources to members like you.
+main.donate.intro=Your donations support GPS Network's mission of providing free resources to members like you.
 main.donate.pleasechoosetext=Please select your optional donation:
 
 
@@ -423,13 +466,13 @@ register.curriki_intro.description=&lt;span style="font-size:larger"&gt;&lt;b&gt
 
 
 #COMMERCIAL PARAGRAPH
-register.curriki_intro.commercial=&lt;span style="font-size:larger"&gt;&lt;b&gt;Commercial Organizations:&lt;/b&gt; Join Curriki for a nominal membership fee as an annual donation to Curriki.&lt;/span&gt;
-##&lt;p&gt;As a Corporate member of Curriki you'll be able to make your education content available to hundreds of thousands of Curriki members worldwide. When you join Curriki you'll be able to promote your content to the Curriki community and engage with other members.&lt;/p&gt;
+register.curriki_intro.commercial=&lt;span style="font-size:larger"&gt;&lt;b&gt;Commercial Organizations:&lt;/b&gt; Join GPS Network for a nominal membership fee as an annual donation to GPS Network.&lt;/span&gt;
+##&lt;p&gt;As a Corporate member of GPS Network you'll be able to make your education content available to hundreds of thousands of GPS Network members worldwide. When you join GPS Network you'll be able to promote your content to the GPS Network community and engage with other members.&lt;/p&gt;
 
 
 #FIND OUT SENTENCE (LOTS OF PARTS TO IT)
 register.curriki_intro.description.findout=Find out
-register.curriki_intro.link1_text=Why Curriki Matters
+register.curriki_intro.link1_text=Why GPS Network Matters
 register.curriki_intro.link1_rollover=Educators find, contribute, and collaborate on the best curricula.&lt;br&gt;&lt;br&gt;Teachers and students access free materials online.&lt;br&gt;&lt;br&gt;The global education community improves learning outcomes worldwide.
 register.curriki_intro.link1_url=/xwiki/bin/view/Main/About
 register.curriki_intro.link2_text=What Members Can Do
@@ -462,10 +505,10 @@ register.account_info.email2.title=Confirm Email Address:
 register.account_info.email2.description=Confirm your email address to make sure you entered it correctly in both instances.
 register.account_info.email2.tooltip=Check that you typed the domain name correctly both times. For instance, 'gmail.com' can easily be mistyped without noticing.
 register.account_info.name1.title=First Name:
-register.account_info.name1.description=The name you enter will be viewable by all Curriki members as your first name. For tips on entering names, visit the &lt;a href="/xwiki/bin/view/Coll_curriki/MembershipHowtoJoin?bc=;Coll_curriki.CurrikiHelp" target=blank&gt;Help Collection&lt;/a&gt;.
+register.account_info.name1.description=The name you enter will be viewable by all GPS Network members as your first name. For tips on entering names, visit the &lt;a href="/xwiki/bin/view/Coll_curriki/MembershipHowtoJoin?bc=;Coll_curriki.CurrikiHelp" target=blank&gt;Help Collection&lt;/a&gt;.
 register.account_info.name1.tooltip=If you want to display your real name, use your first name here.
 register.account_info.name2.title=Last Name 2:
-register.account_info.name2.description=The name you enter will be viewable by all Curriki members as your last name.
+register.account_info.name2.description=The name you enter will be viewable by all GPS Network members as your last name.
 register.account_info.name2.tooltip=If you want to display your real name, use your last name here.
 register.account_info.error.blank_field=Some required fields are missing; see highlighted areas.
 register.account_info.error.login_not_unique=The member login you entered has already been used; please enter another member login.
@@ -540,7 +583,7 @@ register.interests.language.tooltip=Choose a language; you can always edit this 
 
 #New Corporate Translations - (1.8.5)
 
-register.interests.publish_intent.title=&lt;strong&gt;Corporate &amp; Non-Profit Members:&lt;/strong&gt; What would you like to publish on Curriki?
+register.interests.publish_intent.title=&lt;strong&gt;Corporate &amp; Non-Profit Members:&lt;/strong&gt; What would you like to publish on GPS Network?
 register.interests.publish_intent.tooltip=Please select all that apply.
 register.interests.publish_intent.description=Select one or more choices.
 
@@ -553,9 +596,9 @@ register.interests.publish_intent.podcasts=Podcasts
 register.interests.publish_intent.lessons=Lesson plans/Teaching unites
 register.interests.publish_intent.etext=etext books
 register.interests.publish_intent.other=other
-register.interests.value_add.title=&lt;strong&gt;Corporate &amp; Non-profit Members:&lt;/strong&gt; Please describe the value your organization will bring to Curriki:
-register.interests.value_add.tooltip=Share how your corporation will contribute to Curriki, such as adding content.
-register.interests.value_add.description=Enter a description; you can always edit this field later in My Curriki.
+register.interests.value_add.title=&lt;strong&gt;Corporate &amp; Non-profit Members:&lt;/strong&gt; Please describe the value your organization will bring to GPS Network:
+register.interests.value_add.tooltip=Share how your corporation will contribute to GPS Network, such as adding content.
+register.interests.value_add.description=Enter a description; you can always edit this field later in My GPS Network.
 
 
 register.terms.header=Save Information &amp; Register
@@ -572,7 +615,7 @@ register.terms.no_agreement=You must agree to GPS Network's Privacy and Terms of
 
 
 #email sender and body
-registration.email=webmaster@curriki.org
+registration.email=contactgpsnetwork@nea.org
 registration.email.name=GPS Network
 
 
@@ -616,7 +659,7 @@ emailValidation.step1.cancel=Logout and Cancel
 emailValidation.step1.goElsewhere=Any changes made to the page will be lost. Select OK to be logged out and returned to the home page. You can return to this form by logging in.  Click Cancel to return to the form and submit your changes.
 
 emailValidation.sent.title=Email Verification Sent
-emailValidation.sent.text=&lt;p&gt;The first step in verifying your email address is complete.&lt;/p&gt;&lt;p&gt;To complete the next step, please check your email inbox for a message from webmaster@curriki.org&lt;/p&gt;&lt;p&gt;If you do not see the email, it may be because of a SPAM filter. Check your SPAM folder and be sure to add curriki.org to your "safe senders" list or address book.&lt;/p&gt;
+emailValidation.sent.text=&lt;p&gt;The first step in verifying your email address is complete.&lt;/p&gt;&lt;p&gt;To complete the next step, please check your email inbox for a message from contactgpsnetwork@nea.org&lt;/p&gt;&lt;p&gt;If you do not see the email, it may be because of a SPAM filter. Check your SPAM folder and be sure to add nea.org to your "safe senders" list or address book.&lt;/p&gt;
 emailValidation.sent.notreceived=If you have not received an email within 10 minutes, please contact GPS Network by using the &lt;a href="{0}"&gt;Email Not Received&lt;/a&gt; form.
 
 emailValidation.step2.title=Email Verified - Step 2 of 2 Completed
@@ -656,7 +699,7 @@ staf.from=sendtoafriend@curriki.org
 staf.sent.okaymsg=E-mail sent.
 staf.err.emptyto=Please enter an email address.
 staf.err.invalidemail=Please enter a valid email address.
-staf.err.isguest=Only Curriki members can send resources to a friend. Please log in or become a member.
+staf.err.isguest=Only GPS Network members can send resources to a friend. Please log in or become a member.
 staf.sent.errored=An unknown error has occurred.
 
 

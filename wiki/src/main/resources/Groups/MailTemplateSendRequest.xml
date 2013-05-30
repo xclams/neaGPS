@@ -7,14 +7,14 @@
 <translation>0</translation>
 <parent></parent>
 <creator></creator>
-<author>XWiki.adminPolx</author>
+<author>XWiki.LudovicDubost</author>
 <customClass></customClass>
-<contentAuthor>XWiki.adminPolx</contentAuthor>
+<contentAuthor>XWiki.LudovicDubost</contentAuthor>
 <creationDate>1198697069000</creationDate>
-<date>1291854015000</date>
-<contentUpdateDate>1291854015000</contentUpdateDate>
-<version>7.1</version>
-<title>Membership Request for $space.displayTitle on Curriki</title>
+<date>1369944289000</date>
+<contentUpdateDate>1369944289000</contentUpdateDate>
+<version>9.1</version>
+<title>Membership Request for $space.displayTitle on GPS Network</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
@@ -52,7 +52,7 @@
 <name>Groups.MailTemplateSendRequest</name>
 <number>0</number>
 <className>XWiki.TagClass</className>
-<guid></guid>
+<guid>de16b589-a4a0-4217-83fe-eb82ec2f8085</guid>
 <property>
 <tags/>
 </property>
@@ -68,7 +68,7 @@
 
 Dear group leader for $groupName,
 
-You have received a membership request for $groupName on Curriki. Because yours is a closed group, you must respond by either accepting or denying each membership request.
+You have received a membership request for $groupName on GPS Network. Because yours is a closed group, you must respond by either accepting or denying each membership request.
 
 Please visit the Members tab of your group to sort the Members listing so that it shows only the "Pending" membership requests. There you can click the Deny or Accept link for each request. You can also view the status of any invitations by sorting.
 
@@ -76,9 +76,8 @@ If you are logged in, you can access the Members tab for $groupName here:
 
 $membersTabURL
 
-If you need support in managing your group membership, please send a message to the Curriki Leaders Group at http://leaders.groups.curriki.org/Messages or email Curriki at groups@curriki.org.
+If you need support in managing your group membership, please send a message to the GPS Network Leaders Group at http://leaders.groups.gpsnetwork.org/Messages or email GPS Network at contactgpsnetwork@nea.org.
 
 Sincerely,
 
-Curriki
-</content></xwikidoc>
+GPS Network</content></xwikidoc>
