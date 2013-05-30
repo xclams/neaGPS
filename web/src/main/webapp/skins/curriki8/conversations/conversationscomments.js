@@ -7,10 +7,21 @@ var viewers = XWiki.viewers = XWiki.viewers || {};
 viewers.Comments = Class.create({
   xcommentSelector : ".xwikicomment",
   /** Constructor. Adds all the JS improvements of the Comments area. */
-  initialize : function() {
-    if ($("commentscontent")) {
+  initialize: function(convContainer) {
+    if (!convContainer || typeof(convContainer) == "undefined") {
+      // if we don't have a container, do nothing, this is to prevent the default behaviour of the comments enhancer
+      return false;
+    }
+    this.conversation = convContainer;
+    var conversationId = this.conversation.readAttribute('id');
+    if (conversationId) {
+      this.xcommentSelector = "#" + conversationId + " " + this.xcommentSelector;
+    }
+
+    if (this.conversation.down(".commentscontent")) {
       // If the comments area is already visible, enhance it.
       this.startup();
+      this.addConversationHandlers();
     }
     if ($("Commentstab")) {
       this.container = $("Commentspane");
@@ -19,13 +30,18 @@ viewers.Comments = Class.create({
       this.container = $$(".main.layoutsubsection").first();
       this.generatorTemplate = "conversationscomments.vm";
     }
+
+    // don't know yet what is the container used for
+    this.container = this.conversation.down('.commentscontent');
+    this.generatorTemplate = 'conversations.vm';
+
     // We wait for a notification for the AJAX loading of the Comments metadata tab.
     this.addTabLoadListener();
   },
   /** Enhance the Comments UI with JS behaviors. */
   startup : function() {
-    if ($("commentform")) {
-      this.form = $("commentform").up("form");
+    if (this.conversation.down(".commentform")) {
+      this.form = this.conversation.down(".commentform").up('form');
     } else {
       this.form = undefined;
     }
@@ -37,6 +53,13 @@ viewers.Comments = Class.create({
     this.addCancelListener();
     this.addEditListener();
     this.addPreview(this.form);
+  },
+  addConversationHandlers : function() {
+    this.addConversationDeleteListener();
+    this.addConversationEditListener();
+    this.addConversationHideListener();
+    this.addConversationLikeListener();
+    this.addConversationPermalinkListener();
   },
   /**
    * Parse the IDs of the comments to obtain the xobject number.
@@ -186,7 +209,6 @@ viewers.Comments = Class.create({
     var comment = editActivator.up(this.xcommentSelector);
     editActivator._x_editForm.hide();
     comment.show();
-    // force hiding the form
     this.cancelPreview(editActivator._x_editForm);
     this.editing = false;
   },
@@ -206,23 +228,29 @@ viewers.Comments = Class.create({
           item.blur();
           event.stop();
           // If the form was already displayed as a reply, re-enable the Reply button for the old location
-          /*
           if (this.form.up('.commentthread')) {
             this.form.up(".commentthread").previous(this.xcommentSelector).down('a.commentreply').show();
           }
+
+         // Before moving the editor we need to unload the wysiwyg editor
+         var tarea = this.form["XWiki.XWikiComments_comment"];
+         tarea.wysiwyg.release()
+         tarea.previous().remove()
+
           // Insert the form on top of that comment's discussion
-          item.up(this.xcommentSelector).next('.commentthread').insert({'top' : this.form});
-          */
+         item.up(this.xcommentSelector).next('.commentthread').insert({'top' : this.form});
+
+         // now we can reload the editor
+         tarea.wysiwyg = new WysiwygEditor(WysiwygConfig[tarea.id]);
+         XWiki.widgets.fs.addBehavior(this.form.down(".xRichTextEditor"));
+
           // Set the replyto field to the replied comment's number
           this.form["XWiki.XWikiComments_replyto"].value = item.up(this.xcommentSelector)._x_number;
           // Clear the contents and focus the textarea
           this.form["XWiki.XWikiComments_comment"].value = "";
-          this.form["XWiki.XWikiComments_comment"].focus();
+          // this.form["XWiki.XWikiComments_comment"].focus();
           // Hide the reply button
-          // item.hide();
-          // Show the comment form
-          this.form.show();
-          this.center(this.form);
+          item.hide();
         }.bindAsEventListener(this));
       }.bind(this));
     } else {
@@ -260,6 +288,8 @@ viewers.Comments = Class.create({
   /**
    * When pressing Submit, check that the comment is not empty. Submit the form with ajax and update the whole comments
    * zone on success.
+   *
+   * We customize this function only to handle the redirect for the comment edit form, which is wrongly being overwritten with a URL to the current document
    */
   addSubmitListener : function(form) {
     if (form) {
@@ -268,7 +298,10 @@ viewers.Comments = Class.create({
         event.stop();
         if (form.down('textarea').value != "") {
           var formData = new Hash(form.serialize(true));
-          formData.set('xredirect', window.docgeturl + '?xpage=xpart&vm=' + this.generatorTemplate);
+          // only overwrite the xredirect if it's not already set. In any case, add comment and add reply don't use this redirect, they use the xpage and vm under
+          if(!formData.get('xredirect')) {
+            formData.set('xredirect', window.docgeturl + '?xpage=xpart&vm=' + this.generatorTemplate);
+          }
           // Allows CommentAddAction to parse a template which will return a message telling if the captcha was wrong.
           formData.set('xpage', 'xpart');
           formData.set('vm', this.generatorTemplate);
@@ -277,7 +310,6 @@ viewers.Comments = Class.create({
           formData.unset('action_cancel');
           // Create a notification message to display to the user when the submit is being sent
           form._x_notification = new XWiki.widgets.Notification("$msg.get('core.viewers.comments.add.inProgress')", "inprogress");
-          form.hide();
           form.disable();
           this.restartNeeded = false;
           new Ajax.Request(url, {
@@ -301,33 +333,36 @@ viewers.Comments = Class.create({
             },
             onComplete : function (response) {
               if (this.restartNeeded) {
-                this.container.update(response.responseText);
+                // force reload
+                location.reload();
+                /*
+                this.container.innerHTML = response.responseText;
                 document.fire("xwiki:docextra:loaded", {
                   "id" : "Comments",
                   "element": this.container
                 });
-                this.updateCount();
+                this.updateCount()
+                */
               } else {
                 form.enable();
-              }
+              } 
             }.bind(this)
           });
         }
       }.bindAsEventListener(this));
     }
   },
-  /**
-   * When pressing Cancel, reset the form.
-   */
   addCancelListener : function() {
     if (this.form) {
+      // I have no idea what this initial location is used for, but we leave it here and correct it to use .commentscontent instead of #_comments
       this.initialLocation = new Element("span", {className : "hidden"});
-      $('_comments').insert(this.initialLocation);
+      this.conversation.down('.commentscontent').insert(this.initialLocation);
       // If the form is inside a thread, as a reply form, move it back to the bottom.
-      this.form.down('a.cancel').observe('click', function() { this.resetForm.bindAsEventListener(this); this.container.hide(); } );
+      var that = this;
+      this.form.down('a.cancel').observe('click', this.resetForm.bindAsEventListener(this));
     }
   },
-  /**
+   /**
    * Add a preview button that generates the rendered comment,
    */
   addPreview : function(form) {
@@ -408,35 +443,42 @@ viewers.Comments = Class.create({
     if (event) {
       event.stop();
     }
-    var ccontent = this.form;
-    if (ccontent) ccontent.hide();
-    console.log("In cancel : " + ccontent);
-
     if (this.form.up('.commentthread')) {
       // Show the comment's reply button
-      // this.form.up(".commentthread").previous(this.xcommentSelector).down('a.commentreply').show();
+      this.form.up(".commentthread").previous(this.xcommentSelector).down('a.commentreply').show();
+
+      // Before moving the editor we need to unload the wysiwyg editor
+      var tarea = this.form["XWiki.XWikiComments_comment"];
+      tarea.wysiwyg.release()
+      tarea.previous().remove()
+
       // Put the form back to its initial location and clear the contents
-      // this.initialLocation.insert({after: this.form});
+      this.initialLocation.insert({after: this.form});
+
+      // now we can reload the editor
+      tarea.wysiwyg = new WysiwygEditor(WysiwygConfig[tarea.id]);
+      XWiki.widgets.fs.addBehavior(this.form.down(".xRichTextEditor"));
     }
     this.form["XWiki.XWikiComments_replyto"].value = "";
     this.form["XWiki.XWikiComments_comment"].value = "";
     this.cancelPreview(this.form);
   },
+  /**
+   * Customized to take into account the new display of the conversation count.
+   */
   updateCount : function() {
-    if ($("Commentstab") && $("Commentstab").down(".itemCount")) {
-      $("Commentstab").down(".itemCount").update("$msg.get('docextra.extranb', ['__number__'])".replace("__number__", $$(this.xcommentSelector).size()));
-    }
-    if ($("commentsshortcut") && $("commentsshortcut").down(".itemCount")) {
-      $("commentsshortcut").down(".itemCount").update("$msg.get('docextra.extranb', ['__number__'])".replace("__number__", $$(this.xcommentSelector).size()));
+    if (this.conversation.down('.conversation-count')) {
+      this.conversation.down('.conversation-count').update($$(this.xcommentSelector).size());
     }
   },
   /**
    * Registers a listener that watches for the insertion of the Comments tab and triggers the enhancements.
    * After that, the listener removes itself, since it is no longer needed.
+   * We overwrite this in order to listen to only the reload of this conversation, not to all conversations.
    */
   addTabLoadListener : function(event) {
     var listener = function(event) {
-      if (event.memo.id == 'Comments') {
+      if (event.memo.id == 'Comments' && event.memo.element == this.container) {
         this.startup();
       }
     }.bindAsEventListener(this);
@@ -451,24 +493,290 @@ viewers.Comments = Class.create({
     return msg;
   },
 
-  center: function(el) {
-   console.log("in center");
-   var wwidth = window.innerWidth || (window.document.documentElement.clientWidth || window.document.body.clientWidth);
-   var wheight=  window.innerHeight || (window.document.documentElement.clientHeight || window.document.body.clientHeight);
-   var width = el.getWidth()
-   var height = el.getHeight()
-   el.style.padding="30px";
-   el.style.backgroundColor = "#ccc";
-   el.style.left = (wwidth-width)/2 + "px";
-   el.style.top = (wheight-height)/2 + "px";
-  }
-});
+  /**
+   * Ajax conversation deletion.
+   */
+  addConversationDeleteListener : function() {
+    var conversationDelete = this.conversation.down('.conversation-delete a');
+    if (!conversationDelete) {
+      return;
+    }
+    conversationDelete.observe('click', function(event) {
+      var commentsCount = $$(this.xcommentSelector).size();
+      conversationDelete.blur();
+      event.stop();
+      if (conversationDelete.disabled) {
+        // Do nothing if the button was already clicked and it's waiting for a response from the server.
+        return;
+      } else {
+        new XWiki.widgets.ConfirmedAjaxRequest(
+          /* Ajax request URL */
+          conversationDelete.readAttribute('href') + (Prototype.Browser.Opera ? "" : "&ajax=1"),
+          /* Ajax request parameters */
+          {
+            onCreate : function() {
+              // Disable the button, to avoid a cascade of clicks from impatient users
+              conversationDelete.disabled = true;
+            },
+            onSuccess : function() {
+              // Remove the corresponding HTML element from the UI
+              var conversation = conversationDelete.up('.conversation');
+              // Replace the comment with a "deleted conversation" placeholder
+              conversation.replace(this.createNotification("$msg.get('conversation.delete.success')"));
+            }.bind(this),
+            onComplete : function() {
+              // In the end: re-enable the button
+              conversationDelete.disabled = false;
+            }
+          },
+          /* Interaction parameters */
+          {
+             confirmationText: commentsCount > 0 ? "$escapetool.javascript($msg.get('conversation.delete.confirm.withReplies', ['__number__']))".replace('__number__', commentsCount) : "$escapetool.javascript($msg.get('conversation.delete.confirm'))",
+             progressMessageText : "$msg.get('conversation.delete.inProgress')",
+             successMessageText : "$msg.get('conversation.delete.done')",
+             failureMessageText : "$msg.get('conversation.delete.failed')"
+          }
+        );
+      }
+    }.bindAsEventListener(this));
+  },
+
+  addConversationEditListener : function() {
+    var conversationEdit = this.conversation.down('.conversation-edit a');
+    if (!conversationEdit) {
+      return;
+    }
+    conversationEdit.observe('click', function(event){
+      event.stop();
+      // check if a form exists already and if it has something in it
+      var existingForm = this.conversation.down('.conversation-editformcontainer form');
+      if (existingForm && existingForm.getElements().size() > 0) {
+        return;
+      }
+      var conversationEditFormContainer = new Element('div', {'class' : 'loading conversation-editformcontainer'});
+      var conversationInfo = this.conversation.down('.conversation-info');
+      conversationInfo.insert({after : conversationEditFormContainer});
+      var url = event.findElement().readAttribute('href');
+      // make up a save URL from the edit URL
+      var saveUrl = url.replace("\/edit\/", "/save/");
+      var editForm = new Element('form', {'method' : 'post', 'action' : saveUrl})
+      conversationEditFormContainer.insert(editForm);
+      // create the buttons for the future form, but don't insert them just yet
+      var saveButton = new Element('input', {'type' : 'submit', 'value' : '$escapetool.javascript($msg.get("save"))', 'class' : 'button'});
+      var cancelButton = new Element('a', {'href' : window.location.href, 'class' : 'button'}).insert('$msg.get("cancel")');
+      cancelButton.observe('click', function(event) {
+        var conversationFormContainer = event.findElement('.conversation-editformcontainer');
+        if (conversationFormContainer) {
+          event.stop();
+          conversationFormContainer.remove();
+        }
+      });
+      var buttonsContainer = new Element('div', {'class' : 'buttonwrapper'}).insert(saveButton).insert(' ').insert(cancelButton);
+      new Ajax.Request(url, {
+        method : 'get',
+        parameters : {'xpage' : 'plain'},
+        onSuccess : function (response) {
+          // put the form data in the form
+          editForm.insert(response.responseText);
+          // put the redirect in the form and wait for the prey...
+          editForm.insert(new Element('input', {'type' : 'hidden', 'name' : 'xredirect', 'value' : window.location.href}));
+          editForm.insert(buttonsContainer);
+        }.bind(this),
+        onFailure : function (response) {
+          var failureReason = response.statusText;
+          if (response.statusText == '' /* No response */ || response.status == 12031 /* In IE */) {
+            failureReason = 'Server not responding';
+          }
+          editForm._x_notification = new XWiki.widgets.Notification("$msg.get('conversation.edit.failed')" + failureReason, "error");
+          conversationEditFormContainer.remove();
+        }.bind(this),
+        on0 : function (response) {
+          response.request.options.onFailure(response);
+        },
+        onComplete : function (response) {
+          conversationEditFormContainer.removeClassName('loading');
+        }.bind(this)
+      });
+    }.bindAsEventListener(this));
+  },
+  toggleConversationContent : function() {
+    var commentsContent = this.conversation.down('.commentscontent');
+    if (commentsContent) {
+      commentsContent.toggleClassName('hidden');
+    }
+    var conversationTitle = this.conversation.down('.conversation-titlebar');
+    if (conversationTitle) {
+      conversationTitle.toggleClassName('conversation-showhandler');
+    }
+  },
+    /**
+      * Hide the conversation if it's not focused and add a handler to toggle it.
+      *
+      */
+    addConversationHideListener : function() {
+      var isVisible = false;
+      // we cannot use .xwikicomment:target here since we're not sure it;s already loaded (e.g. on chrome) so we read the anchor manually
+      var anchor = window.location.hash;
+      if (anchor && anchor != "" && (this.conversation.down(anchor) || this.conversation.match(anchor))) {
+        isVisible = true;
+      }
+      // force display:
+      isVisible = true;
+      var conversationTitle = this.conversation.down('.conversation-titlebar');
+      if (conversationTitle) {
+        if (!isVisible) {
+          this.toggleConversationContent();
+        }
+        // add the listener
+        conversationTitle.observe('click', function(event){
+          this.toggleConversationContent();
+        }.bindAsEventListener(this));
+        // and a class name
+        conversationTitle.addClassName('conversation-togglehandler');
+      }
+    },
+
+    addConversationLikeListener : function() {
+      var conversationLike = this.conversation.down('.conversation-like img.canVote');
+      // if there is no clickable button, return, don't do anything
+      if (!conversationLike) {
+        return;
+      }
+
+      // if we have an active like button, add a listener to it
+      conversationLike.observe('click', function(event) {
+        event.stop();
+        var conversationLikeBlock = event.findElement('.conversation-like');
+        if (conversationLikeBlock.votingInProgress) {
+          // there is already a voting in progress, don't start again
+          return;
+        }
+        // find the conversation document name to vote for
+        var conversationDocName;
+        if (conversationLikeBlock) {
+          var conversationNameInput = conversationLikeBlock.down('input[name=documenttolike]');
+          if (conversationNameInput) {
+            conversationDocName = conversationNameInput.value;
+          }
+        }
+        if (!conversationDocName || typeof(conversationDocName) == "undefined") {
+          // we don't have the name of the document to like, return
+          return;
+        }
+
+        var likeUrl = '$escapetool.javascript($xwiki.getURL("XWiki.Ratings"))';
+        conversationLikeBlock.votingInProgress = false;
+
+        new Ajax.Request(likeUrl, {
+          method : 'post',
+          parameters : {'xpage' : 'plain', 'doc' : conversationDocName, 'vote' : '1'},
+          onCreate : function () {
+            conversationLikeBlock.votingInProgress = true;
+            conversationLikeBlock._x_notification = new XWiki.widgets.Notification("$escapetool.javascript($msg.get('conversation.like.loading'))", "inprogress");
+          }.bind(this),
+          onSuccess : function (response) {
+            conversationLikeBlock._x_notification.replace(new XWiki.widgets.Notification("$escapetool.javascript($msg.get('conversation.like.done'))", "done"));
+            // get the conversation score which is the sibling of the like block
+            var scoreDisplayer = conversationLikeBlock.next('.conversation-score');
+            if (scoreDisplayer) {
+              scoreDisplayer.update(response.responseJSON.totalvotes);
+            }
+            // and now remove this listener from the like button, since the current user shouldn't be able to vote again ...
+            var conversationLikeButton = conversationLikeBlock.down('img');
+            if (conversationLikeButton) {
+              conversationLikeButton.stopObserving('click');
+              // ... and put inactive class to change the style
+              conversationLikeButton.removeClassName('canVote');
+            }
+          }.bind(this),
+          onFailure : function (response) {
+            var failureReason = response.responseText;
+            if (!response.responseText || response.responseText == '' ) {
+              failureReason = response.statusText;
+            }
+            if (response.statusText == '' /* No response */ || response.status == 12031 /* In IE */) {
+              failureReason = 'Server not responding';
+            }
+            conversationLikeBlock._x_notification.replace(new XWiki.widgets.Notification("$escapetool.javascript($msg.get('conversation.like.failed'))" + failureReason, "error"));
+          }.bind(this),
+          on0 : function (response) {
+            response.request.options.onFailure(response);
+          },
+          onComplete : function (response) {
+            conversationLikeBlock.votingInProgress = false;
+          }.bind(this)
+        });
+      }.bindAsEventListener(this));
+    },
+
+    addConversationPermalinkListener : function() {
+      var conversationPermalink = this.conversation.down('.conversation-permalink a');
+      if (!conversationPermalink) {
+        return;
+      }
+      conversationPermalink.observe('click', function(event) {
+        conversationPermalink.blur();
+        event.stop();
+        var permalinkBox = new XWiki.widgets.ConfirmationBox(
+          {
+            onYes : function () {
+              window.location = conversationPermalink.href;
+            }
+          },
+          /* Interaction parameters */
+          {
+            confirmationText: "$msg.get('core.viewers.comments.permalink'): <input type='text' class='full' value='" + conversationPermalink.href + "'/>",
+            yesButtonText: "$msg.get('core.viewers.comments.permalink.goto')",
+            noButtonText : "$msg.get('core.viewers.comments.permalink.hide')"
+          }
+        );
+        permalinkBox.dialog.addClassName('permalinkBox')
+        permalinkBox.dialog.down('input[type="text"]').select();
+      });
+    }
+  });
 
 function init() {
-  viewers.comments = new viewers.Comments();
+  $$('.conversation').each(function(conv) {
+    new XWiki.viewers.Comments(conv);
+  });
+
+  $$('.AddComment').each(function(el) {
+    // el.hide();
+  });
+
+  // also make the conversation add activator to show the add form when clicked
+  $$(".addconversation-activator").each(function(item) {
+    item.observe('click', function(event) {
+      // get the button that was clicked
+      var activator = event.findElement();
+      // get its form, which is the sibling form .addconversation
+      var form = activator.next('form.addconversation');
+      // if we have a form, do all sorts of stuff, otherwise just let the link go
+      if (form) {
+        event.stop();
+        form.removeClassName('hidden');
+        activator.addClassName('hidden');
+
+        // find the cancel button of this form and make it display the button back and hide the form
+        var cancelButton = form.down('a.cancel');
+        cancelButton.observe('click', function(event){
+          event.stop();
+          activator.removeClassName('hidden');
+          form.addClassName('hidden');
+        });
+      }
+    });
+  });
+
+  // Activate full screen:
+  if (!XWiki.widgets.fs)
+     XWiki.widgets.fs = new XWiki.widgets.FullScreen();
+
 }
 
 // When the document is loaded, trigger the Comments form enhancements.
+// Modification to work with curriki. This means js needs to be loaded non defered
 document.observe("dom:loaded", init);
 
 // End XWiki augmentation.
