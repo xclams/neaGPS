@@ -5802,7 +5802,7 @@ Curriki</confirmation_email_content>
 <default_language>en</default_language>
 </property>
 <property>
-<documentBundles>XWiki.GlobalClassTranslations,CreateResources.Translations,XWiki.Translations,CRS.Translations,Registration.Translations,FileCheck.Translations,Groups.Translations,MyCurriki.Translations,XWiki.ToTranslate,Search.Translations,CurrikiCode.EditViewTranslations,Affiliate.Translations,AdWordsJump.Translations</documentBundles>
+<documentBundles>XWiki.GlobalClassTranslations,CreateResources.Translations,XWiki.Translations,CRS.Translations,Registration.Translations,FileCheck.Translations,Groups.Translations,MyCurriki.Translations,XWiki.ToTranslate,Search.Translations,CurrikiCode.EditViewTranslations,Affiliate.Translations,AdWordsJump.Translations,ConversationCode.Translations</documentBundles>
 </property>
 <property>
 <edit_anonymous>---</edit_anonymous>
