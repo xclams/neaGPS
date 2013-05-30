@@ -111,3 +111,12 @@ body.curriki#body {
 .groups .headerbar, .form-wrp fieldset h3 {
     background: #164891 !important;
 }
+
+/*
+==========================================
+JIRAs
+==========================================
+*/
+.titleheader-red {
+  background-color: #006699 !important ;  
+}
