@@ -7,18 +7,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.ShermanTank</creator>
-<author>XWiki.adminPolx</author>
+<author>XWiki.LudovicDubost</author>
 <customClass></customClass>
-<contentAuthor>XWiki.adminPolx</contentAuthor>
+<contentAuthor>XWiki.LudovicDubost</contentAuthor>
 <creationDate>1312933983000</creationDate>
-<date>1320792651000</date>
-<contentUpdateDate>1320792651000</contentUpdateDate>
-<version>15.1</version>
-<title>Action required -- Curriki Registration</title>
+<date>1369944311000</date>
+<contentUpdateDate>1369944311000</contentUpdateDate>
+<version>10.1</version>
+<title>Action required -- GPS Network Registration</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>cli-upload.</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <hidden>false</hidden>
@@ -52,15 +52,15 @@
 <name>Registration.MemberRegKeySentEmail</name>
 <number>0</number>
 <className>XWiki.TagClass</className>
-<guid></guid>
+<guid>1301f1e2-96ef-4cef-960c-a7700c915089</guid>
 <property>
 <tags/>
 </property>
 </object>
 <content>
-&lt;h3&gt;Thank you for becoming a Curriki member!&lt;/h3&gt;
+&lt;h3&gt;Thank you for becoming a GPS Network member!&lt;/h3&gt;
 
-We are happy to have you as a members.
+We are happy to have you as a member.
 
 Registration is almost complete.
 
@@ -76,5 +76,5 @@ Alternatively, please click this link to complete registration:
 
 If the link does not open your browser, please cut and paste the link into your browser.
 
-The Curriki Community.
+The GPS Network Community.
 </content></xwikidoc>

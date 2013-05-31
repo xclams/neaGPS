@@ -7,18 +7,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.LudovicDubost</creator>
-<author>XWiki.ShermanTank</author>
+<author>XWiki.ShermanTankNEA</author>
 <customClass></customClass>
-<contentAuthor>XWiki.ShermanTank</contentAuthor>
+<contentAuthor>XWiki.ShermanTankNEA</contentAuthor>
 <creationDate>1194210594000</creationDate>
-<date>1291618506000</date>
-<contentUpdateDate>1291618506000</contentUpdateDate>
-<version>44.1</version>
+<date>1369784684000</date>
+<contentUpdateDate>1369784684000</contentUpdateDate>
+<version>3.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>Branding pass.</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <hidden>false</hidden>
@@ -52,7 +52,7 @@
 <name>FileCheck.Translations</name>
 <number>0</number>
 <className>XWiki.TagClass</className>
-<guid></guid>
+<guid>4be7c260-2db7-41fe-836a-e0e0827800c4</guid>
 <property>
 <tags/>
 </property>
@@ -151,7 +151,7 @@
 <name>FileCheck.Translations</name>
 <number>0</number>
 <className>XWiki.XWikiRights</className>
-<guid></guid>
+<guid>c2f064dc-b802-49e6-82c5-85b41f7b893d</guid>
 <property>
 <allow>1</allow>
 </property>
@@ -259,7 +259,7 @@
 <name>FileCheck.Translations</name>
 <number>1</number>
 <className>XWiki.XWikiRights</className>
-<guid></guid>
+<guid>f09f62e9-8ca8-461a-a630-dd4fac86ca29</guid>
 <property>
 <allow>1</allow>
 </property>
@@ -283,7 +283,7 @@
 
 fc_filecheck=File Check
 fc_resourcetitle=Resource Title
-fc_dateadded=Date Created/Added in Curriki
+fc_dateadded=Date Created/Added in GPS Network
 fc_contributor=Contributor
 fc_status=Basic File Check Status
 fc_datechecked=Date of Basic File Check Action
@@ -300,7 +300,7 @@ fc_ok=Submit
 fc_cancel=Cancel
 fc_noactionchecked=No action has been selected.
 fc_confirmmessage1=Do you want to mark this resource as OK?
-fc_confirmmessage2=Do you want to mark this resource as requiring a special check by Curriki's editorial or technical staff?
+fc_confirmmessage2=Do you want to mark this resource as requiring a special check by GPS Network's editorial or technical staff?
 fc_confirmmessage3=Do you want to set this resource's Access Privileges to Private and send the resource contributor the Resource Improvement Request email?
 fc_confirmmessage4=Do you want to set this resource to Deleted From Member Access and send the resource creator the Resource Deleted email?
 fc_noassetselected=No resource has been selected to be checked.
@@ -380,7 +380,7 @@ flag.dialog.reason.alt.filecheck=is objectionable for another reason I'll descri
 
 flag.dialog.header=FLAG THIS RESOURCE
 flag.dialog.guidingquestion1.txt=What happens when you flag a resource?
-flag.dialog.instruction1.txt=You submit the resource for immediate evaluation by Curriki.
+flag.dialog.instruction1.txt=You submit the resource for immediate evaluation by GPS Network.
 flag.dialog.guidingquestion2.txt=Why are you flagging this resource?
 flag.dialog.required.field.icon=&lt;em class="required-indicator"&gt;* &lt;/em&gt;
 flag.dialog.instruction2.txt=I am flagging this resource because it

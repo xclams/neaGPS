@@ -7,14 +7,14 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.mflorea</creator>
-<author>XWiki.adminPolx</author>
+<author>XWiki.LudovicDubost</author>
 <customClass></customClass>
-<contentAuthor>XWiki.adminPolx</contentAuthor>
+<contentAuthor>XWiki.LudovicDubost</contentAuthor>
 <creationDate>1199281932000</creationDate>
-<date>1291854011000</date>
-<contentUpdateDate>1291854011000</contentUpdateDate>
-<version>7.1</version>
-<title>Membership Request Confirmation for $space.displayTitle on Curriki </title>
+<date>1369944289000</date>
+<contentUpdateDate>1369944289000</contentUpdateDate>
+<version>9.1</version>
+<title>Membership Request Confirmation for $space.displayTitle on GPS Network </title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
@@ -52,7 +52,7 @@
 <name>Groups.MailTemplateCreateRequest</name>
 <number>0</number>
 <className>XWiki.TagClass</className>
-<guid></guid>
+<guid>20179c28-cd11-420a-8b80-a130666b18bb</guid>
 <property>
 <tags/>
 </property>
@@ -76,5 +76,5 @@ This is a confirmation that your membership request to join $groupName is comple
 
 Sincerely,
 
-Curriki
+GPS Network
 </content></xwikidoc>

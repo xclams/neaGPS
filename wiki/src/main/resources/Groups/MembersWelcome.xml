@@ -7,13 +7,13 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.LudovicDubost</creator>
-<author>XWiki.adminPolx</author>
+<author>XWiki.LudovicDubost</author>
 <customClass></customClass>
-<contentAuthor>XWiki.adminPolx</contentAuthor>
+<contentAuthor>XWiki.LudovicDubost</contentAuthor>
 <creationDate>1199209047000</creationDate>
-<date>1291854016000</date>
-<contentUpdateDate>1291854016000</contentUpdateDate>
-<version>7.1</version>
+<date>1369944289000</date>
+<contentUpdateDate>1369944289000</contentUpdateDate>
+<version>9.1</version>
 <title>MembersWelcome</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -52,7 +52,7 @@
 <name>Groups.MembersWelcome</name>
 <number>0</number>
 <className>XWiki.TagClass</className>
-<guid></guid>
+<guid>4b62f65f-86d0-42c2-9f8d-821f3f2bacbd</guid>
 <property>
 <tags/>
 </property>
@@ -63,4 +63,4 @@
  * @type content 
  * @refactored ludovic 
  *#
-The membership setting for this group appears on the group's Home tab under Information Settings. Groups set to "Open" accept all interested Curriki members; groups set to "Closed" accept members based on screening by the group leader. For open groups, visitors can view current group members below.</content></xwikidoc>
+The membership setting for this group appears on the group's Home tab under Information Settings. Groups set to "Open" accept all interested GPS Network members; groups set to "Closed" accept members based on screening by the group leader. For open groups, visitors can view current group members below.</content></xwikidoc>
