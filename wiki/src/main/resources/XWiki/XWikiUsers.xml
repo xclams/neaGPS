@@ -497,7 +497,7 @@ I have read, understand and agree to Curriki's Privacy Policy, the Educational P
 </neaaffiliate>
 <neamember>
 <customDisplay></customDisplay>
-<defaultValue>0</defaultValue>
+<defaultValue>1</defaultValue>
 <disabled>0</disabled>
 <displayFormType>radio</displayFormType>
 <displayType>nea</displayType>
@@ -622,7 +622,7 @@ I have read, understand and agree to Curriki's Privacy Policy, the Educational P
 <picker>0</picker>
 <prettyName>Password</prettyName>
 <size>30</size>
-<storageType>Clear</storageType>
+<storageType>Hash</storageType>
 <tooltip></tooltip>
 <unmodifiable>0</unmodifiable>
 <validationMessage>The password field must be at least 5 characters long and without space</validationMessage>
@@ -643,6 +643,19 @@ I have read, understand and agree to Curriki's Privacy Policy, the Educational P
 <validationRegExp></validationRegExp>
 <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
 </phone>
+<postalCode>
+<customDisplay></customDisplay>
+<disabled>0</disabled>
+<name>postalCode</name>
+<number>48</number>
+<picker>0</picker>
+<prettyName>postalCode</prettyName>
+<size>30</size>
+<unmodifiable>0</unmodifiable>
+<validationMessage></validationMessage>
+<validationRegExp></validationRegExp>
+<classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+</postalCode>
 <publish_intent>
 <cache>0</cache>
 <customDisplay></customDisplay>

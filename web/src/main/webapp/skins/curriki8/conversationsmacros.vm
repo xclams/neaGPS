@@ -99,6 +99,11 @@
       #if ($xwiki.hasAccessLevel('edit', $xcontext.user, $services.model.serialize($commentDoc.documentReference, 'compactwiki')))
         <span class="commenttool commentdelete"><a class="delete" href="$xwiki.getURL('ConversationCode.Actions', 'view', "action=deletecomment&amp;form_token=$!{services.csrf.getToken()}&amp;conversationdoc=${escapetool.url($services.model.serialize($commentDoc.documentReference, 'compactwiki'))}&amp;commentnumber=${comment.number}&amp;xredirect=$escapetool.url($xredirect)")" title="$msg.get('core.viewers.comments.delete')">$msg.get('core.viewers.comments.delete')</a></span>
       #end
+      #if ($context.user!="XWiki.XWikiGuest")
+        <span class="conversation-flag">
+         <a href="$xwiki.getURL("${doc.space}.NewFlag", "view", "target=${escapetool.url($doc.fullName)}:xwikicomment_${conversationId}_${comment.number}")">$msg.get("conversations.flag.button")</a>
+        </span>
+      #end
       </span>## commenttools
     </div>## commentheader
     <div class="commentcontent">$commentDoc.getRenderedContent($comment.getProperty('comment').getValue(), $doc.getSyntax().toIdString())</div>
@@ -263,17 +268,22 @@
     #set($nextorder = "desc")    
    #end
   #end
-  <span class="${sortclass}"><a href="$doc.getURL("view", "viewer=conversationsforum&sortfield=${field}&sortorder=${nextorder}")" onclick="">$msg.get("conversations.forum.sorttopicsby.${field}")</a></span>   
+  #if($doc.space.startsWith("Group_"))
+   #set($viewer = "")
+  #else
+   #set($viewer = "viewer=conversationsforum&")
+  #end
+  <span class="${sortclass}"><a href="$doc.getURL("view", "${viewer}sortfield=${field}&sortorder=${nextorder}")" onclick="">$msg.get("conversations.forum.sorttopicsby.${field}")</a></span>   
 #end
 ###
 ###
-#macro(displayTopicAddForm)
+#macro(displayTopicAddForm $space)
     <div class="addconversation-container">
     <a href="$doc.getURL('view', 'viewer=conversations&amp;action=addconversation')" class="addconversation-activator">$msg.get('conversations.topic.add.activator')</a>
     <form class="#if("$!request.action" != "addtopic")hidden#end addconversation xform full" method="post" action="$xwiki.getURL('ConversationCode.Actions')">
       <div>
         <input type="hidden" name="action" value="addtopic" />
-        <input type="hidden" name="space" value="$escapetool.xml($doc.space)" />
+        <input type="hidden" name="space" value="$escapetool.xml($space)" />
         <input type="hidden" name="parent" value="$escapetool.xml($doc.fullName)" />
         <input type="hidden" name="form_token" value="$services.csrf.token" />
         <input type="hidden" name="xredirect" value="$escapetool.xml($doc.getURL('view', 'viewer=conversationsforum'))" />
@@ -334,27 +344,29 @@
 ##
 ##
 #macro(displayTopics)
-  #set($nb = 10)
+  #set($step = 10)
+  #set($nb = $step)
   #set($start = 0)
-  #set($nextstart = 10)
+  #set($nextstart = $step)
   #if($request.start)
    #set($start = $util.parseInt($request.start))
-   #set($start = $start + 10)
+   #set($nextstart = $start + $step)
   #end
   #if($request.sortfield=="votes")
-  SORT BY VOTES
-   #set($topics = $xwiki.searchDocuments(', BaseObject as obj where doc.parent = ? and obj.name = doc.fullName and obj.className = ? ', $nb, $start, [$doc.fullName, 'ConversationCode.TopicClass']))  
+   ## sort by votes - requires programming rights
+   #set($topics = $xwiki.search("select doc.fullName from XWikiDocument as doc, BaseObject as obj, BaseObject as votesobj, IntegerProperty as nbvotes where doc.parent = ? and obj.name = doc.fullName and obj.className = 'ConversationCode.TopicClass'  and votesobj.name=doc.fullName and votesobj.className='XWiki.AverageRatingsClass' and votesobj.id=nbvotes.id.id and nbvotes.id.name='nbvotes'  order by nbvotes.value $!{currentorder}", $nb, $start, [ $doc.fullName ]))
   #elseif($request.sortfield=="comments")
-  SORT BY COMMENTS
-  #set($topics = $xwiki.searchDocuments(', BaseObject as obj where doc.parent = ? and obj.name = doc.fullName and obj.className = ? ', $nb, $start, [$doc.fullName, 'ConversationCode.TopicClass']))
+   ## sort by comments - requires programming rights
+   #set($topics = $xwiki.search("select doc.fullName from XWikiDocument as doc, BaseObject as obj, XWikiDocument as answerdoc, BaseObject as cobj where doc.parent = ? and obj.name = doc.fullName and obj.className = 'ConversationCode.TopicClass'  and answerdoc.parent=doc.fullName and answerdoc.fullName=cobj.name and cobj.className='XWiki.XWikiComments' group by 1 order by count(distinct cobj.number)+count(distinct answerdoc.fullName) $!{currentorder}", $nb, $start, [ $doc.fullName ]))
   #else
+   ## sort by last update date
    #set($topics = $xwiki.searchDocuments(", BaseObject as obj where doc.parent = ? and obj.name = doc.fullName and obj.className = ? order by doc.date $!{currentorder}", $nb, $start, [$doc.fullName, 'ConversationCode.TopicClass']))
   #end
   #foreach($topic in $topics)
     #displayForumTopic($topic)
   #end
   <div id="forum-more">
-  <a href="$doc.getURL("view", "viewer=conversations&start=${nextstart}")">$msg.get("conversations.forum.more")</a>
+  <a href="$doc.getURL("view", "viewer=conversationsforum&start=${nextstart}")">$msg.get("conversations.forum.more", [$step])</a>
   </div>
 #end
 ##
@@ -365,12 +377,12 @@ TODO ADD THIS
 #end
 ##
 #macro(displayForumActions $topicDoc) 
-<div class="topic-actions-flag">
-FLAG
-</div>
-<div class="topic-actions-permalink">
-<a href="$topicDoc.getURL()"></a>
-<div>
+<span class="topic-actions-flag conversation-flag">
+ <a href="$xwiki.getURL("${doc.space}.NewFlag", "view", "target=${escapetool.url($topicDoc.fullName)}")">$msg.get("conversations.flag.button")</a>
+</span>
+<span class="topic-actions-permalink">
+ <a href="$topicDoc.getURL()"></a>
+</span>
 #end
 ##
 
@@ -480,6 +492,11 @@ FLAG
             #end
             #if($xwiki.hasAccessLevel('delete', $xcontext.user, $services.model.serialize($conversationDoc.documentReference, 'compactwiki')))        
               <span class="conversation-delete"><a href="$xwiki.getURL('ConversationCode.Actions', 'view', "action=deleteconversation&amp;form_token=$!{services.csrf.getToken()}&amp;conversationdoc=${escapetool.url($services.model.serialize($conversationDoc.documentReference, 'compactwiki'))}&amp;xredirect=$escapetool.url($xredirect)")" title="$msg.get('conversation.delete.title')">$msg.get('conversation.delete')</a></span>
+            #end
+            #if($context.user!="XWiki.XWikiUsers")
+             <span class="conversation-flag">
+              <a href="$xwiki.getURL("${doc.space}.NewFlag", "view", "target=${escapetool.url($doc.fullName)}:${conversationId}")">$msg.get("conversations.flag.button")</a>
+             </span>
             #end
           </span>
         </div>

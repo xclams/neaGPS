@@ -521,6 +521,8 @@ $!desc
         #if("$x" != "")#set($c = 1 + $c)#end
     ##
         #set($mt=$!userobj.getProperty('member_type').value)
+    #*
+    ## we hide corporation and non profit content
         #if($mt=="corporation" || "$!mt"=="")
             #set($numberoffield=22)
             #set($x = "")#set($x = $!userobj.getProperty('publish_intent').value)
@@ -529,6 +531,7 @@ $!desc
             #set($x = "")#set($x = $!userobj.getProperty('value_add').value)
             #if("$x" != "")#set($c = 1 + $c)#end
         #end
+    *#
     <div class="button-right"><button class="button-grey" onclick="window.location='$userdoc.getURL('view')'; return false;">$msg.get('edit_profile.cancel_button')</button></div>
     #profilechange_photo()
     #startregistrationform()
@@ -875,6 +878,8 @@ $response.sendRedirect($xwiki.getURL("Registration.CleanLogout", "logout", "xred
 #set($affiliation = $!userobj.getProperty("affiliation").getValue())
 #set($city = "")
 #set($city = $!userobj.getProperty("city").getValue())
+#set($postalCode = "")
+#set($postalCode = $!userobj.getProperty("postalCode").getValue())
 #set($state = "")
 #set($state = $!userobj.getProperty("state").getValue())
 #set($country = "")
@@ -884,11 +889,14 @@ $response.sendRedirect($xwiki.getURL("Registration.CleanLogout", "logout", "xred
 #end ##}
 #set($language = "")
 #set($language = $!userobj.getProperty("language").getValue())
+#*
+## Hide corporate and non profit fields
 #set($publish_intent = "")
 #set($publish_intent = $!userobj.getProperty("publish_intent").getValue())
 #set($publish_intent = $userdoc.display("publish_intent", $userobj).replaceAll("#--#",", "))
 #set($value_add = "")
 #set($value_add = $!userobj.getProperty("value_add").getValue())
+*#
 #set($comment = "")
 #set($comment = $!userobj.getProperty("comment").getValue())
 #set($contact = "")
@@ -970,6 +978,12 @@ $response.sendRedirect($xwiki.getURL("Registration.CleanLogout", "logout", "xred
 		#mycurriki_dashifempty($userdoc.display("city", $userobj))
 	</li>
 #end ##}
+#if("$!postalCode" != "") ##{
+	<li>
+		**$msg.get("view_profile.interests.postalCode.title")**
+		#mycurriki_dashifempty($userdoc.display("postalCode", $userobj))
+	</li>
+#end ##}
 #if("$!state" != "") ##{
 	<li>
 		**$msg.get("view_profile.interests.state.title")**
@@ -988,6 +1002,8 @@ $response.sendRedirect($xwiki.getURL("Registration.CleanLogout", "logout", "xred
 		#mycurriki_dashifempty($userdoc.display("language", $userobj))
 	</li>
 #end ##}
+#*
+## Hide corporate and non profit fields
 #htmlcomment("<!-- publish_intent=$publish_intent and value_add=$value_add -->")
 #if("$!publish_intent" != "") ##{
 	<li>**$msg.get("view_profile.interests.publish_intent.title")**
@@ -1000,6 +1016,7 @@ $response.sendRedirect($xwiki.getURL("Registration.CleanLogout", "logout", "xred
 		#mycurriki_dashifempty($userdoc.display("value_add", $userobj))
 	</li>
 #end ##}
+*#
 #if("$!comment" != "") ##{
 	<li>
 		**$msg.get("view_profile.interests.bio.title")**

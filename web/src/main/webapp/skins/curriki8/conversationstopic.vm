@@ -13,7 +13,7 @@
     #set($comments = $comments + $answerDoc.getComments().size())
   #end
   ## Display topic header
-  <div class="conversation-main">
+  <div id="conversation-topic" class="conversation-main">
     <div class="conversation-titlebar">
       <div class="conversation-inlineactions">                
         #if($xwiki.hasAccessLevel('edit', $xcontext.user, $doc.prefixedFullName))
@@ -21,6 +21,10 @@
           <span class="commenttool commentedit"><a class="edit" href="$doc.getURL('edit')" title="$msg.get('conversations.topic.edit')">$msg.get('conversations.topic.edit')</a></span>
         #end
         #if("$!viewer" == 'conversationstopic')
+          <span class="separator">|</span>
+          <span class="conversation-flag">
+           <a href="$xwiki.getURL("${doc.space}.NewFlag", "view", "target=${escapetool.url($doc.fullName)}")">$msg.get("conversations.flag.button")</a>
+          </span>
           <span class="separator">|</span>
           <span class="conversation-ratings">
             <span class="conversation-like">
@@ -45,3 +49,4 @@
   #displayAnswers()
   ## Enable WYSIWYG editors loading when adding comments
   #displayEditors()
+  #template('conversationsend.vm')

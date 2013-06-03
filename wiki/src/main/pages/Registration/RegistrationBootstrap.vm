@@ -215,8 +215,8 @@ fieldset h3 {
           #set($f="neamember")
           <p class="radiofield #computeTrClasses($f)" onmouseover="Curriki.ui.login.displayInstruction('join.neamember_instructions');">   
               <label for="${f}_input"><b>$msg.get("join.neamember")</b></label>
-              <input id="${f}_input_on" type="radio" name="neamember" value="1" #if($!tool.neamember=="1")checked="checked"#end onchange="Curriki.ui.login.neaMemberChanged()" /> $msg.get("nea_1")
-              <input id="${f}_input_off" type="radio" name="neamember" value="0" #if($!tool.neamember!="1")checked="checked"#end onchange="Curriki.ui.login.neaMemberChanged()" /> $msg.get("nea_0")
+              <input id="${f}_input_on" type="radio" name="neamember" value="1" #if($!tool.neamember!="0")checked="checked"#end onclick="Curriki.ui.login.neaMemberChanged()" /> $msg.get("nea_1")
+              <input id="${f}_input_off" type="radio" name="neamember" value="0" #if($!tool.neamember=="0")checked="checked"#end onclick="Curriki.ui.login.neaMemberChanged()" /> $msg.get("nea_0")
           </p>
           #set($f="neaaffiliate")
           <p id="nea-member-section" style="display:none;" class="textfield #computeTrClasses($f)" onmouseover="Curriki.ui.login.displayInstruction('join.neaaffiliate_instructions');">
@@ -258,7 +258,7 @@ fieldset h3 {
           
           ## NEA Changes end
           
-          <p class="warning" id="memberTypeNotice">&nbsp;</p>
+          <p class="warning" id="memberTypeNotice" style="display: none;">&nbsp;</p>
           ##
           ##
           #set($f="agree")
@@ -293,6 +293,7 @@ fieldset h3 {
                 Curriki.console.log("Can't find elements. Stopping.");
                 return;
             }
+            Ext.get("nea-member-section").setVisibilityMode(Ext.Element.DISPLAY);
             if(s && s.dom.checked) {
                Ext.get("nea-member-section").show();  
             } else {
@@ -308,6 +309,7 @@ fieldset h3 {
                 Curriki.console.log("Can't find elements. Stopping.");
                 return;
             }
+            Ext.get("nea-profession-section").setVisibilityMode(Ext.Element.DISPLAY);
             if(s && s.dom.value &&
                     ("support"==s.dom.value)) {
                 Ext.get("nea-profession-section").show();  
