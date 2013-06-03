@@ -497,7 +497,7 @@ I have read, understand and agree to Curriki's Privacy Policy, the Educational P
 </neaaffiliate>
 <neamember>
 <customDisplay></customDisplay>
-<defaultValue>0</defaultValue>
+<defaultValue>1</defaultValue>
 <disabled>0</disabled>
 <displayFormType>radio</displayFormType>
 <displayType>nea</displayType>
@@ -644,12 +644,16 @@ I have read, understand and agree to Curriki's Privacy Policy, the Educational P
 <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
 </phone>
 <postalCode>
+<customDisplay></customDisplay>
 <disabled>0</disabled>
 <name>postalCode</name>
 <number>48</number>
+<picker>0</picker>
 <prettyName>postalCode</prettyName>
 <size>30</size>
 <unmodifiable>0</unmodifiable>
+<validationMessage></validationMessage>
+<validationRegExp></validationRegExp>
 <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
 </postalCode>
 <publish_intent>
