@@ -715,6 +715,8 @@ document.observe('dom:loaded', function(){
 					<li>$userdoc.display('language', "edit")</li>
 				</ul>
 			</li>
+#*
+## hide corporate and non profit fields
             <li id="registerform_publish_intent_section">
                 <span><label for="XWiki.XWikiUsers_0_publish_intent">$msg.get("${pfx}.publish_intent.title")</label>##
                 <img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.publish_intent.tooltip")"/></span>
@@ -727,6 +729,7 @@ document.observe('dom:loaded', function(){
                 <p class="instructions">$msg.get("${pfx}.value_add.description")</p>
                 $userdoc.display('value_add', "edit")
             </li>
+*#
 		#if($g_RegType == 'edit_profile') ##{
 				<li>
 				    {{html clean=false}}
