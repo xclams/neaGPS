@@ -16,7 +16,7 @@ public class CurrikiSpaceManagerExtension extends SpaceManagerExtensionImpl {
 	public static final String CURRIKI_SPACE_TYPE = "currikispace";
 	public static final String CURRIKI_SPACE_CLASS_NAME = "XWiki.CurrikiSpaceClass";
 	
-	public static final String LEADERS_GROUP_NAME = "Group_NEANetworkLeadersGroup";
+	public static final String LEADERS_GROUP_NAME = "Group_GPSNetworkLeadersGroup";
 	
 	public String getSpaceTypeName() {
         return CURRIKI_SPACE_TYPE;
