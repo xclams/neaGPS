@@ -337,7 +337,7 @@
       </div>
     </form>
   </div>
-  <div style="height: 40px;"></div>
+  <div class="clearfloats"></div>
 #end
 ##
 ##
@@ -370,10 +370,36 @@
   </div>
 #end
 ##
-#macro(displayForumAddThis $topicDoc) 
+#macro(displayForumAddThis $topicDoc, $topicTitle) 
+#if(!$request.viewer)
+{{html clean=false}}
+#end
+#set($addThisTitle = $msg.get("conversations.addthis.title", [$topicTitle, $topicDoc.getExternalURL()]))
+#set($addThisDesc = $msg.get("conversations.addthis.desc", [$topicTitle, $topicDoc.getExternalURL()]))
 <div class="topic-addthis">
-TODO ADD THIS
+<!-- AddThis Button BEGIN -->
+<div class="addthis_toolbox addthis_default_style "
+addthis:url="${escapetool.xml($topicDoc.getExternalURL())}"
+addthis:title="${escapetool.xml($addThisTitle)}"
+#if($addThisDesc!="" && $addThisDesc!="conversations.addthis.desc")
+addthis:description="${escapetool.xml($addThisDesc)}"
+#end
+>
+<a class="addthis_button_preferred_1"></a>
+<a class="addthis_button_preferred_2"></a>
+<a class="addthis_button_preferred_3"></a>
+<a class="addthis_button_preferred_4"></a>
+<a class="addthis_button_compact"></a>
+<a class="addthis_counter addthis_bubble_style"></a>
 </div>
+<script type="text/javascript">var addthis_config =
+{"data_track_addressbar":true};</script>
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-51acd2cb7dc9d536"></script>
+<!-- AddThis Button END -->
+</div>
+#if(!$request.viewer)
+{{/html}}
+#end
 #end
 ##
 #macro(displayForumActions $topicDoc) 
@@ -393,23 +419,31 @@ TODO ADD THIS
   #set($topicTitle = $topicDoc.displayTitle)
   #set($topicDescription = $topicDoc.display('description'))
   #set($topicComments = 0)
-  #set($topicAnswers = $xwiki.searchDocuments(', BaseObject obj where doc.parent = ? and doc.fullName = obj.name and obj.className = ? and doc.fullName != ? order by doc.date desc', 0, 0, [$doc.fullName, 'ConversationCode.AnswerClass', 'ConversationCode.AnswerTemplate']))
+  #set($topicAnswers = $xwiki.searchDocuments(', BaseObject obj where doc.parent = ? and doc.fullName = obj.name and obj.className = ? and doc.fullName <> ? order by doc.date desc', 0, 0, [$topicDoc.fullName, 'ConversationCode.AnswerClass', 'ConversationCode.AnswerTemplate']))
+  #if($topicAnswers)
   #foreach($topicAnswer in $topicAnswers)
     #set($answerDoc = $xwiki.getDocument($topicAnswer))
-    #set($topicComments = $topicComments + $answerDoc.getComments())
+    #set($topicComments = $topicComments + $answerDoc.getComments().size())
   #end
   #set($nbCommentsAnswers = $topicAnswers.size() + $topicComments)
+  #else
+  #set($nbCommentsAnswers = 0)  
+  #end
   <div class="topic">
-    <span class="user-avatar">#smallUserAvater2($context.user)</span>
+    <span class="user-avatar">#smallUserAvater2($topicDoc.creator)</span>
     <h3 class="topic-title"><a href="$topicDoc.getURL()" title="$escapetool.xml($topicTitle)">$topicTitle</a></h3>
-    <span class="topic-comments">$topicComments</span>
+    <span class="topic-comments">$nbCommentsAnswers</span>
     <div class="topic-metadata">      
       <span class="topic-authortype">$!xwiki.getDocument($topicDoc.creator).display("neaoccupation")</span>
       <span class="topic-metas">
         <span class="topic-author">$!xwiki.getUserName($topicDoc.creator)</span>
         <span class="topic-date">$datetool.format('dd/MM/yyyy', $topicDoc.date)</span> ## Maybe it should be creation date ?
         <span class="topic-answers">$topicAnswers.size()</span>
-        <span class="topic-vote">VOTE</span>
+        <div class="topic-vote conversation-like">
+            #set($rating = $xwiki.ratings.getAverageRating($topicDoc).nbVotes)
+            <input type="hidden" name="documenttolike" value="$topicDoc.fullName" />
+            <span class="conversation-score" title="$msg.get('conversation.like.score.tooltip', [$rating])">$!rating</span>
+        </div>
       </span>
     </div>
   <div class="topic-description">
@@ -418,9 +452,9 @@ TODO ADD THIS
       <span class="left">
         #displayForumActions($topicDoc)
       </span>
-      <span class="center">VOTE</span>
+      <span class="topic-vote2 conversation-like center"><input type="hidden" name="documenttolike" value="$topicDoc.fullName" /></span>
       <span class="right">
-       #displayForumAddThis($topicDoc)             
+       #displayForumAddThis($topicDoc, $topicTitle)             
       </span>
     </div>
   </div>

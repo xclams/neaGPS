@@ -17,7 +17,7 @@
  * This macro is called from the contentview.vm template when a page is a discussions page
  * It adds the header and footer of the groups section to the pages
  *#
-#macro(groups_discussions)
+ #macro(groups_discussions)
  #groupinit()
  #groupsheader("discussions")
  #if(!$isGroupMember && ($s.policy=="closed") && !$hasadmin)
