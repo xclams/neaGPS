@@ -7,18 +7,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.ShermanTank</creator>
-<author>XWiki.ShermanTank</author>
+<author>XWiki.adminPolx</author>
 <customClass></customClass>
-<contentAuthor>XWiki.ShermanTank</contentAuthor>
+<contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1217614529000</creationDate>
-<date>1336078326000</date>
-<contentUpdateDate>1336078326000</contentUpdateDate>
-<version>177.1</version>
+<date>1370372443000</date>
+<contentUpdateDate>1370372443000</contentUpdateDate>
+<version>14.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>updating column tooltips</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <hidden>false</hidden>
@@ -52,7 +52,7 @@
 <name>Search.Translations</name>
 <number>0</number>
 <className>XWiki.TagClass</className>
-<guid>da7ed816-e9b9-46fc-9644-7939230816af</guid>
+<guid>3c54d98f-d2f6-454f-ac8b-c55cce54340a</guid>
 <property>
 <tags/>
 </property>
@@ -80,11 +80,12 @@ search.tab.title.results={0} ({1})
 search.tab.title.resultsmax_exceeds={0} ({2})
 
 ## Window title
-search.window.title.resource = Curriki - Search for - {0} - among resources
-search.window.title.group = Curriki - Search for - {0} - among groups
-search.window.title.blop = Curriki - Search for - {0} - among blog entries
-search.window.title.member = Curriki - Search for - {0} - among members
-search.window.title.curriki = Curriki - Search for - {0} - among pages
+search.window.title.resource = GPS Network - Search for - {0} - among resources
+search.window.title.outerResource=GPS Network - Search for - {0} - among Curriki resources
+search.window.title.group = GPS Network - Search for - {0} - among groups
+search.window.title.blop = GPS Network - Search for - {0} - among blog entries
+search.window.title.member = GPS Network - Search for - {0} - among members
+search.window.title.curriki = GPS Network - Search for - {0} - among pages
 
 ## Search Tips Page
 search.text.entry.help.text=
@@ -140,6 +141,8 @@ search.pagination.refresh=Refresh
 ##RESOURCES TAB
 
 search.resource.tab.title=Resources
+search.outerResource.tab.title=Curriki Resources
+search.window.title.outerResource=Curriki Resources
 
 ##SUBJECT
 ## The naming convention follows the asset class names but is NOT part of the asset class
@@ -258,7 +261,7 @@ CurrikiCode.AssetClass_category_UNSPECIFIED=Media Type: Any
 
 search.resource.review.selector.UNSPECIFIED=Reviews &amp; Ratings: Any
 search.resource.review.selector.partners=Partners
-search.resource.review.selector.highest_rated=Top-Rated by Curriki
+search.resource.review.selector.highest_rated=Top-Rated by GPS Network
 search.resource.review.selector.members.highest_rated=Top-Rated by Members
 
 ##For Curriki Review Column:
@@ -299,7 +302,7 @@ search.resource.column.header.title=Title
 search.resource.column.title.tooltip.title=Description
 search.resource.column.header.ict=Instruct. Type (ICT)
 search.resource.column.header.contributor=Contributor
-search.resource.column.header.rating=Curriki Review
+search.resource.column.header.rating=GPS Network Review
 search.resource.column.header.member.rating=Member Rating
 search.resource.column.header.updated=Updated
 search.resource.column.header.score=S
@@ -424,16 +427,24 @@ XWiki.XWikiUsers_topics_FW_masterFramework.Mathematics.UNSPECIFIED=Mathematics: 
 XWiki.XWikiUsers_topics_FW_masterFramework.Science.UNSPECIFIED=Science: Any
 XWiki.XWikiUsers_topics_FW_masterFramework.SocialStudies.UNSPECIFIED=Social Studies: Any
 XWiki.XWikiUsers_topics_FW_masterFramework.ForeignLanguages.UNSPECIFIED=World Languages: Any
+
 ##MEMBER TYPE
 ## The naming convention follows the class names but is NOT part of the class
 XWiki.XWikiUsers_member_type_UNSPECIFIED=Member Type: Any
 
+##OCCUPATION TYPE
+## The naming convention follows the class names but is NOT part of the class.
+XWiki.XWikiUsers_occupation_type_UNSPECIFIED=Occupation Type: Any
 
 ##COUNTRY
 ## The naming convention follows the class names but is NOT part of the class
 
 XWiki.XWikiUsers_country_UNSPECIFIED=Country: Any
 
+##STATE
+## The naming convention follows the class names but is NOT part of the class
+
+XWiki.XWikiUsers_state_UNSPECIFIED=State: Any
 
 ##COLUMNS
 
@@ -441,6 +452,7 @@ search.member.column.header.picture=Picture
 search.member.column.header.name1=Name 1
 search.member.column.header.name2=Name 2
 search.member.column.header.bio=Bio
+search.member.colunn.header.nea=NEA
 search.member.column.header.contributions=Contributions
 search.member.column.picture.alt.text=
 
@@ -463,7 +475,7 @@ search.blog.column.header.updated=Updated
 ##
 ##CURRIKI PAGE
 
-search.curriki.tab.title=Curriki Pages
+search.curriki.tab.title=GPS Network Pages
 
 ##PAGES OR SPACES TO SEARCH
 
@@ -485,5 +497,4 @@ search.connection.error.body=There is a problem connecting to the server. Please
 search.connection.error.button=OK
 
 
-&lt;/pre&gt;
-</content></xwikidoc>
+&lt;/pre&gt;</content></xwikidoc>
