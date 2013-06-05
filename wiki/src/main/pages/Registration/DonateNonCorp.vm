@@ -30,70 +30,16 @@
 
 <div id="container">
     <h2>$msg.get('join.complete.donate.title')</h2>
-##
     <p> $msg.get('join.complete.donate.text')</p>
-    <p><b>$msg.get('join.complete.donate.header'):</b></p>
-    <div id="box-wrapper" style="margin: 30px auto 0; padding:0; width: 450px">
-    ##
-    ##
-        #set($amount="25")##
-        <a href="$baseUrlPopup$amount"><button class="box" style="border-color: #99CB25" ##
-                                               onclick="Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount','close-now-$now'); Curriki.logView('/join/donate/donation/started'); return false;">
-            <span  class="dollar_sign">$</span>$amount&nbsp;<br/>
-            <img width="90" src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&w=115&h=50&style=white&variant=text&loc=${context.language}"/></button>
-        </a>
-    ##
-    ##
-        #set($amount="75")##
-        <a href="$baseUrlPopup$amount"><button class="box" style="border-color: #FB661E"##
-                                               onclick="Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount','close-now-$now'); Curriki.logView('/join/donate/donation/started'); return false;">
-            <span  class="dollar_sign">$</span>$amount&nbsp;<br/>
-            <img width="90" src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&w=115&h=50&style=white&variant=text&loc=${context.language}"/></button>
-        </a>
-    ##
-    ##
-        #set($amount="100")##
-        <a href="$baseUrlPopup$amount"><button class="box"  style="border-color: #3E6AFB"##
-                                               onclick="Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount','close-now-$now'); Curriki.logView('/join/donate/donation/started'); return false;">
-            <span  class="dollar_sign">$</span>$amount&nbsp;<br/>
-            <img width="90" src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&w=115&h=50&style=white&variant=text&loc=${context.language}"/></button>
-        </a>
-    ##
-        <div style="clear: both"></div>
-    ##
-        #set($amount="150")##
-        <a href="$baseUrlPopup$amount"><button class="box" style="border-color: #FC9824"##
-                                               onclick="Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount','close-now-$now'); Curriki.logView('/join/donate/donation/started'); return false;">
-            <span  class="dollar_sign">$</span>$amount&nbsp;<br/>
-            <img width="90" src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&w=115&h=50&style=white&variant=text&loc=${context.language}"/></button>
-        </a>
-    ##
-    ##
-        #set($amount="300")##
-        <a href="$baseUrlPopup$amount"><button class="box" style="border-color: #379817" ##
-                                               onclick="Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount','close-now-$now'); Curriki.logView('/join/donate/donation/started'); return false;">
-            <span  class="dollar_sign">$</span>$amount&nbsp;<br/>
-            <img width="90" src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&w=115&h=50&style=white&variant=text&loc=${context.language}"/></button>
-        </a>
-    ##
-    ##
-        #set($amount="1000")##
-        <a href="$baseUrlPopup$amount"><button class="box" style="border-color: #9933ff"
-                                               onclick="Curriki.ui.login.popupGCheckout('$baseUrlPopup$amount','close-now-$now'); Curriki.logView('/join/donate/donation/started'); return false;">
-            <span  class="dollar_sign">$</span>1,000&nbsp;<br/>
-            <img width="90" src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&w=115&h=50&style=white&variant=text&loc=${context.language}"/></button>
-        </a>
-        <div style="clear: both"></div>
-        $msg.get('join.complete.donate.other_method')
-        ##Please see the <a href="../Main/Donate" target="_top">Donate page</a> for other payment ways.
-    </div>
+    <p>$msg.get('join.complete.donate.header')</p>
+
 </div>
 <script type="text/javascript">
     scheduleDialogRescale(window, document, "loginIframe", 800,0);
     Curriki.ui.login.hideLoginLoading();
 </script>
 #if($redir)#else#set($redir=$targets.afterLogin)#end##
-#set($hasDownload=$targets.isDownloadLink($redir))<!-- hasDownload: $hasDownload -->##
+    #set($hasDownload=$targets.isDownloadLink($redir))<!-- hasDownload: $hasDownload -->##
 #set($nextStep=$redir)##
 #if($redir)#else#set($redir="/")#end##
 #if($redir.contains("Registration/JumpToTop"))#set($redir="/")#end
