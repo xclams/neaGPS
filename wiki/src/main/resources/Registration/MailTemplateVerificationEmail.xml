@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <xwikidoc>
 <web>Registration</web>
 <name>MailTemplateVerificationEmail</name>
@@ -8,20 +7,21 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.dward</creator>
-<author>XWiki.dward</author>
+<author>XWiki.ShermanTankNEA</author>
 <customClass></customClass>
-<contentAuthor>XWiki.dward</contentAuthor>
+<contentAuthor>XWiki.ShermanTankNEA</contentAuthor>
 <creationDate>1204046729000</creationDate>
-<date>1204046761000</date>
-<contentUpdateDate>1204046761000</contentUpdateDate>
-<version>1.1</version>
-<title>Curriki Email Check -- Action Needed</title>
+<date>1369948962000</date>
+<contentUpdateDate>1369948962000</contentUpdateDate>
+<version>7.1</version>
+<title>GPS Network Email Check -- Action Needed</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Email verification email template</comment>
+<comment>GPS branding pass.</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
+<hidden>false</hidden>
 <object>
 <class>
 <name>XWiki.TagClass</name>
@@ -34,6 +34,7 @@
 <validationScript></validationScript>
 <tags>
 <cache>0</cache>
+<disabled>0</disabled>
 <displayType>select</displayType>
 <multiSelect>1</multiSelect>
 <name>tags</name>
@@ -51,21 +52,21 @@
 <name>Registration.MailTemplateVerificationEmail</name>
 <number>0</number>
 <className>XWiki.TagClass</className>
+<guid>02321daf-363c-4c5f-af48-8ef0e5838362</guid>
 <property>
 <tags/>
 </property>
 </object>
 <content>{pre}
-Dear Curriki Member,
+Dear GPS Network Member,
 
 Please click this link to complete step 2 of the email verification process. ${link} If the link does not open your browser, please cut and past the link into your browser. 
 
-If you received this email by mistake, please contact Curriki at webmaster@curriki.org.
+If you received this email by mistake, please contact GPS Network at contactgpsnetwork@nea.org.
  
 
 Thank you.
 
-The Curriki Community
-www.curriki.org
-{/pre}</content>
-</xwikidoc>
+The GPS Network Community
+www.gpsnetwork.org
+{/pre}</content></xwikidoc>
