@@ -136,7 +136,7 @@
    #if($xcontext.user != 'XWiki.XWikiGuest')
     <div class="comment user">
      <form id="${conversationId}_addcommentform" action="$escapetool.xml($commentDoc.getURL('commentadd', "xredirect=$escapetool.url($redirectURL)"))" method="post" class="AddComment">
-      <div class="answer-layout">
+      <div class="comment-layout">
        <span class="user-avatar">
        #mediumUserAvatar2($context.user)
        </span>
