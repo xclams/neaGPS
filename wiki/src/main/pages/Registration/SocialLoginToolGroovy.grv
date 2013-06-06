@@ -330,10 +330,18 @@ public class SocialLoginToolGroovy {
         passed = validation.isValidPassword(password, true) & passed;
         // this is not used on NEA
         // passed = validation.isValidMemberType(memberType, true) & passed;
+        passed = validation.isValidNEAOccupation(neaoccupation, true) & passed;
         passed = validation.isValidAgree(request.agree, true) & passed;
         passed = validation.isValidFirstName(firstName, true) & passed;
         passed = validation.isValidLastName(lastName, true) & passed;
         passed = validation.isValidLocation(country, postalCode, city, state, longitude, latitude, !isMerging) & passed;
+        passed = validation.isValidNEAOccupation(neaoccupation, true) & passed;
+        if (neamember=="1") {
+         passed = validation.isValidNEAAffiliate(neaaffiliate, true) & passed;
+        }
+        if (neaoccupation=="support") {
+         passed = validation.isValidNEAProfession(neaprofession, true) & passed;
+        }
 
         System.out.println("Validation Passed? " + passed);
         if(!passed) System.out.println(" Validation Errors ( Merging is "+ isMerging +"): " + validation.errors);
@@ -704,6 +712,13 @@ public class SocialLoginToolGroovy {
         passed = validation.isValidFirstName(firstName, true) & passed;
         passed = validation.isValidLastName(lastName, true) & passed;
         passed = validation.isValidLocation(country, postalCode, city, state, longitude, latitude, true) & passed;
+        passed = validation.isValidNEAOccupation(neaoccupation, true) & passed;
+        if (neamember=="1") {
+         passed = validation.isValidNEAAffiliate(neaaffiliate, true) & passed;
+        }
+        if (neaoccupation=="support") {
+         passed = validation.isValidNEAProfession(neaprofession, true) & passed;
+        }
         return passed;
     }
 
