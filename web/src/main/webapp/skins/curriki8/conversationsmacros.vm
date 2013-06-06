@@ -77,7 +77,7 @@
   <div id="xwikicomment_${conversationId}_${comment.number}" class="comment $commentodd #if($comment.getProperty('author').value == $commentDoc.creator) commentByCreator#end">
     <span class="user-avatar">
      #if("$!comment.replyto" == '')#smallUserAvater2($comment.author)#{else}#smallUserAvater2($comment.author)#end
-    <span> 
+    </span> 
     <span class="answer-meta">
 		<span class="user">$!xwiki.getUserName($doc.display('author', 'view', $comment))</span>
 		#set($date = $comment.getProperty('date').value)
@@ -125,23 +125,23 @@
  #if ("$!conversationId" == "")
     #set($conversationId = $util.clearName("${commentDoc.name}$xwiki.formatDate($commentDoc.creationDate, 'dd/MM/yyyy HH:mm:ss')"))  
  #end
- #if($xwiki.hasAccessLevel('comment', $xcontext.user, $commentDoc.prefixedFullName))
+ #if($xwiki.hasAccessLevel('edit', $xcontext.user, $commentDoc.prefixedFullName))
     ## prepare a nice redirect URL: for the reply form, redirect to the comemnt to which we replied, 
     ## for the new comment form, redirect to the conversation itself
     #if ("$!replyTo" != "")
-      #set($redirectURL = "$doc.getURL('view', 'viewer=conversations')#xwikicomment_${conversationId}_${replyTo}")
+      #set($redirectURL = "$doc.getURL('view', 'viewer=conversationstopic')#xwikicomment_${conversationId}_${replyTo}")
     #else
-      #set($redirectURL = "$doc.getURL('view', 'viewer=conversations')#${conversationId}")
+      #set($redirectURL = "$doc.getURL('view', 'viewer=conversationstopic')#${conversationId}")
     #end
    #if($xcontext.user != 'XWiki.XWikiGuest')
-    <div class="answer user">
+    <div class="comment user">
      <form id="${conversationId}_addcommentform" action="$escapetool.xml($commentDoc.getURL('commentadd', "xredirect=$escapetool.url($redirectURL)"))" method="post" class="AddComment">
       <div class="answer-layout">
        <span class="user-avatar">
        #mediumUserAvatar2($context.user)
        </span>
-       <div class="answer-reply">
-				<span class="answer-meta">
+       <div class="comment-reply">
+		<span class="comment-meta">
         #if($xcontext.user != 'XWiki.XWikiGuest')
           $msg.get('core.viewers.comments.add.guestName.prompt') $xwiki.getUserName($xcontext.user)
           <input type="hidden" name="${xCommentClass}_author" value="$xcontext.user"/>
@@ -149,13 +149,13 @@
           $msg.get('core.viewers.comments.add.guestName.prompt') <input type="text" id="${xCommentClass}_author" name="${xCommentClass}_author" value="$author"/>
           <a href='$escapetool.xml($xwiki.getURL('XWiki.XWikiLogin', 'login', "xredirect=$escapetool.url($xwiki.getRequestURL())"))'>$msg.get('login')</a>
         #end
-        		</span>
-				<div class="answer-content">
-		## CSRF prevention
-        <input type="hidden" name="form_token" value="$!{services.csrf.getToken()}" />
-        <input type="hidden" name="${xCommentClass}_date" value=""/>
-        <input type="hidden" name="${xCommentClass}_replyto" value="$!replyTo"/>
-        <div class="commentcontainer">
+        </span>
+		<div class="comment-content">
+		 ## CSRF prevention
+         <input type="hidden" name="form_token" value="$!{services.csrf.getToken()}" />
+         <input type="hidden" name="${xCommentClass}_date" value=""/>
+         <input type="hidden" name="${xCommentClass}_replyto" value="$!replyTo"/>
+         <div class="commentcontainer">
            <label for="${xCommentClass}_comment_${conversationId}">$msg.get('core.viewers.comments.add.comment.label')</label>
            <textarea id='${xCommentClass}_comment_${conversationId}' rows='5' cols="80" name='${xCommentClass}_comment' class="maximizable">$!comment</textarea>
            ## adding to wysiwyg editors
@@ -164,18 +164,28 @@
            #else
             #set($editors = "${editors},${xCommentClass}_comment_${conversationId}")
            #end
-        </div>
-        #if($xcontext.user == 'XWiki.XWikiGuest' && $offerGuestsCaptcha)
+         </div>
+         #if($xcontext.user == 'XWiki.XWikiGuest' && $offerGuestsCaptcha)
           #displayCaptcha()
-        #end
-        <div>
-          <input class="button-orange" type="submit" value="$msg.get('core.viewers.comments.add.submit')" class="button"/></span>
-          <a class="cancel secondary button-grey" href="$doc.getURL('view', 'viewer=conversationstopic')">$msg.get('core.viewers.comments.add.cancel')</a></span>
-        </div>
-       </div> 
-      </form>
-     </div>  
-    #end   
+         #end
+         <div>
+          <input class="button-orange" type="submit" value="$msg.get('core.viewers.comments.add.submit')"/>
+          <a class="cancel secondary button-grey" href="$doc.getURL('view', 'viewer=conversationstopic')">$msg.get('core.viewers.comments.add.cancel')</a>
+         </div>
+        </div><!-- answer-content --> 
+       </div><!-- answer-reply --> 
+      </div><!-- answer-layout --> 
+     </form>
+    </div>  
+   #end   
+  #else
+   <div class="answer user">
+   #if($s)
+    <p class="norights">$msg.get('conversation.groups.norights')</p>
+   #else
+    <p class="norights">$msg.get('conversation.norights')</p>   
+   #end
+   </div>
   #end
 #end
 ##
@@ -295,7 +305,7 @@
 ###
 ###
 #macro(displayTopicAddForm $space)
-    <div class="addconversation-container">
+    <div class="addconversation-container addtopic-container">
     <a href="$doc.getURL('view', 'viewer=conversations&amp;action=addconversation')" class="addconversation-activator">$msg.get('conversations.topic.add.activator')</a>
     <form class="#if("$!request.action" != "addtopic")hidden#end addconversation xform full" method="post" action="$xwiki.getURL('ConversationCode.Actions')">
       <div>
@@ -336,7 +346,7 @@
 ##
 ##
 #macro(displayConversationAddForm)
-  <div class="addconversation-container">
+  <div class="addconversation-container addanswer-container">
     <a href="$doc.getURL('view', 'viewer=conversations&amp;action=addconversation')" class="addconversation-activator">$msg.get('conversation.add.activator')</a>
     <form class="#if("$!request.action" != "addconversation")hidden#end addconversation xform full" method="post" action="$xwiki.getURL('ConversationCode.Actions')">
       <div>
@@ -362,7 +372,7 @@
       
       <div class="buttons">
         <input class="button-orange" type="submit" class="button" value="$msg.get('save')" />
-        <a class="button-grey" href="$doc.getURL('view', 'viewer=conversations')" class="cancel">$msg.get('cancel')</a>
+        <a class="button-grey" href="$doc.getURL('view', 'viewer=conversationstopic')" class="cancel">$msg.get('cancel')</a>
       </div>
     </form>
   </div>
@@ -548,17 +558,16 @@ addthis:description="${escapetool.xml($addThisDesc)}"
                      </span>
 					</span>
 				</div>
-			</div><!-- / .answer-reply -->
-
-        <div class="answer-moderation">
+		 </div><!-- / .answer-reply -->
+         <div class="answer-moderation">
             #if($xwiki.hasAccessLevel('edit', $xcontext.user, $services.model.serialize($conversationDoc.documentReference, 'compactwiki')))
               <a class="edit" href="$conversationDoc.getURL('edit')" title="$msg.get('conversation.edit.title')">$msg.get('conversation.edit')</a>
             #end
             #if($xwiki.hasAccessLevel('delete', $xcontext.user, $services.model.serialize($conversationDoc.documentReference, 'compactwiki')))        
               <a class="delete" href="$xwiki.getURL('ConversationCode.Actions', 'view', "action=deleteconversation&amp;form_token=$!{services.csrf.getToken()}&amp;conversationdoc=${escapetool.url($services.model.serialize($conversationDoc.documentReference, 'compactwiki'))}&amp;xredirect=$escapetool.url($xredirect)")" title="$msg.get('conversation.delete.title')">$msg.get('conversation.delete')</a>
             #end
-        </div>
-		</div><!-- / .answer-layout -->
+         </div><!-- / .answer-moderation -->
+	    </div><!-- / .answer-layout -->
         <div class="comments">
           #if($comments.size() > 0)
             #set($rootKey = "-1")
@@ -581,10 +590,10 @@ addthis:description="${escapetool.xml($addThisDesc)}"
           #if(!$replied)
             #displayCommentForm($conversationDoc)
           #end
-        </div>
-      </div>
+        </div><!-- / .comments -->
+      </div><!-- / .answer -->
     #end
-  </div>
+  </div><!-- / .answers -->
 #end
 ##
 ##
