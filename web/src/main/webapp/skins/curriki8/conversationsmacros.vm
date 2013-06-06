@@ -77,7 +77,7 @@
   <div id="xwikicomment_${conversationId}_${comment.number}" class="comment $commentodd #if($comment.getProperty('author').value == $commentDoc.creator) commentByCreator#end">
     <span class="user-avatar">
      #if("$!comment.replyto" == '')#smallUserAvater2($comment.author)#{else}#smallUserAvater2($comment.author)#end
-    <span> 
+    </span> 
     <span class="answer-meta">
 		<span class="user">$!xwiki.getUserName($doc.display('author', 'view', $comment))</span>
 		#set($date = $comment.getProperty('date').value)
@@ -125,13 +125,13 @@
  #if ("$!conversationId" == "")
     #set($conversationId = $util.clearName("${commentDoc.name}$xwiki.formatDate($commentDoc.creationDate, 'dd/MM/yyyy HH:mm:ss')"))  
  #end
- #if($xwiki.hasAccessLevel('comment', $xcontext.user, $commentDoc.prefixedFullName))
+ #if($xwiki.hasAccessLevel('edit', $xcontext.user, $commentDoc.prefixedFullName))
     ## prepare a nice redirect URL: for the reply form, redirect to the comemnt to which we replied, 
     ## for the new comment form, redirect to the conversation itself
     #if ("$!replyTo" != "")
-      #set($redirectURL = "$doc.getURL('view', 'viewer=conversations')#xwikicomment_${conversationId}_${replyTo}")
+      #set($redirectURL = "$doc.getURL('view', 'viewer=conversationstopic')#xwikicomment_${conversationId}_${replyTo}")
     #else
-      #set($redirectURL = "$doc.getURL('view', 'viewer=conversations')#${conversationId}")
+      #set($redirectURL = "$doc.getURL('view', 'viewer=conversationstopic')#${conversationId}")
     #end
    #if($xcontext.user != 'XWiki.XWikiGuest')
     <div class="comment user">
@@ -172,11 +172,20 @@
           <input class="button-orange" type="submit" value="$msg.get('core.viewers.comments.add.submit')"/>
           <a class="cancel secondary button-grey" href="$doc.getURL('view', 'viewer=conversationstopic')">$msg.get('core.viewers.comments.add.cancel')</a>
          </div>
-        </div> 
-       </div>
-      </form>
-     </div>  
-    #end   
+        </div><!-- answer-content --> 
+       </div><!-- answer-reply --> 
+      </div><!-- answer-layout --> 
+     </form>
+    </div>  
+   #end   
+  #else
+   <div class="answer user">
+   #if($s)
+    <p class="norights">$msg.get('conversation.groups.norights')</p>
+   #else
+    <p class="norights">$msg.get('conversation.norights')</p>   
+   #end
+   </div>
   #end
 #end
 ##
@@ -296,7 +305,7 @@
 ###
 ###
 #macro(displayTopicAddForm $space)
-    <div class="addconversation-container">
+    <div class="addconversation-container addtopic-container">
     <a href="$doc.getURL('view', 'viewer=conversations&amp;action=addconversation')" class="addconversation-activator">$msg.get('conversations.topic.add.activator')</a>
     <form class="#if("$!request.action" != "addtopic")hidden#end addconversation xform full" method="post" action="$xwiki.getURL('ConversationCode.Actions')">
       <div>
@@ -337,7 +346,7 @@
 ##
 ##
 #macro(displayConversationAddForm)
-  <div class="addconversation-container">
+  <div class="addconversation-container addanswer-container">
     <a href="$doc.getURL('view', 'viewer=conversations&amp;action=addconversation')" class="addconversation-activator">$msg.get('conversation.add.activator')</a>
     <form class="#if("$!request.action" != "addconversation")hidden#end addconversation xform full" method="post" action="$xwiki.getURL('ConversationCode.Actions')">
       <div>
@@ -363,7 +372,7 @@
       
       <div class="buttons">
         <input class="button-orange" type="submit" class="button" value="$msg.get('save')" />
-        <a class="button-grey" href="$doc.getURL('view', 'viewer=conversations')" class="cancel">$msg.get('cancel')</a>
+        <a class="button-grey" href="$doc.getURL('view', 'viewer=conversationstopic')" class="cancel">$msg.get('cancel')</a>
       </div>
     </form>
   </div>

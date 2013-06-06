@@ -793,6 +793,8 @@ xwiki.authentication.group.allgroupimplicit=1
 
 curriki.system.hostname=next.dev.curriki.org
 
+xwiki.ratings.ratingsmanager=com.xpn.xwiki.plugin.ratings.internal.DefaultRatingsManager
+xwiki.ratings.averagerating.stored=1
 
                 </xwikiCfgAdditionalProperties>
                 <xwikiCfgVirtual>0</xwikiCfgVirtual>
