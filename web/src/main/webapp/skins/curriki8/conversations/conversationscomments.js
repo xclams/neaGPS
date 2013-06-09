@@ -18,21 +18,11 @@ viewers.Comments = Class.create({
       this.xcommentSelector = "#" + conversationId + " " + this.xcommentSelector;
     }
 
-    if (this.conversation.down(".answer")) {
-      // If the comments area is already visible, enhance it.
-      this.startup();
-      this.addConversationHandlers();
-    }
-    if ($("Commentstab")) {
-      this.container = $("Commentspane");
-      this.generatorTemplate = "conversationscommentsinline.vm";
-    } else if ($$(".main.layoutsubsection").size() > 0 && $$(".main.layoutsubsection").first().down("#commentscontent")) {
-      this.container = $$(".main.layoutsubsection").first();
-      this.generatorTemplate = "conversationscomments.vm";
-    }
-
+    this.startup();
+    this.addConversationHandlers();
+    
     // don't know yet what is the container used for
-    this.container = this.conversation.down('.answer');
+    this.container = this.conversation;
     this.generatorTemplate = 'conversations.vm';
 
     // We wait for a notification for the AJAX loading of the Comments metadata tab.
@@ -184,8 +174,8 @@ viewers.Comments = Class.create({
  
                 // activate wysiwyg. We will use the configuration from the other textarea
                 try {
-                var convTextArea = this.container.down("form")["XWiki.XWikiComments_comment"];
-                var wConfig = WysiwygConfig[convTextArea.id];
+                var commentAddTextareaId = this.conversation.down(".commentcontainer").down("textarea").id;
+                var wConfig = WysiwygConfig[commentAddTextareaId];
                 wConfig.hookId = item._x_editForm.down("textarea").id;
                 wConfig.cacheId = item._x_editForm.down("input").id;
                 item._x_editForm.wysiwyg = new WysiwygEditor(wConfig);
@@ -636,7 +626,7 @@ viewers.Comments = Class.create({
       * Hide the conversation if it's not focused and add a handler to toggle it.
       *
       */
-    addConveanswerrsationHideListener : function() {
+    addConversationHideListener : function() {
       var isVisible = false;
       // we cannot use .xwikicomment:target here since we're not sure it;s already loaded (e.g. on chrome) so we read the anchor manually
       var anchor = window.location.hash;
@@ -735,7 +725,7 @@ function conversationLikeHandler(event) {
           onSuccess : function (response) {
             topicLikeBlock._x_notification.replace(new XWiki.widgets.Notification("$escapetool.javascript($msg.get('conversation.like.done'))", "done"));
             // get the conversation score which is the sibling of the like block
-            var scoreDisplayer = topicLikeBlock.next('.conversation-score');
+            var scoreDisplayer = topicLikeBlock.down('.conversation-score');
             if (scoreDisplayer) {
               scoreDisplayer.update(response.responseJSON.totalvotes);
             }
@@ -795,6 +785,31 @@ function init() {
          conversationLikeHandler(event);
       }.bindAsEventListener(this));
   });  
+   
+  // add permalink for topic
+  $$(".topic-actions-permalink a").each(function(topicPermalink) {
+   if (topicPermalink) {
+       topicPermalink.observe('click', function(event) {
+        topicPermalink.blur();
+        event.stop();
+        var permalinkBox = new XWiki.widgets.ConfirmationBox(
+          {
+            onYes : function () {
+              window.location = topicPermalink.href;
+            }
+          },
+          /* Interaction parameters */
+          {
+            confirmationText: "$msg.get('core.viewers.comments.permalink'): <input type='text' class='full' value='" + topicPermalink.href + "'/>",
+            yesButtonText: "$msg.get('core.viewers.comments.permalink.goto')",
+            noButtonText : "$msg.get('core.viewers.comments.permalink.hide')"
+          }
+        );
+        permalinkBox.dialog.addClassName('permalinkBox')
+        permalinkBox.dialog.down('input[type="text"]').select();
+      });
+   }
+ });
    
   // also make the conversation add activator to show the add form when clicked
   $$(".addconversation-activator").each(function(item) {
