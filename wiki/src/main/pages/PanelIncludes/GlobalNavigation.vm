@@ -11,12 +11,13 @@
 <!--
 #set($list=[])
 $list.add([$msg.get('panel.navigation.rc.about'), "http://${hostname}/welcome/resources-curricula/"])
+$list.add([$msg.get('panel.navigation.rc.publish'), "http://${hostname}/welcome/resources-curricula/contribute-content/publish-resources/"])
+$list.add([$msg.get('panel.navigation.rc.addresource'), "/xwiki/bin/view/MyCurriki/StartAdd"])
 $list.add([$msg.get('panel.navigation.rc.share'), "http://${hostname}/welcome/resources-curricula/share-and-rate-resources/"])
 $list.add([$msg.get('panel.navigation.rc.reviewteam'), "http://${hostname}/welcome/resources-curricula/contribute-content/about-curriki-review-team/"])
 $list.add([$msg.get('panel.navigation.rc.standards'), "http://${hostname}/welcome/resources-curricula/about-standards/"])
-$list.add([$msg.get('panel.navigation.rc.publish'), "http://${hostname}/welcome/resources-curricula/contribute-content/publish-resources/"])
-$list.add([$msg.get('panel.navigation.rc.addresource'), "/xwiki/bin/view/MyCurriki/StartAdd"])
 $list.add([$msg.get('panel.navigation.rc.pdworkshop'), "http://${hostname}/welcome/resources-curricula/pd-workshops/"])
+$list.add([$msg.get('panel.navigation.rc.neaacademy'), "http://${hostname}/welcome/nea-academy/"])
 -->
 #navigationCategory($msg.get('panel.navigation.rc'), $msg.get("panel.navigation.rc.rollover"), "",  $defstate,$list)
 ##
@@ -24,8 +25,8 @@ $list.add([$msg.get('panel.navigation.rc.pdworkshop'), "http://${hostname}/welco
 ##
 <!--
 #set($list=[])
-$list.add([$msg.get('panel.navigation.collaborate.about'), "http://${hostname}/welcome/collaborate/"])
-$list.add([$msg.get('panel.navigation.collaborate.groups'), "http://${hostname}/welcome/collaborate/groups/"])
+##$list.add([$msg.get('panel.navigation.collaborate.about'), "http://${hostname}/welcome/collaborate/"])
+$list.add([$msg.get('panel.navigation.collaborate.groups'), "http://${hostname}/welcome/collaborate/"])
 $list.add([$msg.get('panel.navigation.collaborate.createGroup'), "/xwiki/bin/view/Groups/CreateNewGroup/"])
 -->
 #navigationCategory($msg.get('panel.navigation.collaborate'), $msg.get("panel.navigation.collaborate.rollover"),"",  $defstate,$list)
@@ -37,27 +38,29 @@ $list.add([$msg.get('panel.navigation.collaborate.createGroup'), "/xwiki/bin/vie
 <!--
 #set($list=[])
 ## ---- comment
-$list.add([$msg.get('panel.navigation.about.curriki'), "http://${hostname}/welcome/about-curriki/"])
+$list.add([$msg.get('panel.navigation.about.curriki'), "http://${hostname}/welcome/about-nea/about-the-gps-network/"])
 ## ---- comment
-$list.add([$msg.get('panel.navigation.about.mediacenter'), "http://${hostname}/welcome/about-curriki/media-center/"])
+##$list.add([$msg.get('panel.navigation.about.mediacenter'), "http://${hostname}/welcome/about-curriki/media-center/"])
 ## ---- comment
-$list.add([$msg.get('panel.navigation.about.team'), "http://${hostname}/welcome/about-curriki/team/"])
+$list.add([$msg.get('panel.navigation.about.team'), "http://${hostname}/welcome/about-nea/team-staff/"])
 ## ---- comment
-$list.add([$msg.get('panel.navigation.about.board'), "http://${hostname}/welcome/about-curriki/board/"])
+##$list.add([$msg.get('panel.navigation.about.board'), "http://${hostname}/welcome/about-curriki/board/"])
 ## ---- comment
-$list.add([$msg.get('panel.navigation.about.contactus'), "http://${hostname}/welcome/about-curriki/contact-us/"])
+##$list.add([$msg.get('panel.navigation.about.linktocurriki'), "http://${hostname}/welcome/about-curriki/link-to-curriki/"])
 ## ---- comment
-$list.add([$msg.get('panel.navigation.about.linktocurriki'), "http://${hostname}/welcome/about-curriki/link-to-curriki/"])
+$list.add([$msg.get('panel.navigation.about.newsletter'), "http://${hostname}/welcome/about-nea/curriki-newsletter-sign-up/"])
 ## ---- comment
-$list.add([$msg.get('panel.navigation.about.faq'), "http://${hostname}/welcome/about-curriki/faq/"])
+$list.add([$msg.get('panel.navigation.about.faq'), "http://${hostname}/welcome/about-nea/faq/"])
 ## ---- comment
-$list.add([$msg.get('panel.navigation.about.partners'), "http://${hostname}/welcome/about-curriki/partners/"])
+$list.add([$msg.get('panel.navigation.about.contactus'), "http://${hostname}/welcome/about-nea/contact-us/"])
 ## ---- comment
-$list.add([$msg.get('panel.navigation.about.sponsors'), "http://${hostname}/welcome/sponsors/"])
+$list.add([$msg.get('panel.navigation.about.partners'), "http://${hostname}/welcome/about-nea/partners/"])
 ## ---- comment
-$list.add([$msg.get('panel.navigation.about.volunteer'), "Main.Volunteer"])
+##$list.add([$msg.get('panel.navigation.about.sponsors'), "http://${hostname}/welcome/sponsors/"])
 ## ---- comment
-$list.add([$msg.get('panel.navigation.about.donate'), "http://${hostname}/welcome/about-curriki/donate/"])
+##$list.add([$msg.get('panel.navigation.about.volunteer'), "Main.Volunteer"])
+## ---- comment
+##$list.add([$msg.get('panel.navigation.about.donate'), "http://${hostname}/welcome/about-curriki/donate/"])
 -->
 #navigationCategory($msg.get('panel.navigation.about'),
     $msg.get("panel.navigation.about.rollover"),"", $defstate, $list)
