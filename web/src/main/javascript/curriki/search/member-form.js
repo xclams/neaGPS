@@ -30,7 +30,7 @@ form.init = function(){
 		,items:[
 			form.termPanel
 //			,form.helpPanel
-			,{
+			/*,{
 				xtype:'fieldset'
 				,title:_('search.advanced.search.button')
 				,id:'search-advanced-'+modName
@@ -183,7 +183,7 @@ form.init = function(){
 						}]
 					}]
 				}]
-			}
+			} */
 		]
 	}
 
