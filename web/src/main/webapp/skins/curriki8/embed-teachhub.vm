@@ -13,6 +13,7 @@
 #** $context.setLinksQueryString("viewer=embed-teachhub") *#
     #asset_display($doc "view")
     $context.unsetLinksQueryString()
+    #set($target="_blank")##
     <script type="text/javascript">
 	    Ext.onReady(function(){
 			var height = document.body.scrollHeight + 100;
