@@ -7,7 +7,7 @@
     #if($isGuest)
         <ul>
             <li class="menu-item menu-item-type-post_type menu-item-object-page"
-                    ><a href="/welcome/about-gps/contact-us/" target="_top"><strong>Contact Us</strong></a></li>
+                    ><a href="/welcome/about-nea/contact-us/" target="_top"><strong>Contact Us</strong></a></li>
             <li class="menu-item menu-item-type-custom menu-item-object-custom"><a  target="_top"
                                                                                     href="/xwiki/bin/view/Registration/DirectLogin?xredirect=%2F"><strong>Register</strong></a></li>
             <li class="menu-item menu-item-type-custom menu-item-object-custom"><a  target="_top"
@@ -30,7 +30,7 @@
         <ul>
             <li class="menu-item menu-item-type-post_type menu-item-object-page"
                     ><a  target="_top"
-                         href="/about-gps/contact-us/"><strong>Contact Us</strong></a></li>
+                         href="/welcome/about-nea/contact-us/"><strong>Contact Us</strong></a></li>
             <li class="menu-item menu-item-type-custom menu-item-object-custom"><a  target="_top"
                                                                                     href="/xwiki/bin/view/MyCurriki/" title="Visit your profile"><strong>Welcome  $crtUserDoc.display("first_name","view")</strong></a></li>
             <li class="menu-item menu-item-type-custom menu-item-object-custom"><a  target="_top"
