@@ -103,6 +103,7 @@ viewers.Comments = Class.create({
               onComplete : function() {
                 // In the end: re-enable the button
                 item.disabled = false;
+                Curriki.logView('/features/discussion/delete_comment/'+ window.location.href.split("/").pop());
               }
             },
             /* Interaction parameters */
@@ -272,6 +273,7 @@ viewers.Comments = Class.create({
   addPermalinkListener : function() {
     $$(this.xcommentSelector + ' a.permalink').each(function(item) {
       item.observe('click', function(event) {
+        Curriki.logView('/features/discussion/permalink_comment/'+ window.location.href.split("/").pop());
         item.blur();
         event.stop();
         var permalinkBox = new XWiki.widgets.ConfirmationBox(
@@ -338,6 +340,7 @@ viewers.Comments = Class.create({
               response.request.options.onFailure(response);
             },
             onComplete : function (response) {
+              Curriki.logView('/features/discussion/edit_comment/'+ window.location.href.split("/").pop());
               if (this.restartNeeded) {
                 // force reload
                 location.reload();
@@ -535,6 +538,7 @@ viewers.Comments = Class.create({
             onComplete : function() {
               // In the end: re-enable the button
               conversationDelete.disabled = false;
+              Curriki.logView('/features/discussion/delete_response/'+ window.location.href.split("/").pop());
             }
           },
           /* Interaction parameters */
@@ -668,6 +672,7 @@ viewers.Comments = Class.create({
         return;
       }
       conversationPermalink.observe('click', function(event) {
+        Curriki.logView('/features/discussion/permalink_response/'+ window.location.href.split("/").pop());
         conversationPermalink.blur();
         event.stop();
         var permalinkBox = new XWiki.widgets.ConfirmationBox(
@@ -752,10 +757,10 @@ function conversationLikeHandler(event) {
           },
           onComplete : function (response) {
             topicLikeBlock.votingInProgress = false;
+            Curriki.logView('/features/discussion/like_topic/'+ window.location.href.split("/").pop());
           }.bind(this)
         });
 }
-
 
 function init() {
  
@@ -790,6 +795,7 @@ function init() {
   $$(".topic-actions-permalink a").each(function(topicPermalink) {
    if (topicPermalink) {
        topicPermalink.observe('click', function(event) {
+        Curriki.logView('/features/discussion/permalink_topic/'+ window.location.href.split("/").pop());
         topicPermalink.blur();
         event.stop();
         var permalinkBox = new XWiki.widgets.ConfirmationBox(
@@ -861,6 +867,7 @@ function init() {
             onComplete : function() {
               // In the end: re-enable the button
               topicDeletelink.disabled = false;
+              Curriki.logView('/features/discussion/delete_topic/'+ window.location.href.split("/").pop());
             }
           },
           /* Interaction parameters */
@@ -875,7 +882,31 @@ function init() {
      }.bindAsEventListener(this));
     }
     });
+
+
+    /** Add analytics tracking via click observer to the the save button of the addconversation form **/
+    $$("form.addconversation input[value=addconversation]").each(function(actionInput){
+      actionInput.up("form").down("input[type=submit]").observe('click', function(event) { 
+        Curriki.logView('/features/discussion/create_response/'+ window.location.href.split("/").pop());
+      });
+    }); 
+
+
+    /** Add analytics tracking via click observer to the the save button of the addtopic form **/
+    $$("form.addconversation input[value=addtopic]").each(function(actionInput){
+      actionInput.up("form").down("input[type=submit]").observe('click', function(event) { 
+        Curriki.logView('/features/discussion/create_topic/'+ window.location.href.split("/").pop());
+      });
+    }); 
     
+
+    /** Add analytics tracking via click observer to the the save button of the addcomment form **/
+    $$("form.AddComment").each(function(addCommentForm){
+      addCommentForm.down("input[type=submit]").observe('click', function(event) { 
+        Curriki.logView('/features/discussion/create_comment/'+ window.location.href.split("/").pop());
+      });
+    }); 
+
     // add vote click handler for the topic
     /*
      var topicDiv = $('conversation-topic');
