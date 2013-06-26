@@ -56,23 +56,11 @@
     ## e.g. from https://docs.google.com/a/curriki.org/document/d/1osoShZ4wkCru_fAGPVmBIYHjcAvuCZiZmVYgLMfuy3Q/edit
     ## .... to https://docs.google.com/a/curriki.org/document/d/1osoShZ4wkCru_fAGPVmBIYHjcAvuCZiZmVYgLMfuy3Q/view
     ## ---------------------- curriki.org -----------------------------------------------
-    #elseif($url.startsWith("http://www.curriki.org/xwiki/bin/view/Coll_"))<!-- curriki embed -->
-        #if("$!currikiEmbedCounter"=="")#set($currikiEmbedCounter=0)#else#set($currikiEmbedCounter=$math.add($currikiEmbedCounter, 1))#end
-        #set($width=590)#set($height=200)##
-        #if($url.contains("viewer="))#set($embedURL=$url)#else#if($url.contains('?'))#set($embedURL="${url}&viewer=embed")#else#set($embedURL="${url}?viewer=embed")#end#end
-    <div  style="width: ${width}px; height: ${height}px;">
-        <iframe src="$embedURL" width="${width}" height="${height}" frameborder="0" id="currikiIFrame_$currikiEmbedCounter"></iframe>
-    </div>
-    ## ---------------------- current.dev.curriki.org -----------------------------------------------
-    #elseif($url.startsWith("http://dev.current.curriki.org/xwiki/bin/view/Coll_"))<!-- curriki embed -->
-        #if("$!currikiEmbedCounter"=="")#set($currikiEmbedCounter=0)#else#set($currikiEmbedCounter=$math.add($currikiEmbedCounter, 1))#end
-        #set($width=590)#set($height=200)##
-        #if($url.contains("viewer="))#set($embedURL=$url)#else#if($url.contains('?'))#set($embedURL="${url}&viewer=embed-gps")#else#set($embedURL="${url}?viewer=embed-gps")#end#end
-    <div  style="width: ${width}px; height: ${height}px;">
-        <iframe src="$embedURL" width="${width}" height="${height}" frameborder="0" id="currikiIFrame_$currikiEmbedCounter"></iframe>
-    </div>
-    ## ---------------------- paul's dev -----------------------------------------------
-    #elseif($url.startsWith("http://node1.hoplahup.net/xwiki/bin/view/Coll_"))<!-- curriki embed -->
+    #elseif($url.startsWith("http://www.curriki.org/xwiki/bin/view/Coll_") ||
+        $url.startsWith("http://current.dev.curriki.org/xwiki/bin/view/Coll_") || $url.startsWith("http://beta.curriki.org/xwiki/bin/view/Coll_") ||
+        $url.startsWith("http://dev.gpsnetwork.org/xwiki/bin/view/Coll_") ||
+        $url.startsWith("http://node1.hoplahup.net/xwiki/bin/view/Coll_")
+    )<!-- curriki embed -->
         #if("$!currikiEmbedCounter"=="")#set($currikiEmbedCounter=0)#else#set($currikiEmbedCounter=$math.add($currikiEmbedCounter, 1))#end
         #set($width=590)#set($height=200)##
         #if($url.contains("viewer="))#set($embedURL=$url)#else#if($url.contains('?'))#set($embedURL="${url}&viewer=embed-gps")#else#set($embedURL="${url}?viewer=embed-gps")#end#end
