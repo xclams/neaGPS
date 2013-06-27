@@ -14,8 +14,8 @@ $list.add([$msg.get('panel.navigation.rc.about'), "http://${hostname}/welcome/re
 $list.add([$msg.get('panel.navigation.rc.publish'), "http://${hostname}/welcome/resources-curricula/contribute-content/publish-resources/"])
 $list.add([$msg.get('panel.navigation.rc.addresource'), "/xwiki/bin/view/MyCurriki/StartAdd"])
 $list.add([$msg.get('panel.navigation.rc.share'), "http://${hostname}/welcome/resources-curricula/share-and-rate-resources/"])
-$list.add([$msg.get('panel.navigation.rc.reviewteam'), "http://${hostname}/welcome/resources-curricula/contribute-content/about-curriki-review-team/"])
-$list.add([$msg.get('panel.navigation.rc.standards'), "http://${hostname}/welcome/resources-curricula/about-standards/"])
+$list.add([$msg.get('panel.navigation.rc.reviewteam'), "http://${hostname}/welcome/resources-curricula/contribute-content/about-content-review-team/"])
+##$list.add([$msg.get('panel.navigation.rc.standards'), "http://${hostname}/welcome/resources-curricula/about-standards/"])
 $list.add([$msg.get('panel.navigation.rc.pdworkshop'), "http://${hostname}/welcome/resources-curricula/pd-workshops/"])
 $list.add([$msg.get('panel.navigation.rc.neaacademy'), "http://${hostname}/welcome/nea-academy/"])
 -->
@@ -48,7 +48,7 @@ $list.add([$msg.get('panel.navigation.about.team'), "http://${hostname}/welcome/
 ## ---- comment
 ##$list.add([$msg.get('panel.navigation.about.linktocurriki'), "http://${hostname}/welcome/about-curriki/link-to-curriki/"])
 ## ---- comment
-$list.add([$msg.get('panel.navigation.about.newsletter'), "http://${hostname}/welcome/about-nea/curriki-newsletter-sign-up/"])
+$list.add([$msg.get('panel.navigation.about.newsletter'), "http://${hostname}/welcome/about-nea/newsletter-sign-up/"])
 ## ---- comment
 $list.add([$msg.get('panel.navigation.about.faq'), "http://${hostname}/welcome/about-nea/faq/"])
 ## ---- comment
@@ -71,7 +71,7 @@ $list.add([$msg.get('panel.navigation.about.partners'), "http://${hostname}/welc
 #set($list=[])
 <!--
 $list.add([$msg.get('panel.navigation.help_collection'), "Coll_curriki.CurrikiHelp"])
-$list.add([$msg.get('panel.navigation.help.tutorials'), "Coll_curriki.Tutorials"])
+$list.add([$msg.get('panel.navigation.help.tutorials'), "http://www.curriki.org/xwiki/bin/view/Coll_curriki/Tutorials"])
 $list.add([$msg.get('panel.navigation.help.guided_tour'), "javascript:tourpop();"])
 -->
 #navigationCategory($msg.get('panel.navigation.help'), $msg.get("panel.navigation.help.rollover"),"", $defstate,$list)
