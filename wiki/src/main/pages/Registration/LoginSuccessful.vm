@@ -4,8 +4,13 @@
 <style type="text/css">body { min-width: 0; margin-right:1em; width:90%; background-color: white;}</style>
 <!-- this is LoginSuccessful ! -->
 <div style=" vertical-align: middle; color: #4E83C7; font-size: 12px; font-family: arial, helvetica, sans-serif;">
+#if($request.getHeader("User-Agent").contains("Mac OS X"))
+    <p align="left"><a href="#" onclick="window.top.location.href='$redir';">x</a></p>
+#else
+    <p align="right"><a href="#" onclick="window.top.location.href='$redir';">x</a></p>
+#end
 <h3 style="margin-top: 3em; line-height:3em; font-weight:normal; color:black" align="center"
-        >$msg.get("join.login.login_successful")</h3>
+        >$msg.get("join.login.login_successful",[$redir])</h3>
 <p>&nbsp;</p>
 <p align="center"><button style="background-color: #FF7F00; border: 1px solid #FF0000; color: #FFFFFF; cursor: pointer; display: inline-block; font-family: Helvetica; font-size: 11px; font-weight: normal; padding: 4px 10px 3px;" onclick="window.top.location.href='$redir';"##
 >$msg.get("join.login.login_successful_ok")</button></p>
