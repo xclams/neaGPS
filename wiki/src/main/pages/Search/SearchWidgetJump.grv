@@ -89,7 +89,7 @@ if(request.subject==null && request.mediatype==null && request.level==null && re
     ];
 
     def url = "";//"http://" + xwiki.xWiki.Param('curriki.system.hostname', 'www.curriki.org');
-    url = url + "/xwiki/bin/view/Search/#" + encodeValue(query);
+    url = url + "/Search#" + encodeValue(query);
 
 
     //println("{pre}")
