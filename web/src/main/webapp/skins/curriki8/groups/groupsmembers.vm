@@ -374,6 +374,7 @@ $msg.get("groups_members_admin_current_membersettings_error")
 ##
 #macro(groupsdisplayinvitation $invitation)
 #groupsajaxjs()
+#verbatim_start
 <div class="groups-members-invitee">
 #set($memberName = $invitation.invitee)
 #set($mdoc = $xwiki.getDocument($memberName))
@@ -418,6 +419,7 @@ function cancelInvitation(invitee, spaceName){
 </div>
 </div>
 </div>
+#verbatim_end
 #end
 ##
 ##
