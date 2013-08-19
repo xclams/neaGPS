@@ -895,11 +895,11 @@ $xwiki.addTooltipJS()
   *#
 #macro(groups_members_service)
 #verbatim_start
-#set($sm=$xwiki.csm)
-#set($spaceName=$request.space)
-#set($memberName=$request.user)
-#set($actionCode=$request.code)
-#if((!$hasGlobalAdmin)&&(!$sm.isAdmin($spaceName, $context.user))&&(!(($actionCode == 3)&&($memberName==$context.user))))
+#set($sm=$xwiki.csm)##
+#set($spaceName=$request.space)##
+#set($memberName=$request.user)##
+#set($actionCode=$request.code)##
+#if((!$hasGlobalAdmin)&&(!$sm.isAdmin($spaceName, $context.user))&&(!(($actionCode == 3)&&($memberName==$context.user))))##
 $msg.groups_needsadminrights
 #else
 ## $context.user is an admin of $spaceName
@@ -930,12 +930,12 @@ $msg.groups_cannotremovemember
 #elseif($actionCode == 4)
 ## Cancel invitation for $memberName to join $spaceName
 #if($xwiki.invitationmanager.cancelInvitation($memberName, $spaceName))
-$msg.groups_invitationcancelled
+$msg.groups_invitationcancelled##
 #else
-$msg.groups_cannotcancelinvitation
+$msg.groups_cannotcancelinvitation##
 #end
 #end
-#end
+#end##
 #verbatim_end
 #end
 
