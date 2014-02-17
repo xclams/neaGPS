@@ -29,7 +29,7 @@ public class SocialLoginToolGroovy {
     String providerId = null;
     String city="", state="", country="";
     List warningFields=new ArrayList(), okFields=new ArrayList();
-    String username, password, firstName, lastName, email, memberType, postalCode="", longitude="", latitude="", agree;
+    String username, password, firstName, lastName, email, email_confirmation, memberType, postalCode="", longitude="", latitude="", agree;
     String neamember, neaaffiliate, neaoccupation, neaprofession;
     String validKey = null;
     String nowTarget = null;
@@ -90,7 +90,7 @@ public class SocialLoginToolGroovy {
         this.neaaffiliate = other.neaaffiliate;
         this.neaoccupation = other.neaoccupation;
         this.neaprofession = other.neaprofession;
-        
+
         this.password = other.password;
         this.providerId = other.providerId;
         this.username = other.username;
@@ -317,15 +317,17 @@ public class SocialLoginToolGroovy {
         neaprofession = request.getParameter("neaprofession");
         if(neaprofession==null) neaprofession="-";
         // END NEA FIELDS
-        
+
         if(request.getParameter("country")) country= request.getParameter("country");
         if(request.getParameter("city")) city  = request.getParameter("city");
         if(request.getParameter("state")) state = request.getParameter("state");
         if(request.getParameter("postalCode"))    postalCode = request.getParameter("postalCode");
         if(request.getParameter("longitude"))     longitude = request.getParameter("longitude");
         if(request.getParameter("latitude"))      longitude = request.getParameter("latitude");
-    
+
         boolean passed = validation.isValidEmail(email, true);
+        // This is not active on GPS since the social auth does not need this honeypot field
+        // passed = validation.isValidEmailConfirmation(email_confirmation, true) & passed;
         passed = validation.isValidUsername(username, true) & passed;
         passed = validation.isValidPassword(password, true) & passed;
         // this is not used on NEA
@@ -449,20 +451,28 @@ public class SocialLoginToolGroovy {
         Locale locale = new Locale(language);
         userObj.set("language",    locale.getISO3Language());
 
-        // activate if from social login, otherwise send mail and put validation key
-        if(profile) {
-            System.out.println("Making profile active.")
-            userObj.set("active", "1");
-            userObj.set("email_undeliverable", "0");
-        } else {
-            System.out.println("Making profile inactive.")
-            userObj.set("active", "0");
-            userObj.set("email_undeliverable", "1");
-            validKey = xwiki.getXWiki().generateValidationKey(16);
-            userObj.set("validkey", validKey);
-            userObj.set("validredirect", request.xredirect);
-        }
+        // Due to request from Bob at the Teammeeting on the
+        // 11th of Feb. 2014 users are always made active after registration
+        // and don't have to validate their email anymore
+        //
+        System.out.println("Making profile active.")
+        userObj.set("active", "1");
+        userObj.set("email_undeliverable", "0");
 
+        // Old code:
+        // activate if from social login, otherwise send mail and put validation key
+//        if(profile) {
+//            System.out.println("Making profile active.")
+//            userObj.set("active", "1");
+//            userObj.set("email_undeliverable", "0");
+//        } else {
+//            System.out.println("Making profile inactive.")
+//            userObj.set("active", "0");
+//            userObj.set("email_undeliverable", "1");
+//            validKey = xwiki.getXWiki().generateValidationKey(16);
+//            userObj.set("validkey", validKey);
+//            userObj.set("validredirect", request.xredirect);
+//        }
 
         //userdoc.setParent("XWiki.XWikiUsers");
         userDoc.setContent('#include' + 'Form("XWiki.XWikiUserSheet")');
@@ -682,6 +692,7 @@ public class SocialLoginToolGroovy {
         firstName = request.firstName;
         lastName = request.lastName;
         email = request.email;
+        email_confirmation = request.email_confirmation;
         city = request.city;
         country = request.country;
         postalCode = request.postalCode;
@@ -691,7 +702,7 @@ public class SocialLoginToolGroovy {
         password = request.password;
         memberType = request.getParameter("member_type");
         if(memberType==null) memberType="-";
-        
+
         // BEGIN NEA FIELDS
         neamember = request.getParameter("neamember");
         if(neamember==null) neamember="0";
@@ -704,6 +715,7 @@ public class SocialLoginToolGroovy {
         // END NEA FIELDS
 
         boolean passed = validation.isValidEmail(email, true);
+        passed = validation.isValidEmailConfirmation(email_confirmation, true) & passed;
         passed = validation.isValidUsername(username, true) & passed;
         passed = validation.isValidPassword(password, true) & passed;
         // this is not used on NEA
@@ -725,8 +737,9 @@ public class SocialLoginToolGroovy {
     public boolean createUser() {
         Document userDoc = createUserDoc();
         userDoc.saveWithProgrammingRights(msg.get('xwiki.socialLogin.updatedSocialProfile'), true)
-        sendValidationEmail();
-        //authenticateUser(userDoc);
+        //sendValidationEmail();
+        sendConfirmationEmail();
+        authenticateUser(userDoc);
         return true;
     }
 
