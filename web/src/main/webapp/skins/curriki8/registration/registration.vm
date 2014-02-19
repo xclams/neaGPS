@@ -278,11 +278,6 @@ function validateRegisterForm(){
 		CurrikiApp.errMsgAdd("$msg.get('register.account_info.error.name2_long')");
 	}
 
-    if ($F('XWiki.XWikiUsers_0_member_type')=="0" || $F('XWiki.XWikiUsers_0_member_type').length<1){
-        errorMissing = true;
-        CurrikiApp.errHighlight("block-XWiki-XWikiUsers_0_member_type", $('register')['XWiki.XWikiUsers_0_member_type']);
-    }
-
 
 	if ($('field-receive-email-some') && $('field-receive-email-some').checked){
 		if(!$('field-receive-email-newsletters').checked
