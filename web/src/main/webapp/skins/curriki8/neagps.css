@@ -68,7 +68,7 @@ XWIKI STYLES          (notice the .curriki prefix)
 */
 body.curriki#body { background: #DDDDDD !important; }
 /* logo */
-.curriki #header #header-logo img { max-height: 65px !important; }
+.curriki #header #header-logo img { max-height: 75px !important; }
 /* search box */
 .curriki #header-search .search-box { background-color: #164891 !important; border: none !important; }
 /* left nav */
