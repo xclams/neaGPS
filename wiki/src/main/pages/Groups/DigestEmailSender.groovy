@@ -5,6 +5,8 @@ import org.curriki.plugin.activitystream.plugin.CurrikiActivityStreamPluginApi
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import java.text.SimpleDateFormat
+
 public class DigestEmailSender {
 
     /**
@@ -16,6 +18,7 @@ public class DigestEmailSender {
      * The xwiki object of the running curriki instance
      */
     private XWiki wiki;
+    private Long sinceHowLong = 24*60*60*1000;
 
     public void init(XWiki xwiki) {
         this.wiki = xwiki;
@@ -53,7 +56,12 @@ public class DigestEmailSender {
     private List<ActivityEvent> getActivityEventsForGroup(String groupName) {
         CurrikiActivityStreamPluginApi activityStream = wiki.activitystream;
         String streamName = activityStream.getStreamName(groupName);
-        return activityStream.getEvents(streamName, true, 15, 0);
+        SimpleDateFormat isoFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        isoFormat.setTimeZone(TimeZone.getTimeZone("PST"));
+        Date date = new Date(new Date().getTime() - sinceHowLong);
+        String dateStr = isoFormat.format(date);
+        LOG.warn("Selecting events from stream \"" + streamName + "\" with date > " + dateStr);
+        return activityStream.searchEvents("act.stream='"+ streamName+"'  and act.date > ${dateStr}", false, 25, 0)
     }
 
     private void sendMail(String from, String to, String subject, String text){
