@@ -106,4 +106,9 @@ public class DiscussionActivityEvent extends ActivityEvent
     {
         return displayBody;
     }
+
+    public String getMessageBodyTeaser() {
+        return getEvent().getParam4();
+    }
+
 }
