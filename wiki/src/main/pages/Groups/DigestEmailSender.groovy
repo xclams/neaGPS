@@ -1,6 +1,8 @@
+import com.xpn.xwiki.XWikiContext
 import com.xpn.xwiki.api.Document
 import com.xpn.xwiki.api.XWiki
 import com.xpn.xwiki.plugin.activitystream.api.ActivityEvent
+import com.xpn.xwiki.plugin.spacemanager.api.Space
 import org.curriki.plugin.activitystream.plugin.CurrikiActivityStreamPluginApi
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -19,38 +21,90 @@ public class DigestEmailSender {
      */
     private XWiki wiki;
     private Long sinceHowLong = 24*60*60*1000;
+    private int eventsCount = 0;
 
     public void init(XWiki xwiki) {
         this.wiki = xwiki;
         LOG.warn("Inited DigestEmailSender");
     }
 
+    public void setSinceHowLong(String s) { this.sinceHowLong = s;}
+
+    public int sendDigestEmailToAllGroupsMatching(String pattern, List<String> groupAdminsUserNames){
+        boolean hasWildcard = pattern.endsWith("*");
+        String prefix = pattern; if(hasWildcard) prefix = pattern.substring(0, pattern.length()-1);
+        int count = 0;
+        for(name in wiki.csm.getSpaceNames(10000,0)) {
+            if(hasWildcard && !(name.startsWith(prefix))) continue;
+            println("Processing " + name);
+            System.out.println("Processing " + name);
+            count += sendDigestEmailForGroup(name, groupAdminsUserNames);
+        }
+        return count;
+    }
+
+    public void dispatchEventNotification(ActivityEvent event, com.xpn.xwiki.api.Context context) {
+        XWiki wiki = new XWiki(context.getXWiki(), context.getContext());
+        System.out.println("Would be dispatching event ${event} within context ${context}.");
+        def text = wiki.getDocument("Groups.DigestEmailMailTemplate").getRenderedContent();
+        wiki.mailsender.sendHtmlMessage("paul@hoplahup.net", "polx@online.de", null, null, "test", text, text.replaceAll("<[^>]*>",""), []);
+    }
+
+    public int eventTick() {
+        eventsCount++;
+        return eventsCount;
+    }
+
     public int sendDigestEmailForGroup(String groupName, List<String> groupAdminsUserNames){
         List<ActivityEvent> activityEvents = getActivityEventsForGroup(groupName);
 
-        if(groupAdminsUserNames == null || groupAdminsUserNames.size() == 0){
+        // If we have no events to send we don't proceed here.
+        // Log that and return quietly
+        if(activityEvents == null || activityEvents.size() == 0) {
+            LOG.warn("No Events to send for group with name: " + groupName)
+            return 0;
+        }
+
+        if(groupAdminsUserNames == null || groupAdminsUserNames.size() == 0 || groupAdminsUserNames.contains("")){
             groupAdminsUserNames = wiki.csm.getAdmins(groupName);
         }
 
+        Space space = wiki.csm.getSpace(groupName);
         wiki.context.put("GROUPNAME", groupName);
+        wiki.context.put("DISPLAY_GROUPNAME", space.getDisplayTitle());
         wiki.context.put("EVENTS", activityEvents);
+        wiki.context.put("DIGEST_EMAIL_SENDER", this);
 
         Document emailDoc = wiki.getDocument("Groups.DigestEmailMailTemplate");
         String subject = wiki.renderText(emailDoc.title, emailDoc);
         String from = wiki.getXWikiPreference("admin_email");
+        eventsCount = 0;
         String text = emailDoc.getRenderedContent();
 
+
         LOG.warn("Events ###  " + activityEvents);
-        LOG.warn("Groupadmins ###  " + groupAdminsUserNames);
+        LOG.warn("Groupadmins ### "+groupAdminsUserNames.size() + " " + groupAdminsUserNames);
+        int count=0;
         for (groupAdminUserName in groupAdminsUserNames) {
             Document groupAdminUserDoc = wiki.getDocument(groupAdminUserName);
             com.xpn.xwiki.api.Object userObj = groupAdminUserDoc.getObject("XWiki.XWikiUsers", true);
-            if(userObj==null || userObj.getProperty("email")==null) continue;
+            if(userObj==null || !userObj.getProperty("email")) continue;
             String to = userObj.getProperty("email").getValue();
-            LOG.warn("Sending mail to " + to);
-            sendMail(from, to, subject, text);
+            if(eventsCount>0) {
+                LOG.warn("Sending mail to " + to);
+                sendMail(from, to, subject, text);
+                count++;
+            } else {
+                LOG.warn("Not sending mail to " + to + " as the number of events ("+eventsCount+") is not strictly positive.");
+            }
         }
-        return groupAdminsUserNames.size();
+        return count;
+    }
+
+    public String formatDate(Date date){
+        SimpleDateFormat isoFormat = new SimpleDateFormat("hh:mm a");
+        isoFormat.setTimeZone(TimeZone.getTimeZone("EST5EDT"));
+        return isoFormat.format(date);
     }
 
     private List<ActivityEvent> getActivityEventsForGroup(String groupName) {

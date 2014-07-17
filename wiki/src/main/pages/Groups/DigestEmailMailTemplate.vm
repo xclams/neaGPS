@@ -79,6 +79,7 @@
                                 #set($url="http://${hostname}${event.getUrl()}")
 
                                 #if("${event.class}" == "class org.curriki.plugin.activitystream.plugin.MemberActivityEvent")
+                                    <!-- $digestEmailSender.eventTick() events} -->
                                     <li>
                                         $msg.get("groups.digestemail.member_activity_event", [$date, $groupMemberPageUrl,$groupMemberName,$groupMembersPageUrl])
                                     </li>
@@ -88,9 +89,9 @@
                                     #set($docTitle=$event.getParam1())
                                     #set($docType=$event.getParam3())
 
-                                    <li>
                                         ## Topics
                                         #if(($docType.contains("discussion-topic")) && ($event.getType().contains("create")))
+                                            <!-- $digestEmailSender.eventTick() events} -->
                                         <li>
                                             $msg.get("groups.digestemail.discussion_activity_event.topic.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])<br/><br/>
                                             <div style="border:thin"><i>$event.getMessageBodyTeaser()</i>##
@@ -103,6 +104,7 @@
 
                                         ## Answers
                                         #elseif(($docType.contains("discussion-answer")) && ($event.getType().contains("create")))
+                                            <!-- $digestEmailSender.eventTick() events} -->
                                         <li>
                                             $msg.get("groups.digestemail.discussion_activity_event.answer.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])<br/><br/>
                                             <div style="border:thin"><i>$event.getMessageBodyTeaser()</i>##
@@ -115,13 +117,14 @@
 
                                         ## Comments
                                         #elseif(($docType.contains("discussion-answer")) && ($event.getType().contains("addComment")))
+                                            <!-- $digestEmailSender.eventTick() events} -->
                                         <li>
                                             $msg.get("groups.digestemail.discussion_activity_event.comment.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])<br/><br/>
                                             <div style="border:thin"><i>$event.getMessageBodyTeaser()</i>##
                                                 #if($event.getMessageBodyTeaser().endsWith("…")) <a href="$url">$msg.get("readmore")</a>#end</div><br/>
                                         </li>
                                         #end
-                                    </li>
+
 
                                 #elseif("${event.class}" == "class org.curriki.plugin.activitystream.plugin.MessageActivityEvent")
                                     #set($articleTitle=$event.getParam1())
@@ -131,15 +134,24 @@
                                     #set($mailTo=$event.getMailTo())
                                     #set($recipientRole=$event.getRecipientRole())
                                     #set($toGroupMail=$event.getToGroupMail())
-                                    ##
+
+                                    #if($level=="message")
+                                        <!-- $digestEmailSender.eventTick() events} -->
                                     <li>
                                         $msg.get("groups.digestemail.message_activity_event.message", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url])<br/><br/>
                                         <div style="border:thin"><i>$event.getMessageBodyTeaser()</i>##
                                             #if($event.getMessageBodyTeaser().endsWith("…")) <a href="$url">$msg.get("readmore")</a>#end</div><br/>
                                     </li>
+                                    ###elseif(($level=="comment"))
+                                    ##<li>
+                                    ##    $msg.get("groups.digestemail.message_activity_event.comment", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url])
+                                    ##    <div style="border:thin">$event.getMessageBodyTeaser()</div>
+                                    ##</li>
+                                    #end
 
                                 #elseif("${event.class}" == "class org.curriki.plugin.activitystream.plugin.ResourceActivityEvent")
                                     #set($assetTitle=$event.getParam1())
+                                    <!-- $digestEmailSender.eventTick() events} -->
                                     <li>
                                         $msg.get("groups.digestemail.resource_activity_event", [$date, $groupMemberPageUrl,$groupMemberName,$assetTitle,$url])
                                     </li>
@@ -147,8 +159,6 @@
 
                             ##elseif("${event.class}" == "class org.curriki.plugin.activitystream.plugin.DocumentationActivityEvent")
                             ##    <li>DocumentationActivityEvent: $date, $groupMember, $groupMemberPageUrl, $groupMemberPageUrl</li>
-
-
                             #end
                         </ul>
 
