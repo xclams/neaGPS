@@ -308,58 +308,57 @@ $profile
 #end ## }
 ##
 #macro(groupsdisplayeditmemberinfo $memberName $spaceName $divid)
-#set($mdoc = $xwiki.getDocument($memberName))
-#if(!$mdoc.isNew())
-<div class="groups-members-memberpic userpic">
-#if($mdoc.attachmentList.size()==0)
- <img src="$xwiki.getSkinFile("noavatar.png")" width="80" />
-#else
- #foreach ($attach in $mdoc.attachmentList)
-  <a href="$mdoc.getURL("view")" >
-  <img src="$mdoc.getAttachmentURL($attach.filename,"download")?width=80" width="80" /></a>
- #end
-#end
-</div>
-#end
-#set($uprofile = $sm.getSpaceUserProfile($spaceName,$memberName))
+<!-- this is groupsdisplayeditmemberinfo internal -->
+    #if(!$mdoc.isNew())
+    <div class="groups-members-memberpic userpic">
+        <!-- mdoc is $mdoc of class $mdoc.getClass() -->
+        #mycurriki_viewphoto($mdoc)
+    </div>
+    #end
+    #set($uprofile = $sm.getSpaceUserProfile($spaceName,$memberName))
 <div class="groups-members-membername">
-<a href="$uprofile.userURL">$!uprofile.firstName $!uprofile.lastName</a>
+    <a href="$uprofile.userURL">$!uprofile.firstName $!uprofile.lastName</a>
 </div>
-<form action="$xwiki.getURL("Groups.SaveSpaceUserProfileService")" method="post" onsubmit="document.getElementById('${divid}').parentNode.className = 'groups-members-member'; new iframe(this,{update:'${divid}'}); return false;">
-<div class="groups-members-member-buttons">
-<input type="button"  class="button-grey" value="$msg.get("groups_members_admin_current_membersettings_cancel_link")" onclick="cancelEditProfile('${memberName}','${spaceName}','${divid}');" /><input type="submit" class="button-orange" value="$msg.get("groups_members_admin_current_membersettings_save_link")" />
-</div>
-<input type="hidden" name="user" value="$!memberName" />
-<input type="hidden" name="space" value="$!spaceName" />
-<input type="hidden" name="divid" value="$!divid" />
-<input type="hidden" name="xpage" value="plain" />
-$uprofile.display("profile","edit")
-#if($sm.getRoles($spaceName).size() > 0) ## {
-<div class="select-roles">$msg.get("groups.members.selectroles")</div>
-<div class="instruction">$msg.get("groups.members.selectroles.info")</div>
-<select name="roles" multiple size=4>
-#groupRoleSelector($spaceName false false $memberName)
-</select>
-#foreach($role in $ret_hasRoles) ## {
-<input type="hidden" name="hasrole" value="${role}" />
-#end ## }
-<br />
-#end ## }
-$uprofile.display("allowNotifications","edit") $msg.get("groups_members_create_membersettings_email")
-<br />
-$uprofile.display("allowNotificationsFromSelf","edit") $msg.get("groups_members_create_membersettings_changenotice")
-#* <br/>
-    How often do you want to be notified per email of events happening in your group?<br>
-    #set($notif=$!doc.getObject("XWiki.SpaceUserProfileClass").getProperty("notifications").value)
-    <label class="xwiki-form-listclass"><input value="immediate"
-       #if($notif=="immediate")checked#end
-       name="XWiki.SpaceUserProfileClass_0_notifications" type="radio">immediately at each action</label><br>
-    <label class="xwiki-form-listclass"><input value="digest"
-       #if($notif=="digest" || $notif=="")checked#end
-       name="XWiki.SpaceUserProfileClass_0_notifications" type="radio">once a day</label><br>
-    <label class="xwiki-form-listclass"><input value="none"
-       #if($notif=="none")checked#end
-       name="XWiki.SpaceUserProfileClass_0_notifications" type="radio">never</label><br> *#
+<form action="$xwiki.getURL("Groups.SaveSpaceUserProfileService")" method="post" onsubmit="document.getElementById('${divid}').parentNode.className = 'groups-members-member'; new iframe(this,{update:'${divid}'}); return false;" style="padding-top:0">
+    <div class="groups-members-member-buttons">
+        <input type="button"  class="button-grey" value="$msg.get("groups_members_admin_current_membersettings_cancel_link")" onclick="cancelEditProfile('${memberName}','${spaceName}','${divid}');" /><input type="submit" class="button-orange" value="$msg.get("groups_members_admin_current_membersettings_save_link")" />
+    </div>
+    <input type="hidden" name="user" value="$!memberName" />
+    <input type="hidden" name="space" value="$!spaceName" />
+    <input type="hidden" name="divid" value="$!divid" />
+    <input type="hidden" name="xpage" value="plain" />
+    #verbatim_end
+    $uprofile.display("profile","edit")
+    #verbatim_start
+    #if($sm.getRoles($spaceName).size() > 0) ## {
+        <div class="select-roles">$msg.get("groups.members.selectroles")</div>
+        <div class="instruction">$msg.get("groups.members.selectroles.info")</div>
+        <select name="roles" multiple size=4>
+            #groupRoleSelector($spaceName false false $memberName)
+        </select>
+        #foreach($role in $ret_hasRoles) ## {
+            <input type="hidden" name="hasrole" value="${role}" />
+        #end ## }
+        <br />
+    #end ## }
+    #verbatim_end
+    $uprofile.display("allowNotifications","edit") $msg.get("groups_members_create_membersettings_email")
+    $uprofile.display("allowNotificationsFromSelf","edit") $msg.get("groups_members_create_membersettings_changenotice") #verbatim_start
+    #if($sm.isAdmin($spaceName, $context.getUser()) || $hasGlobalAdmin)
+        <p>
+            Receive...
+            #set($notif=$!doc.getObject("XWiki.SpaceUserProfileClass").getProperty("notifications").value)
+            <label class="xwiki-form-listclass"><input value="immediate"
+                                                       #if($notif=="immediate")checked #end
+                                                       name="XWiki.SpaceUserProfileClass_0_notifications" type="radio">immediate alerts,</label>
+            <label class="xwiki-form-listclass"><input value="digest"
+                                                       #if($notif=="digest" || $notif=="")checked #end
+                                                       name="XWiki.SpaceUserProfileClass_0_notifications" type="radio">daily alerts,</label>
+            <label class="xwiki-form-listclass"><input value="none"
+                                                       #if($notif=="none")checked #end
+                                                       name="XWiki.SpaceUserProfileClass_0_notifications" type="radio">no alerts.</label>
+        </p>
+    #end
 </form>
 #end
 ##

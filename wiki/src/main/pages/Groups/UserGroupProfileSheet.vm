@@ -1,0 +1,33 @@
+{{velocity}}
+#* @vtlvariable name="doc" type="com.xpn.xwiki.api.Document" *#
+## @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset"
+## @vtlvariable name="document" type="com.xpn.xwiki.api.Document"
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="csm" type="org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi" *# ##
+#* @vtlvariable name="sm" type="org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi" *# ##
+#set($spaceName="${doc.web.substring(13)}")
+### 13 = "UserProfiles_".length()
+#set($sm = $xwiki.csm)
+#set($user = "XWiki.${doc.name}")
+#set($memberName = ${user})
+#set($mdoc = $xwiki.getDocument($memberName))
+== Edit profile of [[$mdoc>>$mdoc]] in group $spaceName ==
+(TODO: get a linked little, get the group title)
+#set($divid = "")
+#verbatim_start<div class="groups-members"><div id="groups-members-list-0" class="groups-members-list"><div class="groups-members-member group-members-edited">
+###
+##
+##
+##
+
+##
+##
+##
+   #set($isGroupAdmin = $sm.isAdmin($spaceName, $context.getUser()))
+    #if($isGroupAdmin||$user==$context.user||$hasGlobalAdmin)
+    #groupsdisplayeditmemberinfo($user,$spaceName,$divid)
+#else
+    $msg.groups_needsadminrights
+#end
+</div></div></div>#verbatim_end{{/velocity}}
