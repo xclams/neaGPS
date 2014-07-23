@@ -308,6 +308,8 @@ $profile
 #end ## }
 ##
 #macro(groupsdisplayeditmemberinfo $memberName $spaceName $divid)
+    #set($doc=$xwiki.getDocument($request.getParameter("user")))
+    #set($doc=$xwiki.getDocument("UserProfiles_${request.getParameter('space')}.${doc.name}"))
 <!-- this is groupsdisplayeditmemberinfo internal -->
     #if(!$mdoc.isNew())
     <div class="groups-members-memberpic userpic">
@@ -339,23 +341,22 @@ $profile
         #foreach($role in $ret_hasRoles) ## {
             <input type="hidden" name="hasrole" value="${role}" />
         #end ## }
-        <br />
     #end ## }
     #verbatim_end
     $uprofile.display("allowNotifications","edit") $msg.get("groups_members_create_membersettings_email")
     $uprofile.display("allowNotificationsFromSelf","edit") $msg.get("groups_members_create_membersettings_changenotice") #verbatim_start
     #if($sm.isAdmin($spaceName, $context.getUser()) || $hasGlobalAdmin)
         <p>
-            Receive...
-            #set($notif=$!doc.getObject("XWiki.SpaceUserProfileClass").getProperty("notifications").value)
-            <label class="xwiki-form-listclass"><input value="immediate"
-                                                       #if($notif=="immediate")checked #end
+            Receive...<br/>
+            #set($notif=$!doc.getObject("XWiki.SpaceUserProfileClass").getProperty("notifications").value)##
+            <label class="xwiki-form-listclass"><input value="immediate" ##
+                                                       #if($notif=="immediate")checked #end ##
                                                        name="XWiki.SpaceUserProfileClass_0_notifications" type="radio">immediate alerts,</label>
-            <label class="xwiki-form-listclass"><input value="digest"
-                                                       #if($notif=="digest" || $notif=="")checked #end
+            <label class="xwiki-form-listclass"><input value="digest" ##
+                                                       #if($notif=="digest" || $notif=="")checked #end ##
                                                        name="XWiki.SpaceUserProfileClass_0_notifications" type="radio">daily alerts,</label>
-            <label class="xwiki-form-listclass"><input value="none"
-                                                       #if($notif=="none")checked #end
+            <label class="xwiki-form-listclass"><input value="none" ##
+                                                       #if($notif=="none")checked #end##
                                                        name="XWiki.SpaceUserProfileClass_0_notifications" type="radio">no alerts.</label>
         </p>
     #end
@@ -665,16 +666,16 @@ function rejectRequestCallback(ajaxreq) {
  * Service for showing the edit member info form
  *#
 #macro(groups_editmemberinfoform)
-#set($sm = $xwiki.csm)
-#set($spaceName = $request.space)
-#set($user = $request.user)
-#set($divid = $!request.divid)
-#set($isGroupAdmin = $sm.isAdmin($spaceName, $context.getUser()))
-#if($isGroupAdmin||$user==$context.user||$hasGlobalAdmin)
-#groupsdisplayeditmemberinfo($user,$spaceName,$divid)
-#else
-$msg.groups_needsadminrights
-#end
+    #set($sm = $xwiki.csm)
+    #set($spaceName = $request.space)
+    #set($user = $request.user)
+    #set($divid = $!request.divid)
+    #set($isGroupAdmin = $sm.isAdmin($spaceName, $context.getUser()))
+    #if($isGroupAdmin||$user==$context.user||$hasGlobalAdmin)
+        #groupsdisplayeditmemberinfo($user,$spaceName,$divid)
+    #else
+        $msg.groups_needsadminrights
+    #end
 #end
 
 

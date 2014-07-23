@@ -1,0 +1,13 @@
+{{velocity}}
+#**
+ * Service for showing the edit member info form
+ * @param request.space Space to accept the user in
+ * @param request.user User to edit
+ * @param request.divid DIV name to pass through
+ * @type ajaxservice
+ * @refactored ludovic
+ *#
+#verbatim_start
+#groups_editmemberinfoform()
+#verbatim_end
+{{/velocity}}
