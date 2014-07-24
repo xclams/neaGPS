@@ -131,6 +131,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
     }
 
     protected void dispatchEventNotification(final ActivityEvent event, XWikiContext xcontext) {
+        final Map<String, Object> temp =  tempStorage.get();
         AbstractXWikiRunnable runnable = new AbstractXWikiRunnable(XWikiContext.EXECUTIONCONTEXT_KEY, xcontext.clone()) {
             public void runInternal() {
                 try {
@@ -138,6 +139,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
                     // I wonder what... some representative of the group so we don't get flooded by actions that trigger huge things?
                     XWikiContext xcontext = (XWikiContext) Utils.getComponent(Execution.class).getContext()
                             .getProperty(XWikiContext.EXECUTIONCONTEXT_KEY);
+                    tempStorage.set(temp);
                     Object notificationMailSender = xcontext.getWiki().parseGroovyFromPage("Groups.NotificationMailSender", xcontext);
                     Method sendNotificationEmailForEventMethod = notificationMailSender.getClass().getMethod("sendNotificationEmailForEvent", String.class, ActivityEvent.class);
                     Method initMethod = notificationMailSender.getClass().getMethod("init", com.xpn.xwiki.api.Context.class);

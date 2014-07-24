@@ -130,9 +130,10 @@
                 <!-- $notificationMailSender.eventTick() events} -->
                 $msg.get("groups.notification_mail.discussion_activity_event.topic.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
                 <br/><br/>
-
-                <div style="border:thin"><i>$event.getMessageBodyTeaser()</i>##
-                  #if($event.getMessageBodyTeaser().endsWith("…")) <a href="$url">$msg.get("readmore")</a>#end</div>
+                  #set($body=$xwiki.activitystream.getTempAttribute("messageBody"))##
+                  #if($body.startsWith('{{html clean="false" wiki="false"}}'))#set($body=$body.substring(35))#end
+                  #if($body.endsWith('{{/html}}'))#set($body=$body.substring(0,$mathtool.sub($body.length(),9)))#end
+                  <div style="border:thin">$body</div>#end</div>
                 <br/>
               ###elseif(($docType.contains("discussion-topic")) && ($event.getType().contains("update")))
               ##<li>
@@ -144,9 +145,10 @@
                 <!-- $notificationMailSender.eventTick() events} -->
                 $msg.get("groups.notification_mail.discussion_activity_event.answer.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
                 <br/><br/>
-
-                <div style="border:thin"><i>$event.getMessageBodyTeaser()</i>##
-                  #if($event.getMessageBodyTeaser().endsWith("…")) <a href="$url">$msg.get("readmore")</a>#end</div>
+                #set($body=$xwiki.activitystream.getTempAttribute("messageBody"))##
+                #if($body.startsWith('{{html clean="false" wiki="false"}}'))#set($body=$body.substring(35))#end
+                #if($body.endsWith('{{/html}}'))#set($body=$body.substring(0,$mathtool.sub($body.length(),9)))#end
+                <div style="border:thin">$body</div>
                 <br/>
               ###elseif(($docType.contains("discussion-answer")) && ($event.getType().contains("update")))
               ##<li>
@@ -159,8 +161,10 @@
                 $msg.get("groups.notification_mail.discussion_activity_event.comment.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
                 <br/><br/>
 
-                <div style="border:thin"><i>$event.getMessageBodyTeaser()</i>##
-                  #if($event.getMessageBodyTeaser().endsWith("…")) <a href="$url">$msg.get("readmore")</a>#end</div>
+                  #set($body=$xwiki.activitystream.getTempAttribute("messageBody"))##
+                  #if($body.startsWith('{{html clean="false" wiki="false"}}'))#set($body=$body.substring(35))#end
+                  #if($body.endsWith('{{/html}}'))#set($body=$body.substring(0,$mathtool.sub($body.length(),9)))#end
+                  <div style="border:thin">$body</div>
                 <br/>
               #end
 
@@ -177,9 +181,10 @@
                 <!-- $notificationMailSender.eventTick() events} -->
                 $msg.get("groups.notification_mail.message_activity_event.message", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url])
                 <br/><br/>
-
-                <div style="border:thin"><i>$event.getMessageBodyTeaser()</i>##
-                  #if($event.getMessageBodyTeaser().endsWith("…")) <a href="$url">$msg.get("readmore")</a>#end</div>
+                #set($body=$xwiki.activitystream.getTempAttribute("messageBody"))##
+                #if($body.startsWith('{{html clean="false" wiki="false"}}'))#set($body=$body.substring(35))#end
+                #if($body.endsWith('{{/html}}'))#set($body=$body.substring(0,$mathtool.sub($body.length(),9)))#end
+                <div style="border:thin">$body</div>
                 <br/>
               ###elseif(($level=="comment"))
               ##<li>
