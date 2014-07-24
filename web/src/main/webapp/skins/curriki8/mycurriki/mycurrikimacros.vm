@@ -89,7 +89,7 @@ $text
   *#
 #macro(mycurriki_header $userobj $userdoc) ## {
 <div id="mycurriki-img">
-    #curriki_avatar_width_height($mdoc 176 176)</div>
+    #curriki_avatar_width_height($userdoc 176 176)</div>
 <h2>$userobj.first_name $userobj.last_name</h2>
 #end ## macro ## }
 

@@ -294,8 +294,8 @@ $profile
 #end ## }
 ##
 #macro(groupsdisplayeditmemberinfo $memberName $spaceName $divid) ##
-    #set($mdoc=$xwiki.getDocument($request.getParameter("user"))) ##
-    #set($doc=$xwiki.getDocument("UserProfiles_${request.getParameter('space')}.${doc.name}")) ##
+    #set($mdoc=$xwiki.getDocument($memberName)) ##
+    #set($doc=$xwiki.getDocument("UserProfiles_${spaceName}.${mdoc.name}")) ##
 <!-- this is groupsdisplayeditmemberinfo internal -->
     #if(!$mdoc.isNew())
     <div class="groups-members-memberpic userpic">
