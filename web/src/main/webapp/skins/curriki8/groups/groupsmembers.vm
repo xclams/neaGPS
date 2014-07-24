@@ -332,18 +332,20 @@ $profile
     $uprofile.display("allowNotifications","edit") $msg.get("groups_members_create_membersettings_email")
     $uprofile.display("allowNotificationsFromSelf","edit") $msg.get("groups_members_create_membersettings_changenotice") #verbatim_start
     #if($sm.isAdmin($spaceName, $context.getUser()) || $hasGlobalAdmin)
-        <p>## Receive...
-            $msg.get("groups_members_profile_edit_notification_receive")<br/>
+        <div class="select-roles">$msg.get("groups_members_profile_edit_notification_receive")</div>
+    ## Group Activity Notifications
+        <div class="instruction">$msg.get("groups_members_profile_edit_notification_receive_description")</div>
+        <p>
             #set($notif=$!doc.getObject("XWiki.SpaceUserProfileClass").getProperty("notifications").value)##
             <label class="xwiki-form-listclass"><input value="immediate" ##
-                 #if($notif=="immediate")checked #end ## immediate alerts,
-                 name="XWiki.SpaceUserProfileClass_0_notifications" type="radio">$msg.get("groups_members_profile_edit_notification_receive_immediate")</label>
+                                                       #if($notif=="immediate")checked #end ## immediate alerts,
+                                                       name="XWiki.SpaceUserProfileClass_0_notifications" type="radio">$msg.get("groups_members_profile_edit_notification_receive_immediate")</label>
             <label class="xwiki-form-listclass"><input value="digest" ##
-                 #if($notif=="digest" || "$!notif"=="")checked #end ## daily alerts,
-                 name="XWiki.SpaceUserProfileClass_0_notifications" type="radio">$msg.get("groups_members_profile_edit_notification_receive_daily")</label>
+                                                       #if($notif=="digest" || "$!notif"=="")checked #end ## daily alerts,
+                                                       name="XWiki.SpaceUserProfileClass_0_notifications" type="radio">$msg.get("groups_members_profile_edit_notification_receive_daily")</label>
             <label class="xwiki-form-listclass"><input value="none" ##
-                 #if($notif=="none")checked #end## no alerts.
-                 name="XWiki.SpaceUserProfileClass_0_notifications" type="radio">$msg.get("groups_members_profile_edit_notification_receive_none")</label>
+                                                       #if($notif=="none")checked #end## no alerts.
+                                                       name="XWiki.SpaceUserProfileClass_0_notifications" type="radio">$msg.get("groups_members_profile_edit_notification_receive_none")</label>
         </p>
     #end
 </form>
