@@ -40,13 +40,7 @@
 	<div id="xwikicomment_${count}" class="xwikicomment">
 		<div class="commentavatar">
 				#set($creatorDoc = $xwiki.getDocument($doc.display('author','view',$comment)))
-				#if($creatorDoc.attachmentList.size()==0)
-			<img src="$xwiki.getSkinFile("noavatar.png")"/>
-				#else
-					#foreach ($attach in $creatorDoc.attachmentList)
-			<a href="$creatorDoc.getURL("view")" ><img src="$creatorDoc.getAttachmentURL($attach.filename,"download")" /></a>
-					#end
-				#end
+            #curriki_avatar_width_height($mdoc 72 72)
 	</div>
 				#set($date = $!comment.getProperty("date").value)
 	<div class="commentheader"><span class="commentauthor">$!xwiki.getUserName($doc.display('author','view',$comment))</span>
