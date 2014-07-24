@@ -1574,7 +1574,7 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
       #elseif("$!height"=="")##
          <img src="$src?width=$reqWidth" width="$width" class="photo"/>##
       #else##
-         <img src="$src?width=$reqWidth&height=$reqHeight&keepAspectRatio=true" class="photo"/>
+         <img src="$src?width=$reqWidth&height=$reqHeight&keepAspectRatio=true" style="max-width:${width}px; max-height:${height}px" class="photo"/>
       #end##
     </a>
 #else ## } {
@@ -1587,7 +1587,7 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
  #elseif("$!height"=="")##
      <img src="$src?width=$reqWidth" width="$width" class="photo"/>
  #else##
-     <img src="$src?width=$width&height=$reqHeight&keepAspectRatio=true" class="photo"/>
+     <img src="$src?width=$width&height=$reqHeight&keepAspectRatio=true" style="max-width:${width}px; max-height:${height}px" class="photo"/>
  #end##
  </a>
 #end ## }
@@ -1764,24 +1764,30 @@ $response.setDateHeader("Expires",$expires.getTime())##
   *#
 #macro(verbatim $text)#if($xwiki.getCurrentContentSyntaxId()!="xwiki/1.0"){{html wiki=false}}$!text{{/html}}#else{pre}$!text{/pre}#end#end
 #**
-  * Starts a verbatim block
-  *#
-#macro(verbatim_start)
-  #if($xwiki.getCurrentContentSyntaxId()!="xwiki/1.0")
-{{html wiki=false clean=false}}
-  #else
-{pre}
-  #end
+ * Starts a verbatim block
+ *#
+#macro(verbatim_start)##
+#if("$!{inVerbatim}"=="" || !$inVerbatim)##
+#if($xwiki.getCurrentContentSyntaxId()!="xwiki/1.0")##
+{{html wiki=false clean=false}}##
+#else##
+{pre}##
+#end##
+#set($inVerbatim=true)##
+#end##
 #end
 #**
-  * Ends a verbatim block
-  *#
-#macro(verbatim_end)
-  #if($xwiki.getCurrentContentSyntaxId()!="xwiki/1.0")
-{{/html}}
-  #else
-{/pre}
-  #end
+ * Ends a verbatim block
+ *#
+#macro(verbatim_end)##
+#if($inVerbatim)##
+#if($xwiki.getCurrentContentSyntaxId()!="xwiki/1.0")##
+{{/html}}##
+#else##
+{/pre}##
+#end##
+#set($inVerbatim=false)##
+#end##
 #end
 
 #macro(markup_editAssetProperty $editedDocument $propertyId $syntax)
