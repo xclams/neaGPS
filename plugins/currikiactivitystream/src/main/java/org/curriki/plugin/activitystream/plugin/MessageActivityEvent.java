@@ -54,8 +54,12 @@ public class MessageActivityEvent extends ActivityEvent
             article = doc.getObject("XWiki.ArticleClass");
             if (article != null) {
                 articleTitle = article.getStringValue("title");
-                articleLink =
-                    "[[" + articleTitle + ">>" + article.getName().replaceAll("@", "%40") + "]]";
+                String syntax = context.getDoc().getSyntax().toIdString();
+                if("xwiki/1.0".equals(syntax)) {
+                    articleLink = "[" + articleTitle + ">" + article.getName().replaceAll("@", "%40") + "]";
+                } else {
+                    articleLink = "[[" + articleTitle + ">>" + article.getName().replaceAll("@", "%40") + "]]";
+                }
             }
         } catch (XWikiException e) {
         }
@@ -120,7 +124,17 @@ public class MessageActivityEvent extends ActivityEvent
     }
 
     public String getMailTo() {
-        return retrieveFromParam5("mailTo");
+        String result = null;
+        String mailTo = retrieveFromParam5("mailTo");
+        if(mailTo != null && mailTo != ""){
+            int index = mailTo.lastIndexOf(",");
+            if(index != -1){
+                result = mailTo.substring(0,mailTo.lastIndexOf(","));
+            } else {
+                result = mailTo;
+            }
+        }
+        return result;
     }
 
     public String getMailToGroup() {

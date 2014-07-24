@@ -118,6 +118,7 @@
               #if("${event.getType()}" == "create")
                 <!-- $notificationMailSender.eventTick() events} -->
                 $msg.get("groups.notification_mail.member_activity_event", [$date, $groupMemberPageUrl,$groupMemberName,$groupMembersPageUrl])
+                #set($trash=$context.put("EMAIL_SUBJECT", $msg.get("groups.notification_mail.member_activity_event.email_subject", [$groupMemberName, $displayGroupname])))
               #end
 
 
@@ -129,11 +130,12 @@
               #if(($docType.contains("discussion-topic")) && ($event.getType().contains("create")))
                 <!-- $notificationMailSender.eventTick() events} -->
                 $msg.get("groups.notification_mail.discussion_activity_event.topic.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
+                #set($trash=$context.put("EMAIL_SUBJECT", $msg.get("groups.notification_mail.discussion_activity_event.topic.create.email_subject", [$groupMemberName, $displayGroupname])))
                 <br/><br/>
                   #set($body=$xwiki.activitystream.getTempAttribute("messageBody"))##
                   #if($body.startsWith('{{html clean="false" wiki="false"}}'))#set($body=$body.substring(35))#end
                   #if($body.endsWith('{{/html}}'))#set($body=$body.substring(0,$mathtool.sub($body.length(),9)))#end
-                  <div style="border:thin">$body</div>#end</div>
+                  <div style="border:thin">$body</div>
                 <br/>
               ###elseif(($docType.contains("discussion-topic")) && ($event.getType().contains("update")))
               ##<li>
@@ -144,6 +146,7 @@
               #elseif(($docType.contains("discussion-answer")) && ($event.getType().contains("create")))
                 <!-- $notificationMailSender.eventTick() events} -->
                 $msg.get("groups.notification_mail.discussion_activity_event.answer.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
+                #set($trash=$context.put("EMAIL_SUBJECT", $msg.get("groups.notification_mail.discussion_activity_event.answer.create.email_subject", [$groupMemberName, $displayGroupname])))
                 <br/><br/>
                 #set($body=$xwiki.activitystream.getTempAttribute("messageBody"))##
                 #if($body.startsWith('{{html clean="false" wiki="false"}}'))#set($body=$body.substring(35))#end
@@ -159,6 +162,7 @@
               #elseif(($docType.contains("discussion-answer")) && ($event.getType().contains("addComment")))
                 <!-- $notificationMailSender.eventTick() events} -->
                 $msg.get("groups.notification_mail.discussion_activity_event.comment.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
+                #set($trash=$context.put("EMAIL_SUBJECT", $msg.get("groups.notification_mail.discussion_activity_event.comment.create.email_subject", [$groupMemberName, $displayGroupname])))
                 <br/><br/>
 
                   #set($body=$xwiki.activitystream.getTempAttribute("messageBody"))##
@@ -175,16 +179,30 @@
               ## Not used yet..
               #set($mailTo=$event.getMailTo())
               #set($recipientRole=$event.getRecipientRole())
-              #set($toGroupMail=$event.getToGroupMail())
+              #set($toGroupMail=$event.getMailToGroup())
 
               #if($level=="message")
-                <!-- $notificationMailSender.eventTick() events} -->
-                $msg.get("groups.notification_mail.message_activity_event.message", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url])
+                #if("$!{mailTo}" != "")
+                  <!-- $notificationMailSender.eventTick() events} -->
+                  <br/>
+                  $msg.get("groups.notification_mail.message_activity_event.message.to_members", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $mailTo])
+                #end
+                #if("$!{recipientRole}" != "")
+                  <!-- $notificationMailSender.eventTick() events} -->
+                  <br/>
+                  $msg.get("groups.notification_mail.message_activity_event.message.to_role", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $recipientRole])
+                #end
+                #if("$!{toGroupMail}" != "")
+                  <!-- $notificationMailSender.eventTick() events} -->
+                  <br/>
+                  $msg.get("groups.notification_mail.message_activity_event.message.to_group", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $toGroupMail])
+                #end
                 <br/><br/>
                 #set($body=$xwiki.activitystream.getTempAttribute("messageBody"))##
                 #if($body.startsWith('{{html clean="false" wiki="false"}}'))#set($body=$body.substring(35))#end
                 #if($body.endsWith('{{/html}}'))#set($body=$body.substring(0,$mathtool.sub($body.length(),9)))#end
                 <div style="border:thin">$body</div>
+                #set($trash=$context.put("EMAIL_SUBJECT", $msg.get("groups.notification_mail.message_activity_event.message.email_subject", [$groupMemberName, $displayGroupname])))
                 <br/>
               ###elseif(($level=="comment"))
               ##<li>
@@ -197,6 +215,7 @@
               #set($assetTitle=$event.getParam1())
               <!-- $notificationMailSender.eventTick() events} -->
               $msg.get("groups.notification_mail.resource_activity_event", [$date, $groupMemberPageUrl,$groupMemberName,$assetTitle,$url])
+              #set($trash=$context.put("EMAIL_SUBJECT", $msg.get("groups.notification_mail.resource_activity_event.email_subject", [$groupMemberName, $displayGroupname])))
             #end
 
             ##elseif("${event.class}" == "class org.curriki.plugin.activitystream.plugin.DocumentationActivityEvent")
