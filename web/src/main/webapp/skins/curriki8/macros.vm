@@ -1561,10 +1561,14 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
 #set($assetAuthorDisplayName = $!xwiki.getUserName($userdoc.fullName, false))
 #set($userobj = $userdoc.getObject("XWiki.XWikiUsers"))
 #set($current_avatar = $userobj.get('avatar'))
-
+#if("$!current_avatar"=="")
+#set($attachments=$userdoc.getAttachmentList())
+#if($!attachments && !$attachments.isEmpty())#set($current_avatar=$attachments[0].filename)#end
+#end
+##
 #if($current_avatar && "${current_avatar}" != "") ## {
    #set($attach = $userdoc.getAttachment("${current_avatar}").attachment)
-
+   ##
      #set($src=$userdoc.getAttachmentURL($current_avatar,"download"))##
     <a href="$userdoc.getURL("view")" target="${target}" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)" class="photo">
       #if("$!width"=="" && "$!height"=="")##
