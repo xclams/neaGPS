@@ -331,7 +331,7 @@ $profile
     #verbatim_end
     $uprofile.display("allowNotifications","edit") $msg.get("groups_members_create_membersettings_email")
     $uprofile.display("allowNotificationsFromSelf","edit") $msg.get("groups_members_create_membersettings_changenotice") #verbatim_start
-    #if($sm.isAdmin($spaceName, $context.getUser()) || $hasGlobalAdmin)
+    #if($sm.isAdmin($spaceName, $memberName) && ($sm.isAdmin($spaceName, $context.getUser()) || $hasGlobalAdmin))
         <div class="select-roles">$msg.get("groups_members_profile_edit_notification_receive")</div>
     ## Group Activity Notifications
         <div class="instruction">$msg.get("groups_members_profile_edit_notification_receive_description")</div>
