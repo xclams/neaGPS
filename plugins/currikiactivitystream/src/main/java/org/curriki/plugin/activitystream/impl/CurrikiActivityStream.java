@@ -132,6 +132,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
 
     protected void dispatchEventNotification(final ActivityEvent event, XWikiContext xcontext) {
         final Map<String, Object> temp =  tempStorage.get();
+        //System.out.println("tempStorage is, in request thread: " + tempStorage.get());
         AbstractXWikiRunnable runnable = new AbstractXWikiRunnable(XWikiContext.EXECUTIONCONTEXT_KEY, xcontext.clone()) {
             public void runInternal() {
                 try {
@@ -140,6 +141,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
                     XWikiContext xcontext = (XWikiContext) Utils.getComponent(Execution.class).getContext()
                             .getProperty(XWikiContext.EXECUTIONCONTEXT_KEY);
                     tempStorage.set(temp);
+                    //System.out.println("tempStorage is, in thread: " + tempStorage.get());
                     Object notificationMailSender = xcontext.getWiki().parseGroovyFromPage("Groups.NotificationMailSender", xcontext);
                     Method sendNotificationEmailForEventMethod = notificationMailSender.getClass().getMethod("sendNotificationEmailForEvent", String.class, ActivityEvent.class);
                     Method initMethod = notificationMailSender.getClass().getMethod("init", com.xpn.xwiki.api.XWiki.class);
@@ -190,6 +192,8 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
             event = XWikiDocChangeNotificationInterface.EVENT_NEW;
             level = "comment";
             notify = true;
+            setTempAttribute("messageBody", readCommentBody(newdoc, context));
+            // TODO: check we read comment there  properly
         }
 
         // cut the messageBody at max 200 (but at a word please!)
@@ -409,6 +413,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
                     }
                     if(newCommentsCount-oldCommentsCount==1) {
                         // this means a comment has been published
+                        setTempAttribute("messageBody", readCommentBody(newdoc, context));
                         params.add(teasify(readCommentBody(newdoc, context)));
                         addAnswerActivityEvent(streamName, topicDoc, newdoc, ActivityEventType.ADD_COMMENT,
                                 ActivityEventPriority.NOTIFICATION, "", params, context);
