@@ -119,6 +119,7 @@
                 <!-- $notificationMailSender.eventTick() events} -->
                 $msg.get("groups.notification_mail.member_activity_event", [$date, $groupMemberPageUrl,$groupMemberName,$groupMembersPageUrl])
                 #set($trash=$context.put("EMAIL_SUBJECT", $msg.get("groups.notification_mail.member_activity_event.email_subject", [$groupMemberName, $displayGroupname])))
+                <br/><br/>
               #end
 
 
