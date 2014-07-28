@@ -217,6 +217,7 @@
               <!-- $notificationMailSender.eventTick() events} -->
               $msg.get("groups.notification_mail.resource_activity_event", [$date, $groupMemberPageUrl,$groupMemberName,$assetTitle,$url])
               #set($trash=$context.put("EMAIL_SUBJECT", $msg.get("groups.notification_mail.resource_activity_event.email_subject", [$groupMemberName, $displayGroupname])))
+              <br/><br/>
             #end
 
             ##elseif("${event.class}" == "class org.curriki.plugin.activitystream.plugin.DocumentationActivityEvent")
