@@ -181,21 +181,34 @@
               #set($mailTo=$event.getMailTo())
               #set($recipientRole=$event.getRecipientRole())
               #set($toGroupMail=$event.getMailToGroup())
-
+              #set($break=false)
               #if($level=="message")
                 #if("$!{mailTo}" != "")
                   <!-- $notificationMailSender.eventTick() events} -->
+                  #set($break=true)
                   $msg.get("groups.notification_mail.message_activity_event.message.to_members", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $mailTo])
                 #end
                 #if("$!{recipientRole}" != "")
                   <!-- $notificationMailSender.eventTick() events} -->
+                  #set($break=true)
+                  #if($break)
+                    </br>
+                  #end
                   $msg.get("groups.notification_mail.message_activity_event.message.to_role", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $recipientRole])
                 #end
                 #if("$!{toGroupMail}" != "")
                   <!-- $notificationMailSender.eventTick() events} -->
+                  #set($break=true)
+                  #if($break)
+                    </br>
+                  #end
                   $msg.get("groups.notification_mail.message_activity_event.message.to_group", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $toGroupMail])
                 #else
                   <!-- $notificationMailSender.eventTick() events} -->
+                  #set($break=true)
+                  #if($break)
+                    </br>
+                  #end
                   $msg.get("groups.notification_mail.message_activity_event.message.to_none", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url])
                 #end
                 <br/><br/>
