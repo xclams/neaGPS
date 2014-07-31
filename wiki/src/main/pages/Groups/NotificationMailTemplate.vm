@@ -100,7 +100,7 @@
             <br>
 
             $msg.get("groups.notification_mail.content",[$displayGroupname, $groupPageUrl])
-            <br/>
+            <br/> <br/>
 
             #set($date="${notificationMailSender.formatDate($event.date)} EDT")
             #set($groupMember=$event.user)
@@ -185,22 +185,18 @@
               #if($level=="message")
                 #if("$!{mailTo}" != "")
                   <!-- $notificationMailSender.eventTick() events} -->
-                  <br/>
                   $msg.get("groups.notification_mail.message_activity_event.message.to_members", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $mailTo])
                 #end
                 #if("$!{recipientRole}" != "")
                   <!-- $notificationMailSender.eventTick() events} -->
-                  <br/>
                   $msg.get("groups.notification_mail.message_activity_event.message.to_role", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $recipientRole])
                 #end
                 #if("$!{toGroupMail}" != "")
                   <!-- $notificationMailSender.eventTick() events} -->
-                  <br/>
                   $msg.get("groups.notification_mail.message_activity_event.message.to_group", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $toGroupMail])
                 #else
-                    <!-- $notificationMailSender.eventTick() events} -->
-                    <br/>
-                    $msg.get("groups.notification_mail.message_activity_event.message.to_none", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url])
+                  <!-- $notificationMailSender.eventTick() events} -->
+                  $msg.get("groups.notification_mail.message_activity_event.message.to_none", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url])
                 #end
                 <br/><br/>
                 #set($body=$xwiki.activitystream.getTempAttribute("messageBody"))##
