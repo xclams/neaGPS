@@ -80,7 +80,7 @@ public class NotificationMailSender {
         String subject = wiki.renderText(emailDoc.title, emailDoc);
         String from = wiki.getXWikiPreference("admin_email");
         eventsCount = 0;
-        String text = emailDoc.getRenderedContent();
+        String text = emailDoc.getRenderedContent(emailDoc.getContent(), "xwiki/2.0");
 
 
         LOG.warn("Events ###  " + activityEvents);
@@ -131,7 +131,7 @@ public class NotificationMailSender {
 
         Document emailDoc = wiki.getDocument("Groups.NotificationMailTemplate");
         String from = wiki.getXWikiPreference("admin_email");
-        String text = emailDoc.getRenderedContent();
+        String text = emailDoc.getRenderedContent(emailDoc.getContent(), "xwiki/2.0");
         String subject = wiki.context.get("EMAIL_SUBJECT");
 
         LOG.warn("Event ###  " + pluginEvent);
