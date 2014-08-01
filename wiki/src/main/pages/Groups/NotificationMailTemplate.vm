@@ -203,7 +203,8 @@
                   #end
                   #set($break=true)
                   $msg.get("groups.notification_mail.message_activity_event.message.to_group", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $toGroupMail])
-                #else
+                #end
+                #if("$!{mailTo}" == "" && "$!{recipientRole}" == "" && "$!{toGroupMail}" == "")
                   <!-- $notificationMailSender.eventTick() events} -->
                   #if($break)
                     </br>
