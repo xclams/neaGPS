@@ -135,7 +135,7 @@
                                     ## Not used yet..
                                     #set($mailTo=$event.getMailTo())
                                     #set($recipientRole=$event.getRecipientRole())
-                                    #set($toGroupMail=$event.getToGroupMail())
+                                    #set($toGroupMail=$event.getMailToGroup())
 
                                     #if($level=="message")
 
