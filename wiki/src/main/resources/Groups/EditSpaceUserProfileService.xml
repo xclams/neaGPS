@@ -7,22 +7,23 @@
 <translation>0</translation>
 <parent></parent>
 <creator></creator>
-<author>XWiki.LudovicDubost</author>
+<author>XWiki.adminPolx</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
+<contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1199041920000</creationDate>
-<date>1369944288000</date>
-<contentUpdateDate>1369944288000</contentUpdateDate>
-<version>8.1</version>
+<date>1406241835000</date>
+<contentUpdateDate>1406241835000</contentUpdateDate>
+<version>39.1</version>
 <title>EditSpaceUserProfileService</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
 <comment></comment>
 <minorEdit>false</minorEdit>
-<syntaxId>xwiki/1.0</syntaxId>
+<syntaxId>xwiki/2.1</syntaxId>
 <hidden>false</hidden>
-<content>#**
+<content>{{velocity}}
+#**
  * Service for showing the edit member info form
  * @param request.space Space to accept the user in
  * @param request.user User to edit
@@ -30,5 +31,7 @@
  * @type ajaxservice
  * @refactored ludovic
  *#
+#verbatim_start
 #groups_editmemberinfoform()
-</content></xwikidoc>
+#verbatim_end
+{{/velocity}}</content></xwikidoc>

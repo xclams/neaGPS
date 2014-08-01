@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xwikidoc>
+<web>Groups</web>
+<name>NotificationMailTemplate</name>
+<language></language>
+<defaultLanguage>en</defaultLanguage>
+<translation>0</translation>
+<parent></parent>
+<creator>XWiki.Flixt</creator>
+<author>XWiki.adminPolx</author>
+<customClass></customClass>
+<contentAuthor>XWiki.adminPolx</contentAuthor>
+<creationDate>1405964835000</creationDate>
+<date>1406928690000</date>
+<contentUpdateDate>1406928690000</contentUpdateDate>
+<version>45.1</version>
+<title></title>
+<template></template>
+<defaultTemplate></defaultTemplate>
+<validationScript></validationScript>
+<comment></comment>
+<minorEdit>false</minorEdit>
+<syntaxId>xwiki/2.1</syntaxId>
+<hidden>false</hidden>
+<content>{{velocity}}
+#set($hostname=${xwiki.xWiki.Param('curriki.system.hostname', 'broken-url')})
+#set($displayGroupname=$context.get("DISPLAY_GROUPNAME"))
+#set($groupname=$context.get("GROUPNAME"))
+#set($groupPageUrl="http://${hostname}/xwiki/bin/view/${groupname}/WebHome")
+#set($event=$context.get("EVENT"))
+#set($notificationMailSender=$context.get("NOTIFICATION_MAIL_SENDER"))
+{{html clean="false"}}
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
+  &lt;meta name="viewport" content="initial-scale=1.0"&gt;
+  &lt;!-- So that mobile webkit will display zoomed in --&gt;
+  &lt;meta name="format-detection" content="telephone=no"&gt;
+  &lt;!-- disable auto telephone linking in iOS --&gt;
+  &lt;title&gt;Hi there! Curriki wants to keep you up to date with your groups. The following activities happened in the past
+    24 hours in your ${displayGroupname} group.&lt;/title&gt;
+  &lt;style type="text/css"&gt;
+    .ReadMsgBody {
+      width: 100%;
+      background-color: #ebebeb;
+    }
+
+    .ExternalClass {
+      width: 100%;
+      background-color: #ebebeb;
+    }
+
+    .ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div {
+      line-height: 100%;
+    }
+
+    body {
+      -webkit-text-size-adjust: none;
+      -ms-text-size-adjust: none;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    table {
+      border-spacing: 0;
+    }
+
+    table td {
+      border-collapse: collapse;
+    }
+
+    .yshortcuts a {
+      border-bottom: none !important;
+    }
+
+    @media screen and (max-width: 600px) {
+      table[class="container"] {
+        width: 95% !important;
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      td[class="container-padding"] {
+        padding-left: 12px !important;
+        padding-right: 12px !important;
+      }
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body style="margin:0; padding:10px 0;" bgcolor="#ebebeb" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0"&gt;
+
+&lt;br&gt;
+
+&lt;!-- 100% wrapper (grey background) --&gt;
+&lt;table border="0" width="100%" height="100%" cellpadding="0" cellspacing="0" bgcolor="#ebebeb"&gt;
+  &lt;tr&gt;
+    &lt;td align="center" valign="top" bgcolor="#ebebeb" style="background-color: #ebebeb;"&gt;
+
+      &lt;!-- 600px container (white background) --&gt;
+      &lt;table border="0" width="600" cellpadding="0" cellspacing="0" class="container" bgcolor="#ffffff"&gt;
+        &lt;tr&gt;
+          &lt;td class="container-padding" bgcolor="#ffffff"
+              style="background-color: #ffffff; padding-left: 30px; padding-right: 30px; font-size: 14px; line-height: 20px; font-family: Helvetica, sans-serif; color: #333;"&gt;
+
+            &lt;table border="0" width="600" cellpadding="0" cellspacing="0" class="container" bgcolor="#ffffff"&gt;
+              &lt;tr&gt;
+                &lt;td align="center" bgcolor="#ffffff" style="background-color: #ffffff;"&gt;
+                  &lt;br/&gt;
+                  &lt;br/&gt;
+                  &lt;em
+                    style="font-weight: bold; font-size: 36px; line-height: 40px; color:#284EBF; font-style: normal;"&gt;$msg.get("groups.notification_mail.heading")&lt;/em&gt;
+                &lt;/td&gt;
+              &lt;/tr&gt;
+            &lt;/table&gt;
+
+            &lt;br/&gt;
+
+            &lt;div style="font-weight: bold; font-size: 18px; line-height: 24px; color:#373ACA"&gt;
+              $msg.get("groups.notification_mail.greeting")
+            &lt;/div&gt;
+            &lt;br&gt;
+
+            $msg.get("groups.notification_mail.content",[$displayGroupname, $groupPageUrl])
+            &lt;br/&gt; &lt;br/&gt;
+
+            #set($date="${notificationMailSender.formatDate($event.date)} EDT")
+            #set($groupMember=$event.user)
+            #set($userDoc=$xwiki.getDocument($groupMember))
+            #set($userObj=$userDoc.getObject("XWiki.XWikiUsers"))
+            #set($groupMemberName="${userObj.getProperty('first_name').getValue()} ${userObj.getProperty('last_name').getValue()}")
+            #set($groupMemberPageUrl="http://${hostname}/xwiki/bin/view/MyCurriki/Profile?user=${groupMember}")
+            #set($groupMembersPageUrl="http://${hostname}/xwiki/bin/view/${groupname}/Members")
+
+            #set($displayTitle=$event.getDisplayTitle())
+            #set($displayBody=$event.getDisplayBody())
+            #set($url="http://${hostname}${event.getUrl()}")
+
+            #if("${event.class}" == "class org.curriki.plugin.activitystream.plugin.MemberActivityEvent")
+              #if("${event.getType()}" == "create")
+                &lt;!-- $notificationMailSender.eventTick() events} --&gt;
+                $msg.get("groups.notification_mail.member_activity_event", [$date, $groupMemberPageUrl,$groupMemberName,$groupMembersPageUrl])
+                #set($trash=$context.put("EMAIL_SUBJECT", $msg.get("groups.notification_mail.member_activity_event.email_subject", [$groupMemberName, $displayGroupname])))
+                &lt;br/&gt;&lt;br/&gt;
+              #end
+
+
+            #elseif("${event.class}" == "class org.curriki.plugin.activitystream.plugin.DiscussionActivityEvent")
+              #set($docTitle=$event.getParam1())
+              #set($docType=$event.getParam3())
+
+            ## Topics
+              #if(($docType.contains("discussion-topic")) &amp;&amp; ($event.getType().contains("create")))
+                &lt;!-- $notificationMailSender.eventTick() events} --&gt;
+                $msg.get("groups.notification_mail.discussion_activity_event.topic.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
+                #set($trash=$context.put("EMAIL_SUBJECT", $msg.get("groups.notification_mail.discussion_activity_event.topic.create.email_subject", [$groupMemberName, $displayGroupname])))
+                &lt;br/&gt;&lt;br/&gt;
+                  #set($body=$xwiki.activitystream.getTempAttribute("messageBody"))##
+                  #if($body.startsWith('{{html clean="false" wiki="false"}}'))#set($body=$body.substring(35))#end
+                  #if($body.endsWith('{{/html}}'))#set($body=$body.substring(0,$mathtool.sub($body.length(),9)))#end
+                  #set($body=$body.replaceAll("&lt;/?(p|br|h1|h2|h3|h4|h5|h6)[^&gt;]*&gt;","&lt;ö&gt;").replaceAll("&lt;[^ö][^&gt;]+&gt;","").replaceAll("&lt;ö&gt;","&lt;br/&gt;"))
+                  &lt;div style="border:thin"&gt;$body&lt;/div&gt;
+                &lt;br/&gt;
+              ###elseif(($docType.contains("discussion-topic")) &amp;&amp; ($event.getType().contains("update")))
+              ##&lt;li&gt;
+              ##    $msg.get("groups.notification_mail.discussion_activity_event.topic.update", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
+              ##&lt;/li&gt;
+
+              ## Answers
+              #elseif(($docType.contains("discussion-answer")) &amp;&amp; ($event.getType().contains("create")))
+                &lt;!-- $notificationMailSender.eventTick() events} --&gt;
+                $msg.get("groups.notification_mail.discussion_activity_event.answer.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
+                #set($trash=$context.put("EMAIL_SUBJECT", $msg.get("groups.notification_mail.discussion_activity_event.answer.create.email_subject", [$groupMemberName, $displayGroupname])))
+                &lt;br/&gt;&lt;br/&gt;
+                #set($body=$xwiki.activitystream.getTempAttribute("messageBody"))##
+                #if($body.startsWith('{{html clean="false" wiki="false"}}'))#set($body=$body.substring(35))#end
+                #if($body.endsWith('{{/html}}'))#set($body=$body.substring(0,$mathtool.sub($body.length(),9)))#end
+                #set($body=$body.replaceAll("&lt;/?(p|br|h1|h2|h3|h4|h5|h6)[^&gt;]*&gt;","&lt;ö&gt;").replaceAll("&lt;[^ö][^&gt;]+&gt;","").replaceAll("&lt;ö&gt;","&lt;br/&gt;"))
+                &lt;div style="border:thin"&gt;$body&lt;/div&gt;
+                &lt;br/&gt;
+              ###elseif(($docType.contains("discussion-answer")) &amp;&amp; ($event.getType().contains("update")))
+              ##&lt;li&gt;
+              ##    $msg.get("groups.notification_mail.discussion_activity_event.answer.update", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
+              ##&lt;/li&gt;
+
+              ## Comments
+              #elseif(($docType.contains("discussion-answer")) &amp;&amp; ($event.getType().contains("addComment")))
+                &lt;!-- $notificationMailSender.eventTick() events} --&gt;
+                $msg.get("groups.notification_mail.discussion_activity_event.comment.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
+                #set($trash=$context.put("EMAIL_SUBJECT", $msg.get("groups.notification_mail.discussion_activity_event.comment.create.email_subject", [$groupMemberName, $displayGroupname])))
+                &lt;br/&gt;&lt;br/&gt;
+
+                  #set($body=$xwiki.activitystream.getTempAttribute("messageBody"))##
+                  #if($body.startsWith('{{html clean="false" wiki="false"}}'))#set($body=$body.substring(35))#end
+                  #if($body.endsWith('{{/html}}'))#set($body=$body.substring(0,$mathtool.sub($body.length(),9)))#end
+                  #set($body=$body.replaceAll("&lt;/?(p|br|h1|h2|h3|h4|h5|h6)[^&gt;]*&gt;","&lt;ö&gt;").replaceAll("&lt;[^ö][^&gt;]+&gt;","").replaceAll("&lt;ö&gt;","&lt;br/&gt;"))
+                  &lt;div style="border:thin"&gt;$body&lt;/div&gt;
+                &lt;br/&gt;
+              #end
+
+            #elseif("${event.class}" == "class org.curriki.plugin.activitystream.plugin.MessageActivityEvent")
+              #set($articleTitle=$event.getParam1())
+              #set($level=$event.getParam3())
+
+              ## Not used yet..
+              #set($mailTo=$event.getMailTo())
+              #set($recipientRole=$event.getRecipientRole())
+              #set($toGroupMail=$event.getMailToGroup())
+              #set($break=false)
+              #if($level=="message")
+                #if("$!{mailTo}" != "")
+                  &lt;!-- $notificationMailSender.eventTick() events} --&gt;
+                  #set($break=true)
+                  $msg.get("groups.notification_mail.message_activity_event.message.to_members", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $mailTo])
+                #end
+                #if("$!{recipientRole}" != "")
+                  &lt;!-- $notificationMailSender.eventTick() events} --&gt;
+                  #if($break)
+                    &lt;/br&gt;
+                  #end
+                  #set($break=true)
+                  $msg.get("groups.notification_mail.message_activity_event.message.to_role", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $recipientRole])
+                #end
+                #if("$!{toGroupMail}" != "")
+                  &lt;!-- $notificationMailSender.eventTick() events} --&gt;
+                  #if($break)
+                    &lt;/br&gt;
+                  #end
+                  #set($break=true)
+                  $msg.get("groups.notification_mail.message_activity_event.message.to_group", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $toGroupMail])
+                #end
+                #if("$!{mailTo}" == "" &amp;&amp; "$!{recipientRole}" == "" &amp;&amp; "$!{toGroupMail}" == "")
+                  &lt;!-- $notificationMailSender.eventTick() events} --&gt;
+                  #if($break)
+                    &lt;/br&gt;
+                  #end
+                  #set($break=true)
+                  $msg.get("groups.notification_mail.message_activity_event.message.to_none", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url])
+                #end
+                &lt;br/&gt;&lt;br/&gt;
+                #set($body=$xwiki.activitystream.getTempAttribute("messageBody"))##
+                #if($body.startsWith('{{html clean="false" wiki="false"}}'))#set($body=$body.substring(35))#end
+                #if($body.endsWith('{{/html}}'))#set($body=$body.substring(0,$mathtool.sub($body.length(),9)))#end
+                #set($body=$body.replaceAll("&lt;/?(p|br|h1|h2|h3|h4|h5|h6)[^&gt;]*&gt;","&lt;ö&gt;").replaceAll("&lt;[^ö][^&gt;]+&gt;","").replaceAll("&lt;ö&gt;","&lt;br/&gt;"))
+                &lt;div style="border:thin"&gt;$body&lt;/div&gt;
+                #set($trash=$context.put("EMAIL_SUBJECT", $msg.get("groups.notification_mail.message_activity_event.message.email_subject", [$groupMemberName, $displayGroupname])))
+                &lt;br/&gt;
+              ###elseif(($level=="comment"))
+              ##&lt;li&gt;
+              ##    $msg.get("groups.notification_mail.message_activity_event.comment", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url])
+              ##    &lt;div style="border:thin"&gt;$event.getMessageBodyTeaser()&lt;/div&gt;
+              ##&lt;/li&gt;
+              #end
+
+            #elseif("${event.class}" == "class org.curriki.plugin.activitystream.plugin.ResourceActivityEvent")
+              #set($assetTitle=$event.getParam1())
+              &lt;!-- $notificationMailSender.eventTick() events} --&gt;
+              $msg.get("groups.notification_mail.resource_activity_event", [$date, $groupMemberPageUrl,$groupMemberName,$assetTitle,$url])
+              #set($trash=$context.put("EMAIL_SUBJECT", $msg.get("groups.notification_mail.resource_activity_event.email_subject", [$groupMemberName, $displayGroupname])))
+              &lt;br/&gt;&lt;br/&gt;
+            #end
+
+            ##elseif("${event.class}" == "class org.curriki.plugin.activitystream.plugin.DocumentationActivityEvent")
+            ##    &lt;li&gt;DocumentationActivityEvent: $date, $groupMember, $groupMemberPageUrl, $groupMemberPageUrl&lt;/li&gt;
+
+          &lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/table&gt;
+      &lt;!--/600px container --&gt;
+
+    &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+&lt;!--/100% wrapper--&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+{{/html}}
+{{/velocity}}
+</content></xwikidoc>

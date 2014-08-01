@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xwikidoc>
+<web>Groups</web>
+<name>NotificationMailSender</name>
+<language></language>
+<defaultLanguage>en</defaultLanguage>
+<translation>0</translation>
+<parent></parent>
+<creator>XWiki.adminPolx</creator>
+<author>XWiki.adminPolx</author>
+<customClass></customClass>
+<contentAuthor>XWiki.adminPolx</contentAuthor>
+<creationDate>1405711913000</creationDate>
+<date>1406927850000</date>
+<contentUpdateDate>1406927850000</contentUpdateDate>
+<version>40.1</version>
+<title></title>
+<template></template>
+<defaultTemplate></defaultTemplate>
+<validationScript></validationScript>
+<comment></comment>
+<minorEdit>false</minorEdit>
+<syntaxId>xwiki/2.1</syntaxId>
+<hidden>false</hidden>
+<content>import com.xpn.xwiki.api.Context
+import com.xpn.xwiki.api.Document
+import com.xpn.xwiki.api.Property
+import com.xpn.xwiki.api.XWiki
+import com.xpn.xwiki.plugin.activitystream.api.ActivityEvent
+import com.xpn.xwiki.plugin.spacemanager.api.Space
+import org.curriki.plugin.activitystream.plugin.CurrikiActivityStreamPluginApi
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import java.text.SimpleDateFormat
+
+
+public class NotificationMailSender {
+
+    /**
+     * LOGGER
+     */
+    private static final Logger LOG = LoggerFactory.getLogger(NotificationMailSender.class);
+
+    /**
+     * The xwiki object of the running curriki instance
+     */
+    private XWiki wiki;
+
+    /**
+     * Setting the length of the backtrack for the digest mail in milliseconds (java date time)
+     */
+    private Long sinceHowLong = 24 * 60 * 60 * 1000;
+
+    /**
+     * A Counter used by the rendered email templates to indicated if there was something rendered.
+     */
+    private int eventsCount = 0;
+
+    public void init(XWiki xwiki) {
+        this.wiki = xwiki;
+        LOG.warn("Inited NotificationMailSender");
+    }
+
+    public void init(Context context) {
+        this.wiki = new XWiki(context.getXWiki(), context.getContext());
+    }
+
+    // #### Public API for the notification sending ####
+
+    public int sendDigestEmailToAllGroupsMatching(String pattern, List&lt;String&gt; groupAdminsUserNames) {
+        boolean hasWildcard = pattern.endsWith("*");
+        String prefix = pattern; if (hasWildcard) prefix = pattern.substring(0, pattern.length() - 1);
+        int count = 0;
+        for (name in wiki.csm.getSpaceNames(10000, 0)) {
+            if (hasWildcard &amp;&amp; !(name.startsWith(prefix))) continue;
+            println("Processing " + name);
+            System.out.println("Processing " + name);
+            count += sendDigestEmailForGroup(name, groupAdminsUserNames);
+        }
+        return count;
+    }
+
+    public int sendDigestEmailForGroup(String groupName, List&lt;String&gt; groupAdminsUserNames) {
+        List&lt;ActivityEvent&gt; activityEvents = getActivityEventsForGroup(groupName);
+
+        // If we have no events to send we don't proceed here.
+        // Log that and return quietly
+        if (activityEvents == null || activityEvents.size() == 0) {
+            LOG.warn("No Events to send for group with name: " + groupName)
+            return 0;
+        }
+
+        if (groupAdminsUserNames == null || groupAdminsUserNames.size() == 0 || groupAdminsUserNames.contains("")) {
+            groupAdminsUserNames = this.getGroupAdminsForDigestMail(groupName);
+        }
+
+        Space space = wiki.csm.getSpace(groupName);
+        wiki.context.put("GROUPNAME", groupName);
+        wiki.context.put("DISPLAY_GROUPNAME", space.getDisplayTitle());
+        wiki.context.put("EVENTS", activityEvents);
+        wiki.context.put("DIGEST_EMAIL_SENDER", this);
+
+        Document emailDoc = wiki.getDocument("Groups.DigestMailTemplate");
+        String subject = wiki.renderText(emailDoc.title, emailDoc);
+        String from = wiki.getXWikiPreference("admin_email");
+        eventsCount = 0;
+        String text = emailDoc.getRenderedContent(emailDoc.getContent(), "xwiki/2.0");
+
+
+        LOG.warn("Events ###  " + activityEvents);
+        LOG.warn("Groupadmins ### " + groupAdminsUserNames.size() + " " + groupAdminsUserNames);
+        int count = 0;
+        for (groupAdminUserName in groupAdminsUserNames) {
+            Document groupAdminUserDoc = wiki.getDocument(groupAdminUserName);
+            com.xpn.xwiki.api.Object userObj = groupAdminUserDoc.getObject("XWiki.XWikiUsers", true);
+            if (userObj == null || !userObj.getProperty("email")) continue;
+            String to = userObj.getProperty("email").getValue();
+            if (eventsCount &gt; 0) {
+                LOG.warn("Sending mail to " + to);
+                sendMail(from, to, subject, text);
+                count++;
+            } else {
+                LOG.warn("Not sending mail to " + to + " as the number of events (" + eventsCount + ") is not strictly positive.");
+            }
+        }
+        return count;
+    }
+
+    public void sendNotificationEmailForEvent(String groupName, ActivityEvent event) {
+        sendNotificationEmailForEvent(event, groupName, null);
+    }
+
+
+    public int sendNotificationEmailForEvent(ActivityEvent event, String groupName, List&lt;String&gt; groupAdminsUserNames) {
+        // If we have no event to send we don't proceed here.
+        // Log that and return quietly
+        List events = new ArrayList();
+        events.add(event);
+        com.xpn.xwiki.plugin.activitystream.plugin.ActivityEvent pluginEvent = wiki.activitystream.wrapEvents(events).get(0);
+        if (pluginEvent == null) {
+            LOG.warn("No Event to send a notification for: " + groupName)
+            return 0;
+        }
+
+        if (groupAdminsUserNames == null || groupAdminsUserNames.size() == 0 || groupAdminsUserNames.contains("")) {
+            groupAdminsUserNames = this.getGroupAdminsForNotificationMail(groupName);
+        }
+
+        Space space = wiki.csm.getSpace(groupName);
+        wiki.context.put("GROUPNAME", groupName);
+        wiki.context.put("DISPLAY_GROUPNAME", space.getDisplayTitle());
+        wiki.context.put("EVENT", pluginEvent);
+        wiki.context.put("NOTIFICATION_MAIL_SENDER", this);
+        wiki.context.put("EMAIL_SUBJECT", "");
+
+        Document emailDoc = wiki.getDocument("Groups.NotificationMailTemplate");
+        String from = wiki.getXWikiPreference("admin_email");
+        String text = emailDoc.getRenderedContent(emailDoc.getContent(), "xwiki/2.0");
+        String subject = wiki.context.get("EMAIL_SUBJECT");
+
+        LOG.warn("Event ###  " + pluginEvent);
+        LOG.warn("Groupadmins ### " + groupAdminsUserNames.size() + " " + groupAdminsUserNames);
+        for (groupAdminUserName in groupAdminsUserNames) {
+            Document groupAdminUserDoc = wiki.getDocument(groupAdminUserName);
+            com.xpn.xwiki.api.Object userObj = groupAdminUserDoc.getObject("XWiki.XWikiUsers", true);
+            if (userObj == null || !userObj.getProperty("email")) continue;
+            String to = userObj.getProperty("email").getValue();
+            if (eventsCount &gt; 0) {
+                LOG.warn("Sending mail to " + to);
+                sendMail(from, to, subject, text);
+            } else {
+                LOG.warn("Not sending mail to " + to + " as the number of events (" + eventsCount + ") is not strictly positive.");
+            }
+        }
+        return groupAdminsUserNames.size();
+
+    }
+
+    // #### Public Helper for the views ####
+
+    public String formatDate(Date date) {
+        String result = "";
+        if (date != null) {
+            SimpleDateFormat isoFormat = new SimpleDateFormat("hh:mm a")
+            isoFormat.setTimeZone(TimeZone.getTimeZone("EST5EDT"));
+            result = isoFormat.format(date)
+        }
+        return result;
+    }
+
+    public void setSinceHowLong(String s) {
+        this.sinceHowLong = s;
+    }
+
+    public int eventTick() {
+        eventsCount++;
+        return eventsCount;
+    }
+
+    // #### Private ####
+
+    private List&lt;ActivityEvent&gt; getActivityEventsForGroup(String groupName) {
+        CurrikiActivityStreamPluginApi activityStream = wiki.activitystream;
+        String streamName = activityStream.getStreamName(groupName);
+        SimpleDateFormat isoFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        isoFormat.setTimeZone(TimeZone.getTimeZone("PST"));
+        Date date = new Date(new Date().getTime() - sinceHowLong);
+        String dateStr = isoFormat.format(date);
+        LOG.warn("Selecting events from stream \"" + streamName + "\" with date &gt; " + dateStr);
+        return activityStream.searchEvents("act.stream='" + streamName + "'  and act.date &gt; ${dateStr} and act.type!='update' and (act.param3!='comment' or act.type!='create')", false, 25, 0)
+    }
+
+    private List&lt;String&gt; getGroupAdminsByGroupName(String groupName) {
+        List&lt;String&gt; result = new ArrayList&lt;String&gt;();
+        if (groupName != null &amp;&amp; groupName != "") {
+            result = wiki.csm.getAdmins(groupName);
+        }
+        return result;
+    }
+
+    private List&lt;String&gt; getGroupAdminsForNotificationMail(String groupName) {
+        List&lt;String&gt; admins = getGroupAdminsByGroupName(groupName);
+        List&lt;String&gt; result = new ArrayList&lt;String&gt;();
+
+        for (String admin in admins) {
+            com.xpn.xwiki.api.Object obj = wiki.csm.getSpaceUserProfile(groupName, admin).getObject("XWiki.SpaceUserProfileClass");
+            Property property = obj.getProperty("notifications")
+            if (property != null) {
+                String digestHow = property.value;
+                if ("immediate" == digestHow) {
+                    result.add(admin)
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private List&lt;String&gt; getGroupAdminsForDigestMail(String groupName) {
+        List&lt;String&gt; admins = getGroupAdminsByGroupName(groupName);
+        List&lt;String&gt; result = new ArrayList&lt;String&gt;();
+
+        for (String admin in admins) {
+            com.xpn.xwiki.api.Object obj = wiki.csm.getSpaceUserProfile(groupName, admin).getObject("XWiki.SpaceUserProfileClass");
+            Property property = obj.getProperty("notifications")
+            if (property == null) {
+                result.add(admin)
+            } else {
+                String digestHow = property.value;
+                if ("digest" == digestHow || null == digestHow) {
+                    result.add(admin)
+                }
+            }
+        }
+        return result;
+    }
+
+    private void sendMail(String from, String to, String subject, String text) {
+        wiki.mailsender.sendHtmlMessage(from, to, null, null, subject, text, text.replaceAll("&lt;[^&gt;]*&gt;", ""), []);
+    }
+
+}</content></xwikidoc>
