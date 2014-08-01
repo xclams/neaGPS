@@ -136,6 +136,7 @@
                   #set($body=$xwiki.activitystream.getTempAttribute("messageBody"))##
                   #if($body.startsWith('{{html clean="false" wiki="false"}}'))#set($body=$body.substring(35))#end
                   #if($body.endsWith('{{/html}}'))#set($body=$body.substring(0,$mathtool.sub($body.length(),9)))#end
+                  #set($body=$body.replaceAll("</?(p|br|h1|h2|h3|h4|h5|h6)[^>]*>","<ö>").replaceAll("<[^ö][^>]+>","").replaceAll("<ö>","<br/>"))
                   <div style="border:thin">$body</div>
                 <br/>
               ###elseif(($docType.contains("discussion-topic")) && ($event.getType().contains("update")))
@@ -152,6 +153,7 @@
                 #set($body=$xwiki.activitystream.getTempAttribute("messageBody"))##
                 #if($body.startsWith('{{html clean="false" wiki="false"}}'))#set($body=$body.substring(35))#end
                 #if($body.endsWith('{{/html}}'))#set($body=$body.substring(0,$mathtool.sub($body.length(),9)))#end
+                #set($body=$body.replaceAll("</?(p|br|h1|h2|h3|h4|h5|h6)[^>]*>","<ö>").replaceAll("<[^ö][^>]+>","").replaceAll("<ö>","<br/>"))
                 <div style="border:thin">$body</div>
                 <br/>
               ###elseif(($docType.contains("discussion-answer")) && ($event.getType().contains("update")))
@@ -169,6 +171,7 @@
                   #set($body=$xwiki.activitystream.getTempAttribute("messageBody"))##
                   #if($body.startsWith('{{html clean="false" wiki="false"}}'))#set($body=$body.substring(35))#end
                   #if($body.endsWith('{{/html}}'))#set($body=$body.substring(0,$mathtool.sub($body.length(),9)))#end
+                  #set($body=$body.replaceAll("</?(p|br|h1|h2|h3|h4|h5|h6)[^>]*>","<ö>").replaceAll("<[^ö][^>]+>","").replaceAll("<ö>","<br/>"))
                   <div style="border:thin">$body</div>
                 <br/>
               #end
