@@ -158,6 +158,12 @@
                                             $msg.get("groups.digestemail.message_activity_event.message.to_group", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $toGroupMail])
                                           </li>
                                         #end
+                                        #if("$!{mailTo}" == "" && "$!{recipientRole}" == "" && "$!{toGroupMail}" == "")
+                                          <li>
+                                            <!-- $notificationMailSender.eventTick() events} -->
+                                            $msg.get("groups.digestemail.message_activity_event.message.to_none", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $toGroupMail])
+                                          </li>
+                                        #end
                                       <li style="list-style: none">
                                         <br/>
                                         <div style="border:thin">
@@ -167,7 +173,7 @@
                                           #end
                                         </div>
                                       </li>
-                                        <br/>
+                                      <br/>
                                     ###elseif(($level=="comment"))
                                     ##<li>
                                     ##    $msg.get("groups.digestemail.message_activity_event.comment", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url])
