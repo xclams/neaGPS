@@ -158,13 +158,15 @@
                                             $msg.get("groups.digestemail.message_activity_event.message.to_group", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $toGroupMail])
                                           </li>
                                         #end
-                                      </br>
+                                      <li style="list-style: none">
+                                        <br/>
                                         <div style="border:thin">
                                           <i>$event.getMessageBodyTeaser()</i>##
                                           #if($event.getMessageBodyTeaser().endsWith("…"))
                                             <a href="$url">$msg.get("readmore")</a>
                                           #end
                                         </div>
+                                      </li>
                                         <br/>
                                     ###elseif(($level=="comment"))
                                     ##<li>
