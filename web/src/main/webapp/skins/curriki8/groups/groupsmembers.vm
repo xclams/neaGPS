@@ -886,43 +886,43 @@ $xwiki.addTooltipJS()
 #set($memberName=$request.user)
 #set($actionCode=$request.code)
 #if((!$hasGlobalAdmin)&&(!$sm.isAdmin($spaceName, $context.user))&&(!(($actionCode == 3)&&($memberName==$context.user))))
-$msg.groups_needsadminrights
+$msg.groups_needsadminrights ## -
 #else
 ## $context.user is an admin of $spaceName
-#set($adminCount = $sm.getAdmins($spaceName).size())
+#set($adminCount = $sm.getAdmins($spaceName).size()) ## -
 ## Found $adminCount admins in the $spaceName
 #if($actionCode == 1)
 #if($adminCount>1)
 ## Removing $memberName from group admins.
-$sm.removeAdmin($spaceName,$memberName)
-$msg.groups_adminremoved
-#else
-$msg.groups_cannotremovelastadmin
+$sm.removeAdmin($spaceName,$memberName) ## -
+$msg.groups_adminremoved ##
+#else##
+$msg.groups_cannotremovelastadmin ## -
 #end
 #elseif($actionCode == 2)
 ## Adding $memberName to group admins.
-$sm.addAdmin($spaceName,$memberName)
-$msg.groups_adminadded
+$sm.addAdmin($spaceName,$memberName) ## -
+$msg.groups_adminadded ## -
 #elseif($actionCode == 3)
-#set($memberIsAdmin = $sm.isAdmin($spaceName,$memberName))
+#set($memberIsAdmin = $sm.isAdmin($spaceName,$memberName)) ## -
 #if(!$memberIsAdmin || ($memberIsAdmin && $adminCount>1))
 ## Removing $memberName from $spaceName.
-$sm.removeMember($spaceName,$memberName)
+$sm.removeMember($spaceName,$memberName) ## -
 #set($userdoc=$xwiki.getDocument($context.user))$userdoc.saveWithProgrammingRights("Removed from group.", true)
-$msg.groups_memberremoved
+$msg.groups_memberremoved ## -
 #else
-$msg.groups_cannotremovemember
+$msg.groups_cannotremovemember ## -
 #end
 #elseif($actionCode == 4)
 ## Cancel invitation for $memberName to join $spaceName
 #if($xwiki.invitationmanager.cancelInvitation($memberName, $spaceName))
-$msg.groups_invitationcancelled
+$msg.groups_invitationcancelled ## -
 #else
-$msg.groups_cannotcancelinvitation
+$msg.groups_cannotcancelinvitation ## -
 #end
 #end
 #end
-#verbatim_end##
+#verbatim_end ##
 #end
 
 #**
