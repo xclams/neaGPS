@@ -18,6 +18,16 @@ public class NotificationMailSender {
     private static final Logger LOG = LoggerFactory.getLogger(NotificationMailSender.class);
 
     /**
+     * A constant for the milliseconds of a day
+     */
+    private static final int A_DAY = 24 * 60 * 60 * 1000
+
+    /**
+     * A constant for the milliseconds of a week
+     */
+    private static final int A_WEEK = 7 * 24 * 60 * 60 * 1000
+
+    /**
      * The xwiki object of the running curriki instance
      */
     private XWiki wiki;
@@ -25,7 +35,7 @@ public class NotificationMailSender {
     /**
      * Setting the length of the backtrack for the digest mail in milliseconds (java date time)
      */
-    private Long sinceHowLong = 24 * 60 * 60 * 1000;
+    private Long sinceHowLong = A_DAY;
 
     /**
      * A Counter used by the rendered email templates to indicated if there was something rendered.
@@ -43,6 +53,14 @@ public class NotificationMailSender {
 
     // #### Public API for the notification sending ####
 
+    public int sendWeeklyDigestEmailTooAllGroupsMatching(String pattern, List<String> groupAdminsUserNames){
+        int oldSinceHowLong = this.sinceHowLong;
+        this.sinceHowLong = A_WEEK;
+        int count = sendDigestEmailToAllGroupsMatching(pattern, groupAdminsUserNames)
+        this.sinceHowLong = oldSinceHowLong;
+        return count;
+    }
+
     public int sendDigestEmailToAllGroupsMatching(String pattern, List<String> groupAdminsUserNames) {
         boolean hasWildcard = pattern.endsWith("*");
         String prefix = pattern; if (hasWildcard) prefix = pattern.substring(0, pattern.length() - 1);
@@ -53,6 +71,14 @@ public class NotificationMailSender {
             System.out.println("Processing " + name);
             count += sendDigestEmailForGroup(name, groupAdminsUserNames);
         }
+        return count;
+    }
+
+    public int sendWeeklyDigestEmailForGroup(String groupName, List<String> groupAdminsUserNames){
+        int oldSinceHowLong = this.sinceHowLong;
+        this.sinceHowLong = A_WEEK;
+        int count = sendDigestEmailForGroup(groupName, groupAdminsUserNames);
+        this.sinceHowLong = oldSinceHowLong;
         return count;
     }
 
@@ -157,7 +183,8 @@ public class NotificationMailSender {
     public String formatDate(Date date) {
         String result = "";
         if (date != null) {
-            SimpleDateFormat isoFormat = new SimpleDateFormat("hh:mm a")
+            String dateFormatString = this.sinceHowLong <= A_DAY ? "hh:mm a" : "MM/dd/YYYY hh:mm a";
+            SimpleDateFormat isoFormat = new SimpleDateFormat(dateFormatString)
             isoFormat.setTimeZone(TimeZone.getTimeZone("EST5EDT"));
             result = isoFormat.format(date)
         }
@@ -183,7 +210,10 @@ public class NotificationMailSender {
         Date date = new Date(new Date().getTime() - sinceHowLong);
         String dateStr = isoFormat.format(date);
         LOG.warn("Selecting events from stream \"" + streamName + "\" with date > " + dateStr);
-        return activityStream.searchEvents("act.stream='" + streamName + "'  and act.date > ${dateStr} and act.type!='update' and (act.param3!='comment' or act.type!='create')", false, 25, 0)
+
+        // Return 25 Events if the query ask for events from less than a day, 100 otherwise
+        int numberOfevents = this.sinceHowLong <= A_DAY ? 25 : 100;
+        return activityStream.searchEvents("act.stream='" + streamName + "'  and act.date > ${dateStr} and act.type!='update' and (act.param3!='comment' or act.type!='create')", false, numberOfevents, 0)
     }
 
     private List<String> getGroupAdminsByGroupName(String groupName) {
