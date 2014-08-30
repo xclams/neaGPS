@@ -334,6 +334,7 @@ $profile
     #if($sm.isAdmin($spaceName, $memberName) && ($sm.isAdmin($spaceName, $context.getUser()) || $hasGlobalAdmin))
         <div class="select-roles">$msg.get("groups_members_profile_edit_notification_receive")</div>
     ## Group Activity Notifications
+    #end
         <div class="instruction">$msg.get("groups_members_profile_edit_notification_receive_description")</div>
         <p>
             #set($notif=$!doc.getObject("XWiki.SpaceUserProfileClass").getProperty("notifications").value)##
@@ -343,11 +344,15 @@ $profile
             <label class="xwiki-form-listclass"><input value="digest" ##
                                                        #if($notif=="digest" || "$!notif"=="")checked #end ## daily alerts,
                                                        name="XWiki.SpaceUserProfileClass_0_notifications" type="radio">$msg.get("groups_members_profile_edit_notification_receive_daily")</label>
+            <label class="xwiki-form-listclass"><input value="weekly" ##
+                                                         #if($notif=="weekly")checked #end ## weekly alerts.
+                                                         name="XWiki.SpaceUserProfileClass_0_notifications" type="radio">$msg.get("groups_members_profile_edit_notification_receive_weekly")</label>
+
             <label class="xwiki-form-listclass"><input value="none" ##
-                                                       #if($notif=="none")checked #end## no alerts.
-                                                       name="XWiki.SpaceUserProfileClass_0_notifications" type="radio">$msg.get("groups_members_profile_edit_notification_receive_none")</label>
+                                                         #if($notif=="none")checked #end ## no alerts.
+                                                         name="XWiki.SpaceUserProfileClass_0_notifications" type="radio">$msg.get("groups_members_profile_edit_notification_receive_none")</label>
         </p>
-    #end
+
 </form>
 #end
 

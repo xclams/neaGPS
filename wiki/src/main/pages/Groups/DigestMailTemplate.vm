@@ -1,5 +1,6 @@
 {{velocity}}
 #set($hostname=${xwiki.xWiki.Param('curriki.system.hostname', 'broken-url')})
+#set($digest_type=$context.get("DIGEST_TYPE"))
 #set($displayGroupname=$context.get("DISPLAY_GROUPNAME"))
 #set($groupname=$context.get("GROUPNAME"))
 #set($groupPageUrl="http://${hostname}/xwiki/bin/view/${groupname}/WebHome")
@@ -63,7 +64,11 @@
                             $msg.get("groups.digestemail.greeting")
                         </div><br>
 
-                        $msg.get("groups.digestemail.content",[$displayGroupname, $groupPageUrl])
+                        #if($digest_type == "daily")
+                            $msg.get("groups.digestemail.content.daily",[$displayGroupname, $groupPageUrl])
+                        #elseif($digest_type == "weekly")
+                            $msg.get("groups.digestemail.content.weekly",[$displayGroupname, $groupPageUrl])
+                        #end
                         <ul>
                             #foreach($event in $events)
                                 #set($date="${digestEmailSender.formatDate($event.date)} EDT")
@@ -138,29 +143,28 @@
                                     #set($toGroupMail=$event.getMailToGroup())
 
                                     #if($level=="message")
-
                                         <!-- $digestEmailSender.eventTick() events} -->
                                         #if("$!{mailTo}" != "")
                                           <li>
-                                            <!-- $notificationMailSender.eventTick() events} -->
+                                            <!-- $digestEmailSender.eventTick() events} -->
                                               $msg.get("groups.digestemail.message_activity_event.message.to_members", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $mailTo])
                                             #end
                                           </li>
                                         #if("$!{recipientRole}" != "")
                                           <li>
-                                            <!-- $notificationMailSender.eventTick() events} -->
+                                            <!-- $digestEmailSender.eventTick() events} -->
                                             $msg.get("groups.digestemail.message_activity_event.message.to_role", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $recipientRole])
                                           </li>
                                         #end
                                         #if("$!{toGroupMail}" != "")
                                           <li>
-                                            <!-- $notificationMailSender.eventTick() events} -->
+                                            <!-- $digestEmailSender.eventTick() events} -->
                                             $msg.get("groups.digestemail.message_activity_event.message.to_group", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $toGroupMail])
                                           </li>
                                         #end
                                         #if("$!{mailTo}" == "" && "$!{recipientRole}" == "" && "$!{toGroupMail}" == "")
                                           <li>
-                                            <!-- $notificationMailSender.eventTick() events} -->
+                                            <!-- $digestEmailSender.eventTick() events} -->
                                             $msg.get("groups.digestemail.message_activity_event.message.to_none", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $toGroupMail])
                                           </li>
                                         #end

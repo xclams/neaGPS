@@ -53,15 +53,15 @@ public class NotificationMailSender {
 
     // #### Public API for the notification sending ####
 
-    public int sendWeeklyDigestEmailTooAllGroupsMatching(String pattern, List<String> groupAdminsUserNames){
+    public int sendWeeklyDigestEmailTooAllGroupsMatching(String pattern, List<String> groupMembersUserNames){
         int oldSinceHowLong = this.sinceHowLong;
         this.sinceHowLong = A_WEEK;
-        int count = sendDigestEmailToAllGroupsMatching(pattern, groupAdminsUserNames)
+        int count = sendDigestEmailToAllGroupsMatching(pattern, groupMembersUserNames)
         this.sinceHowLong = oldSinceHowLong;
         return count;
     }
 
-    public int sendDigestEmailToAllGroupsMatching(String pattern, List<String> groupAdminsUserNames) {
+    public int sendDigestEmailToAllGroupsMatching(String pattern, List<String> groupMembersUserNames) {
         boolean hasWildcard = pattern.endsWith("*");
         String prefix = pattern; if (hasWildcard) prefix = pattern.substring(0, pattern.length() - 1);
         int count = 0;
@@ -69,20 +69,20 @@ public class NotificationMailSender {
             if (hasWildcard && !(name.startsWith(prefix))) continue;
             println("Processing " + name);
             System.out.println("Processing " + name);
-            count += sendDigestEmailForGroup(name, groupAdminsUserNames);
+            count += sendDigestEmailForGroup(name, groupMembersUserNames);
         }
         return count;
     }
 
-    public int sendWeeklyDigestEmailForGroup(String groupName, List<String> groupAdminsUserNames){
+    public int sendWeeklyDigestEmailForGroup(String groupName, List<String> groupMembersUserNames){
         int oldSinceHowLong = this.sinceHowLong;
         this.sinceHowLong = A_WEEK;
-        int count = sendDigestEmailForGroup(groupName, groupAdminsUserNames);
+        int count = sendDigestEmailForGroup(groupName, groupMembersUserNames);
         this.sinceHowLong = oldSinceHowLong;
         return count;
     }
 
-    public int sendDigestEmailForGroup(String groupName, List<String> groupAdminsUserNames) {
+    public int sendDigestEmailForGroup(String groupName, List<String> groupMembersUserNames) {
         List<ActivityEvent> activityEvents = getActivityEventsForGroup(groupName);
 
         // If we have no events to send we don't proceed here.
@@ -92,11 +92,12 @@ public class NotificationMailSender {
             return 0;
         }
 
-        if (groupAdminsUserNames == null || groupAdminsUserNames.size() == 0 || groupAdminsUserNames.contains("")) {
-            groupAdminsUserNames = this.getGroupAdminsForDigestMail(groupName);
+        if (groupMembersUserNames == null || groupMembersUserNames.size() == 0 || groupMembersUserNames.contains("")) {
+            groupMembersUserNames = this.getGroupMembersForDigestMail(groupName);
         }
 
         Space space = wiki.csm.getSpace(groupName);
+        wiki.context.put("DIGEST_TYPE", sinceHowLong <= A_DAY ? 'daily' : 'weekly');
         wiki.context.put("GROUPNAME", groupName);
         wiki.context.put("DISPLAY_GROUPNAME", space.getDisplayTitle());
         wiki.context.put("EVENTS", activityEvents);
@@ -110,9 +111,9 @@ public class NotificationMailSender {
 
 
         LOG.warn("Events ###  " + activityEvents);
-        LOG.warn("Groupadmins ### " + groupAdminsUserNames.size() + " " + groupAdminsUserNames);
+        LOG.warn("GroupMembers ### " + groupMembersUserNames.size() + " " + groupMembersUserNames);
         int count = 0;
-        for (groupAdminUserName in groupAdminsUserNames) {
+        for (groupAdminUserName in groupMembersUserNames) {
             Document groupAdminUserDoc = wiki.getDocument(groupAdminUserName);
             com.xpn.xwiki.api.Object userObj = groupAdminUserDoc.getObject("XWiki.XWikiUsers", true);
             if (userObj == null || !userObj.getProperty("email")) continue;
@@ -133,7 +134,7 @@ public class NotificationMailSender {
     }
 
 
-    public int sendNotificationEmailForEvent(ActivityEvent event, String groupName, List<String> groupAdminsUserNames) {
+    public int sendNotificationEmailForEvent(ActivityEvent event, String groupName, List<String> groupMembersUserNames) {
         // If we have no event to send we don't proceed here.
         // Log that and return quietly
         List events = new ArrayList();
@@ -144,8 +145,8 @@ public class NotificationMailSender {
             return 0;
         }
 
-        if (groupAdminsUserNames == null || groupAdminsUserNames.size() == 0 || groupAdminsUserNames.contains("")) {
-            groupAdminsUserNames = this.getGroupAdminsForNotificationMail(groupName);
+        if (groupMembersUserNames == null || groupMembersUserNames.size() == 0 || groupMembersUserNames.contains("")) {
+            groupMembersUserNames = this.getGroupMembersForNotificationMail(groupName);
         }
 
         Space space = wiki.csm.getSpace(groupName);
@@ -161,8 +162,8 @@ public class NotificationMailSender {
         String subject = wiki.context.get("EMAIL_SUBJECT");
 
         LOG.warn("Event ###  " + pluginEvent);
-        LOG.warn("Groupadmins ### " + groupAdminsUserNames.size() + " " + groupAdminsUserNames);
-        for (groupAdminUserName in groupAdminsUserNames) {
+        LOG.warn("GroupMembers ### " + groupMembersUserNames.size() + " " + groupMembersUserNames);
+        for (groupAdminUserName in groupMembersUserNames) {
             Document groupAdminUserDoc = wiki.getDocument(groupAdminUserName);
             com.xpn.xwiki.api.Object userObj = groupAdminUserDoc.getObject("XWiki.XWikiUsers", true);
             if (userObj == null || !userObj.getProperty("email")) continue;
@@ -174,7 +175,7 @@ public class NotificationMailSender {
                 LOG.warn("Not sending mail to " + to + " as the number of events (" + eventsCount + ") is not strictly positive.");
             }
         }
-        return groupAdminsUserNames.size();
+        return groupMembersUserNames.size();
 
     }
 
@@ -216,6 +217,14 @@ public class NotificationMailSender {
         return activityStream.searchEvents("act.stream='" + streamName + "'  and act.date > ${dateStr} and act.type!='update' and (act.param3!='comment' or act.type!='create')", false, numberOfevents, 0)
     }
 
+    private List<String> getGroupMembersByGroupName(String groupName) {
+        List<String> result = new ArrayList<String>();
+        if (groupName != null && groupName != "") {
+            result = wiki.csm.getMembers(groupName);
+        }
+        return result;
+    }
+
     private List<String> getGroupAdminsByGroupName(String groupName) {
         List<String> result = new ArrayList<String>();
         if (groupName != null && groupName != "") {
@@ -224,42 +233,72 @@ public class NotificationMailSender {
         return result;
     }
 
-    private List<String> getGroupAdminsForNotificationMail(String groupName) {
-        List<String> admins = getGroupAdminsByGroupName(groupName);
-        List<String> result = new ArrayList<String>();
-
-        for (String admin in admins) {
-            com.xpn.xwiki.api.Object obj = wiki.csm.getSpaceUserProfile(groupName, admin).getObject("XWiki.SpaceUserProfileClass");
-            Property property = obj.getProperty("notifications")
-            if (property != null) {
-                String digestHow = property.value;
-                if ("immediate" == digestHow) {
-                    result.add(admin)
-                }
-            }
-        }
-
-        return result;
+    private List<String> getGroupMembersForNotificationMail(String groupName) {
+        return getGroupMembersForNotificationType(groupName, "immediate");
     }
 
-    private List<String> getGroupAdminsForDigestMail(String groupName) {
-        List<String> admins = getGroupAdminsByGroupName(groupName);
+    private List<String> getGroupMembersForDigestMail(String groupName) {
+        return getGroupMembersForNotificationType(groupName, "digest"); // daily
+    }
+
+    private List<String> getGroupMembersForWeeklyDigestMail(String groupName) {
+        return getGroupMembersForNotificationType(groupName, "weekly");
+    }
+    
+    private List<String> getGroupMembersForNotificationType(String groupName, String notificationSetting) {
+        List<String> members = getGroupMembersByGroupName(groupName);
         List<String> result = new ArrayList<String>();
 
-        for (String admin in admins) {
-            com.xpn.xwiki.api.Object obj = wiki.csm.getSpaceUserProfile(groupName, admin).getObject("XWiki.SpaceUserProfileClass");
+        for (String member in members) {
+            com.xpn.xwiki.api.Object obj = wiki.csm.getSpaceUserProfile(groupName, member).getObject("XWiki.SpaceUserProfileClass");
             Property property = obj.getProperty("notifications")
             if (property == null) {
-                result.add(admin)
+                result.add(member)
             } else {
                 String digestHow = property.value;
-                if ("digest" == digestHow || null == digestHow) {
-                    result.add(admin)
+                if (notificationSetting == digestHow) {
+                    result.add(member)
                 }
+                // TODO:
+                // If user and digestHow == null default to weekly
+                // If admin and digestHow == null default to daily
+                // See next commented method
             }
         }
         return result;
     }
+
+    //TODO: Check if we can use that to implement default values
+    //    private List<String> getGroupMembersForNotificationType(String groupName, String notificationSetting) {
+    //        List<String> members = getGroupMembersByGroupName(groupName);
+    //        List<String> admins = getGroupAdminsByGroupName(groupName);
+    //        List<String> result = new ArrayList<String>();
+    //
+    //        for (String member in members) {
+    //            boolean memberIsAdmin = admins.contains(member);
+    //            com.xpn.xwiki.api.Object obj = wiki.csm.getSpaceUserProfile(groupName, member).getObject("XWiki.SpaceUserProfileClass");
+    //            Property property = obj.getProperty("notifications")
+    //            if (property == null) {
+    //                result.add(member)
+    //            } else {
+    //                String digestHow = property.value;
+    //                if (notificationSetting == digestHow) {
+    //                    result.add(member)
+    //                }
+    //
+    //                // Default to daily for admins
+    //                else if(digestHow == null && memberIsAdmin && notificationSetting == "daily"){
+    //                    result.add(member)
+    //                }
+    //
+    //                // Default to weekly for normal users
+    //                else if(digestHow == null && !memberIsAdmin  && notificationSetting == "weekly"){
+    //                    result.add(member)
+    //                }
+    //            }
+    //        }
+    //        return result;
+    //    }
 
     private void sendMail(String from, String to, String subject, String text) {
         wiki.mailsender.sendHtmlMessage(from, to, null, null, subject, text, text.replaceAll("<[^>]*>", ""), []);
