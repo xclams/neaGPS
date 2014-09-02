@@ -247,58 +247,32 @@ public class NotificationMailSender {
     
     private List<String> getGroupMembersForNotificationType(String groupName, String notificationSetting) {
         List<String> members = getGroupMembersByGroupName(groupName);
+        List<String> admins = getGroupAdminsByGroupName(groupName);
         List<String> result = new ArrayList<String>();
 
         for (String member in members) {
+            boolean memberIsAdmin = admins.contains(member);
             com.xpn.xwiki.api.Object obj = wiki.csm.getSpaceUserProfile(groupName, member).getObject("XWiki.SpaceUserProfileClass");
             Property property = obj.getProperty("notifications")
-            if (property == null) {
+            String digestHow = null;
+            if(property!=null) digestHow= property.value;
+
+            if (notificationSetting == digestHow) {
                 result.add(member)
-            } else {
-                String digestHow = property.value;
-                if (notificationSetting == digestHow) {
-                    result.add(member)
-                }
-                // TODO:
-                // If user and digestHow == null default to weekly
-                // If admin and digestHow == null default to daily
-                // See next commented method
+            }
+
+            // Default to daily for admins
+            else if(digestHow == null && memberIsAdmin && notificationSetting == "daily"){
+                result.add(member)
+            }
+
+            // Default to weekly for normal users
+            else if(digestHow == null && !memberIsAdmin  && notificationSetting == "weekly"){
+                result.add(member)
             }
         }
         return result;
     }
-
-    //TODO: Check if we can use that to implement default values
-    //    private List<String> getGroupMembersForNotificationType(String groupName, String notificationSetting) {
-    //        List<String> members = getGroupMembersByGroupName(groupName);
-    //        List<String> admins = getGroupAdminsByGroupName(groupName);
-    //        List<String> result = new ArrayList<String>();
-    //
-    //        for (String member in members) {
-    //            boolean memberIsAdmin = admins.contains(member);
-    //            com.xpn.xwiki.api.Object obj = wiki.csm.getSpaceUserProfile(groupName, member).getObject("XWiki.SpaceUserProfileClass");
-    //            Property property = obj.getProperty("notifications")
-    //            if (property == null) {
-    //                result.add(member)
-    //            } else {
-    //                String digestHow = property.value;
-    //                if (notificationSetting == digestHow) {
-    //                    result.add(member)
-    //                }
-    //
-    //                // Default to daily for admins
-    //                else if(digestHow == null && memberIsAdmin && notificationSetting == "daily"){
-    //                    result.add(member)
-    //                }
-    //
-    //                // Default to weekly for normal users
-    //                else if(digestHow == null && !memberIsAdmin  && notificationSetting == "weekly"){
-    //                    result.add(member)
-    //                }
-    //            }
-    //        }
-    //        return result;
-    //    }
 
     private void sendMail(String from, String to, String subject, String text) {
         wiki.mailsender.sendHtmlMessage(from, to, null, null, subject, text, text.replaceAll("<[^>]*>", ""), []);

@@ -252,6 +252,9 @@
             ##    <li>DocumentationActivityEvent: $date, $groupMember, $groupMemberPageUrl, $groupMemberPageUrl</li>
 
           </td>
+          <td>You can turn off notifications by selecting
+              <a href="http://${hostname}/xwiki/bin/view/UserProfiles_${groupname}/${userDoc.name}"##
+                      >Edit my Settings</a> under the Group Member tab.</td>
         </tr>
       </table>
       <!--/600px container -->

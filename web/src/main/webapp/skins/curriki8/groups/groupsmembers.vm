@@ -104,7 +104,7 @@ $msg.get("groups_home_membership_closed_visitor_infotxt")
 ##
 #macro(groupsdisplaymembersfilters $type)
 <div id="groups-members-filter">
-$msg.get("groups_members_admin_list_instruction")
+$msg.get("groups_members_admin_list_instruction")##
 <form action="">
 <span><input type="radio" name="type" value="0" #if($type=="0") checked #end onclick="this.form.submit()" />
 $msg.get("groups_members_admin_list_togglecurrent")</span>
@@ -331,6 +331,7 @@ $profile
     #verbatim_end
     $uprofile.display("allowNotifications","edit") $msg.get("groups_members_create_membersettings_email")
     $uprofile.display("allowNotificationsFromSelf","edit") $msg.get("groups_members_create_membersettings_changenotice") #verbatim_start
+    #set($displayedUserIsAdmin=$sm.isAdmin($spaceName, $memberName))##
     #if($sm.isAdmin($spaceName, $memberName) && ($sm.isAdmin($spaceName, $context.getUser()) || $hasGlobalAdmin))
         <div class="select-roles">$msg.get("groups_members_profile_edit_notification_receive")</div>
     ## Group Activity Notifications
@@ -342,10 +343,10 @@ $profile
                                                        #if($notif=="immediate")checked #end ## immediate alerts,
                                                        name="XWiki.SpaceUserProfileClass_0_notifications" type="radio">$msg.get("groups_members_profile_edit_notification_receive_immediate")</label>
             <label class="xwiki-form-listclass"><input value="digest" ##
-                                                       #if($notif=="digest" || "$!notif"=="")checked #end ## daily alerts,
+                                                       #if($notif=="digest" || ("$!notif"=="" && $displayedUserIsAdmin))checked #end ## daily alerts,
                                                        name="XWiki.SpaceUserProfileClass_0_notifications" type="radio">$msg.get("groups_members_profile_edit_notification_receive_daily")</label>
             <label class="xwiki-form-listclass"><input value="weekly" ##
-                                                         #if($notif=="weekly")checked #end ## weekly alerts.
+                                                         #if($notif=="weekly"|| ("$!notif"=="" && ! $displayedUserIsAdmin))checked #end ## weekly alerts.
                                                          name="XWiki.SpaceUserProfileClass_0_notifications" type="radio">$msg.get("groups_members_profile_edit_notification_receive_weekly")</label>
 
             <label class="xwiki-form-listclass"><input value="none" ##
@@ -442,7 +443,11 @@ function cancelInvitation(invitee, spaceName){
 #if($members.size()==0)
 $msg.get("groups_members_admin_current_members_nomembers")
 #else
-$msg.get("groups_members_admin_current_members_infotxt")
+$msg.get("groups_members_admin_current_members_infotxt")##
+    #set($profileDoc="UserProfiles_${spaceName}.${context.getUserReference().name}")##
+    #if($xwiki.exists("${profileDoc}"))##
+    <a href="../UserProfiles_${spaceName}/${context.getUserReference().name}">Edit your profile in this group</a>##
+    #end##
 #set($endIndex = $startIndex + $itemsPerPage - 1)
 #if($endIndex >= $totalCount)
 #set($endIndex = $totalCount - 1)
