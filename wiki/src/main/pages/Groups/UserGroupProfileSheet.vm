@@ -45,8 +45,9 @@
 ##
 ##
 ##
-    #set($isGroupAdmin = $sm.isAdmin($spaceName, $context.getUser()))
+    ## #set($isGroupAdmin = $sm.isAdmin($spaceName, $context.getUser()))
     #if($isGroupAdmin||$user==$context.user||$hasGlobalAdmin)
+        #set($viewingFullPageGroupProfileEdit=true)
         #groupsdisplayeditmemberinfo($user,$spaceName,$divid)
     #else
         $msg.groups_needsadminrights

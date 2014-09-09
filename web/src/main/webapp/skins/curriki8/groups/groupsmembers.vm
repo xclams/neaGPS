@@ -309,12 +309,20 @@ $profile
 </div><p style="height:20px">&nbsp;</p>
 <form action="$xwiki.getURL("Groups.SaveSpaceUserProfileService")" method="post" onsubmit="document.getElementById('${divid}').parentNode.className = 'groups-members-member'; new iframe(this,{update:'${divid}'}); return false;" style="padding-top:0">
     <div class="groups-members-member-buttons">
-        <input type="button"  class="button-grey" value="$msg.get("groups_members_admin_current_membersettings_cancel_link")" onclick="cancelEditProfile('${memberName}','${spaceName}','${divid}');" /><input type="submit" class="button-orange" value="$msg.get("groups_members_admin_current_membersettings_save_link")" />
+        #if($viewingFullPageGroupProfileEdit)
+            <input type="button"  class="button-grey" value="$msg.get("groups_members_admin_current_membersettings_cancel_link")" onclick="window.location.replace('/xwiki/bin/view/${spaceName}/Members')" />##
+        #else
+            <input type="button"  class="button-grey" value="$msg.get("groups_members_admin_current_membersettings_cancel_link")" onclick="cancelEditProfile('${memberName}','${spaceName}','${divid}');" />##
+        #end
+        <input type="submit" class="button-orange" value="$msg.get("groups_members_admin_current_membersettings_save_link")" />
     </div>
     <input type="hidden" name="user" value="$!memberName" />
     <input type="hidden" name="space" value="$!spaceName" />
     <input type="hidden" name="divid" value="$!divid" />
     <input type="hidden" name="xpage" value="plain" />
+    #if($viewingFullPageGroupProfileEdit)
+        <input type="hidden" name="xredirect" value="/xwiki/bin/view/${spaceName}/Members"/>
+    #end
     #verbatim_end
     $uprofile.display("profile","edit")
     #verbatim_start
@@ -1137,10 +1145,14 @@ $xwiki.addTooltipJS()
   #addUserToRole($role $memberName)
 #end ## }
 #end ## }
+#if($request.xredirect && $request.xredirect.startsWith("/xwiki/bin/view/Group_"))
+    $response.sendRedirect($request.xredirect)
+#else
 <div class="groups-members-member-saveinfo">
-$msg.get("groups_members_membersettings_savedone")
+    $msg.get("groups_members_membersettings_savedone")
 </div>
-#groupsdisplaymemberinfo($memberName,$spaceName,$request.divid)#else
+    #groupsdisplaymemberinfo($memberName,$spaceName,$request.divid)#end
+#else
 $msg.groups_needsadminrights
 #end
 #end
