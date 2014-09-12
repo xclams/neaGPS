@@ -53,12 +53,23 @@ public class NotificationMailSender {
 
     // #### Public API for the notification sending ####
 
+    // ### the list variants are for groovy (e.g. the scheduler)
+    // ### the array variants are for velocity (e.g. the manual trigger)
+
+    public int sendWeeklyDigestEmailTooAllGroupsMatching(String pattern, String[] groupMembersUserNames) {
+        this.sendWeeklyDigestEmailTooAllGroupsMatching(pattern, Arrays.asList(groupMembersUserNames));
+    }
+
     public int sendWeeklyDigestEmailTooAllGroupsMatching(String pattern, List<String> groupMembersUserNames){
         int oldSinceHowLong = this.sinceHowLong;
         this.sinceHowLong = A_WEEK;
         int count = sendDigestEmailToAllGroupsMatching(pattern, groupMembersUserNames)
         this.sinceHowLong = oldSinceHowLong;
         return count;
+    }
+
+    public int sendDigestEmailToAllGroupsMatching(String pattern, String[] groupMembersUserNames) {
+        sendDigestEmailToAllGroupsMatching(pattern, Arrays.asList(groupMembersUserNames))
     }
 
     public int sendDigestEmailToAllGroupsMatching(String pattern, List<String> groupMembersUserNames) {
@@ -80,6 +91,10 @@ public class NotificationMailSender {
         int count = sendDigestEmailForGroup(groupName, groupMembersUserNames);
         this.sinceHowLong = oldSinceHowLong;
         return count;
+    }
+
+    public int sendDigestEmailForGroup(String groupName, String[] groupMembersUserNames) {
+        return this.sendDigestEmailForGroup(groupName, Arrays.asList(groupMembersUserNames))
     }
 
     public int sendDigestEmailForGroup(String groupName, List<String> groupMembersUserNames) {
@@ -104,20 +119,24 @@ public class NotificationMailSender {
         wiki.context.put("DIGEST_EMAIL_SENDER", this);
 
         Document emailDoc = wiki.getDocument("Groups.DigestMailTemplate");
-        String subject = wiki.renderText(emailDoc.title, emailDoc);
         String from = wiki.getXWikiPreference("admin_email");
         eventsCount = 0;
-        String text = emailDoc.getRenderedContent(emailDoc.getContent(), "xwiki/2.0");
-
+        int count = 0;
 
         LOG.warn("Events ###  " + activityEvents);
         LOG.warn("GroupMembers ### " + groupMembersUserNames.size() + " " + groupMembersUserNames);
-        int count = 0;
-        for (groupAdminUserName in groupMembersUserNames) {
-            Document groupAdminUserDoc = wiki.getDocument(groupAdminUserName);
-            com.xpn.xwiki.api.Object userObj = groupAdminUserDoc.getObject("XWiki.XWikiUsers", true);
+        for (userName in groupMembersUserNames) {
+            Document userDoc = wiki.getDocument(userName);
+            com.xpn.xwiki.api.Object userObj = userDoc.getObject("XWiki.XWikiUsers", false);
             if (userObj == null || !userObj.getProperty("email")) continue;
             String to = userObj.getProperty("email").getValue();
+
+            wiki.context.vcontext.put("RECIPIENT_USERNAME",userName);
+            wiki.context.vcontext.put("RECIPIENT_EMAIL",to);
+            wiki.context.vcontext.put("RECIPIENT_FIRST_AND_LAST","${userObj.getProperty("first_name").getValue()} ${userObj.getProperty("last_name").getValue()}");
+
+            String subject = wiki.renderText(emailDoc.title, emailDoc);
+            String text = emailDoc.getRenderedContent(emailDoc.getContent(), "xwiki/2.0");
             if (eventsCount > 0) {
                 LOG.warn("Sending mail to " + to);
                 sendMail(from, to, subject, text);
@@ -158,16 +177,21 @@ public class NotificationMailSender {
 
         Document emailDoc = wiki.getDocument("Groups.NotificationMailTemplate");
         String from = wiki.getXWikiPreference("admin_email");
-        String text = emailDoc.getRenderedContent(emailDoc.getContent(), "xwiki/2.0");
-        String subject = wiki.context.get("EMAIL_SUBJECT");
 
         LOG.warn("Event ###  " + pluginEvent);
         LOG.warn("GroupMembers ### " + groupMembersUserNames.size() + " " + groupMembersUserNames);
-        for (groupAdminUserName in groupMembersUserNames) {
-            Document groupAdminUserDoc = wiki.getDocument(groupAdminUserName);
-            com.xpn.xwiki.api.Object userObj = groupAdminUserDoc.getObject("XWiki.XWikiUsers", true);
+        for (userName in groupMembersUserNames) {
+            Document userDoc = wiki.getDocument(userName);
+            com.xpn.xwiki.api.Object userObj = userDoc.getObject("XWiki.XWikiUsers", true);
             if (userObj == null || !userObj.getProperty("email")) continue;
             String to = userObj.getProperty("email").getValue();
+
+            wiki.context.vcontext.put("RECIPIENT_USERNAME",userName);
+            wiki.context.vcontext.put("RECIPIENT_EMAIL",to);
+            wiki.context.vcontext.put("RECIPIENT_FIRST_AND_LAST","${userObj.getProperty("first_name").getValue()} ${userObj.getProperty("last_name").getValue()}");
+
+            String text = emailDoc.getRenderedContent(emailDoc.getContent(), "xwiki/2.0");
+            String subject = wiki.context.get("EMAIL_SUBJECT");
             if (eventsCount > 0) {
                 LOG.warn("Sending mail to " + to);
                 sendMail(from, to, subject, text);

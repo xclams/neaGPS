@@ -251,10 +251,10 @@
             ##elseif("${event.class}" == "class org.curriki.plugin.activitystream.plugin.DocumentationActivityEvent")
             ##    <li>DocumentationActivityEvent: $date, $groupMember, $groupMemberPageUrl, $groupMemberPageUrl</li>
 
-          </td>
-          <td>You can turn off notifications by selecting
-              <a href="http://${hostname}/xwiki/bin/view/UserProfiles_${groupname}/${userDoc.name}"##
-                      >Edit my Settings</a> under the Group Member tab.</td>
+              <p>This message was sent to <a href="mailto:${RECIPIENT_EMAIL}">${RECIPIENT_FIRST_AND_LAST} &lt;${RECIPIENT_EMAIL}&gt;</a>.<br/>
+                  You can turn off notifications by selecting
+                  <a href="http://${hostname}/xwiki/bin/view/UserProfiles_${groupname}/${RECIPIENT_USERNAME.substring(6)}"## "XWiki.".length() = 6
+                          >Edit my Settings</a> under the Group Member tab.</p></td>
         </tr>
       </table>
       <!--/600px container -->

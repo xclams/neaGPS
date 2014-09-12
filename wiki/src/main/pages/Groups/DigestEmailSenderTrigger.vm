@@ -5,30 +5,33 @@
         $notificationMailsender.init($xwiki)
         #set($groupname=$request.groupname)
         #set($users=$request.users)
+        #if($users)#set($users=$users.split(",| "))#end
 
         {{html clean="false"}}
     <h3 xmlns="http://www.w3.org/1999/html">Done..</h3>
         <p>
-        $users <br>
+        #foreach($u in $users)
+            $u <br>
+        #end
         #if($request.type == "daily")
 
           #if(${groupname.contains("*")})
-            #set($count=$notificationMailsender.sendDigestEmailToAllGroupsMatching($groupname, [$users]))
+            #set($count=$notificationMailsender.sendDigestEmailToAllGroupsMatching($groupname, $users))
           #else
-            #set($count=$notificationMailsender.sendDigestEmailForGroup($groupname,[$users]))
+            #set($count=$notificationMailsender.sendDigestEmailForGroup($groupname,$users))
           #end
           Daily was choosen.. <br>
         #elseif($request.type == "weekly")
 
           #if(${groupname.contains("*")})
-            #set($count=$notificationMailsender.sendWeeklyDigestEmailToAllGroupsMatching($groupname, [$users]))
+            #set($count=$notificationMailsender.sendWeeklyDigestEmailToAllGroupsMatching($groupname, $users))
           #else
-            #set($count=$notificationMailsender.sendWeeklyDigestEmailForGroup($groupname,[$users]))
+            #set($count=$notificationMailsender.sendWeeklyDigestEmailForGroup($groupname,$users))
           #end
           Weekly was choosen.. <br>
         #end
 
-        Sent ${count} E-Mail}\s.
+        Sent ${count} E-Mails.
         </br>
         </br>
         <a href="$doc.name">Back</a>
