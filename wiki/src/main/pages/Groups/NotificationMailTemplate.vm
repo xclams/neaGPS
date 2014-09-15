@@ -245,8 +245,7 @@
 
             ##elseif("${event.class}" == "class org.curriki.plugin.activitystream.plugin.DocumentationActivityEvent")
             ##    <li>DocumentationActivityEvent: $date, $groupMember, $groupMemberPageUrl, $groupMemberPageUrl</li>
-              <p>$msg.get("groups.notification_mail.footer.user") <a href="mailto:${RECIPIENT_EMAIL}">${RECIPIENT_FIRST_AND_LAST} &lt;${RECIPIENT_EMAIL}&gt;</a>.
-                  $msg.get("groups.notification_mail.editPreferencesLink",["http://${hostname}/xwiki/bin/view/UserProfiles_${groupname}/${RECIPIENT_USERNAME.substring(6)}"])
+              <p>$msg.get("groups.notification_mail.editPreferencesLink",["http://${hostname}/xwiki/bin/view/UserProfiles_${groupname}/${RECIPIENT_USERNAME.substring(6)}"])
               ## "## "XWiki.".length() = 6
               </p>
         </td></tr>

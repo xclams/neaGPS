@@ -144,31 +144,23 @@
 
                                     #if($level=="message")
                                         <!-- $digestEmailSender.eventTick() events -->
+                                        <li>
                                         #if("$!{mailTo}" != "")
-                                          <li>
                                             <!-- $digestEmailSender.eventTick() events -->
                                               $msg.get("groups.digestemail.message_activity_event.message.to_members", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $mailTo])
                                             #end
-                                          </li>
                                         #if("$!{recipientRole}" != "")
-                                          <li>
                                             <!-- $digestEmailSender.eventTick() events -->
                                             $msg.get("groups.digestemail.message_activity_event.message.to_role", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $recipientRole])
-                                          </li>
                                         #end
                                         #if("$!{toGroupMail}" != "")
-                                          <li>
                                             <!-- $digestEmailSender.eventTick() events -->
                                             $msg.get("groups.digestemail.message_activity_event.message.to_group", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $toGroupMail])
-                                          </li>
                                         #end
                                         #if("$!{mailTo}" == "" && "$!{recipientRole}" == "" && "$!{toGroupMail}" == "")
-                                          <li>
                                             <!-- $digestEmailSender.eventTick() events -->
                                             $msg.get("groups.digestemail.message_activity_event.message.to_none", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $toGroupMail])
-                                          </li>
                                         #end
-                                      <li style="list-style: none">
                                         <br/>
                                         <div style="border:thin">
                                           <i>$event.getMessageBodyTeaser()</i>##
@@ -197,8 +189,7 @@
                             ##    <li>DocumentationActivityEvent: $date, $groupMember, $groupMemberPageUrl, $groupMemberPageUrl</li>
                             #end
                         </ul>
-                        <p>$msg.get("groups.digestemail.footer.user") <a href="mailto:${RECIPIENT_EMAIL}">${RECIPIENT_FIRST_AND_LAST} &lt;${RECIPIENT_EMAIL}&gt;</a>.
-                            $msg.get("groups.digestmail.editPreferencesLink",["http://${hostname}/xwiki/bin/view/UserProfiles_${groupname}/${RECIPIENT_USERNAME.substring(6)}"])
+                        <p>$msg.get("groups.digestmail.editPreferencesLink",["http://${hostname}/xwiki/bin/view/UserProfiles_${groupname}/${RECIPIENT_USERNAME.substring(6)}"])
                         ## "## "XWiki.".length() = 6
                         </p>
                     </td>
