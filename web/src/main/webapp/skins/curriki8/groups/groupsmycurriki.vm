@@ -34,7 +34,7 @@
 #foreach($space in $spaceList) ## {
 #set($showcount = 1 + $showcount)
 #if(($showcount > $startIndex) && ($showcount < ($endIndex + 2))) ## {
-#groups_groupinfomessages($space "")
+#groups_groupinfomessages($space "" $userdoc)
 #end ## }
 #end ## }
 #if($showcount != 0) ## {
@@ -150,7 +150,7 @@ $s.getDescription()
   * @param displayType display in view or edit mode
   * @author dward@curriki.org
   *#
-#macro(groups_groupinfomessages $m_groupName $displayType) ## {
+#macro(groups_groupinfomessages $m_groupName $displayType $userdoc) ## {
 #if(!$g_rowCount) ## {
 #set($g_rowCount = 0)
 #end ## }
@@ -187,8 +187,8 @@ $s.getDescription()
 #if("$context.user" == "$!userdoc.fullName" ) ## {
     <p>
         #set($profileDoc="UserProfiles_${spaceName}.${userdoc.name}")##
-        <a href="../UserProfiles_${s.name}/${userdoc}.name}">$msg.get("groups_members_edit_user_settings")</a>
-        <a href="javascript:void()" onclick="if (window.confirm('$msg.get("groups_members_admin_current_membersettings_remove_confirm")')) {removeMember('$memberName','${userdoc.fullname}');};return false;">$msg.get("groups_members_leave_from_this_group")</a>##
+        <a href="../UserProfiles_${m_groupName}/${userdoc.name}">$msg.get("groups_members_edit_user_settings")</a>
+        <a href="javascript:void()" onclick="if (window.confirm(_('groups_members_admin_current_membersettings_remove_confirm'))) {removeMember('${userdoc.name}','${userdoc.fullname}');};return false;">$msg.get("groups_members_leave_from_this_group")</a>##
     </p>
 ## Get last 5 messages
 #set($sql = ", BaseObject as obj where obj.name=doc.fullName and obj.className='XWiki.ArticleClass' and doc.web='Messages_${m_groupName}' order by doc.creationDate desc")
