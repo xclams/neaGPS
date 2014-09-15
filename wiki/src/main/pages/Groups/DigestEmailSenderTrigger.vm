@@ -13,6 +13,7 @@
         #foreach($u in $users)
             $u <br>
         #end
+
         #if($request.type == "daily")
 
           #if(${groupname.contains("*")})

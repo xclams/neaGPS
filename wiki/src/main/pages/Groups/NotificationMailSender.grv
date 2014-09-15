@@ -56,11 +56,11 @@ public class NotificationMailSender {
     // ### the list variants are for groovy (e.g. the scheduler)
     // ### the array variants are for velocity (e.g. the manual trigger)
 
-    public int sendWeeklyDigestEmailTooAllGroupsMatching(String pattern, String[] groupMembersUserNames) {
-        this.sendWeeklyDigestEmailTooAllGroupsMatching(pattern, Arrays.asList(groupMembersUserNames));
+    public int sendWeeklyDigestEmailToAllGroupsMatching(String pattern, String[] groupMembersUserNames) {
+        this.sendWeeklyDigestEmailToAllGroupsMatching(pattern, Arrays.asList(groupMembersUserNames));
     }
 
-    public int sendWeeklyDigestEmailTooAllGroupsMatching(String pattern, List<String> groupMembersUserNames){
+    public int sendWeeklyDigestEmailToAllGroupsMatching(String pattern, List<String> groupMembersUserNames){
         int oldSinceHowLong = this.sinceHowLong;
         this.sinceHowLong = A_WEEK;
         int count = sendDigestEmailToAllGroupsMatching(pattern, groupMembersUserNames)
@@ -83,6 +83,10 @@ public class NotificationMailSender {
             count += sendDigestEmailForGroup(name, groupMembersUserNames);
         }
         return count;
+    }
+
+    public int sendWeeklyDigestEmailForGroup(String groupName, String[] groupMembersUserNames){
+        return sendWeeklyDigestEmailForGroup(groupName, Arrays.asList(groupMembersUserNames));
     }
 
     public int sendWeeklyDigestEmailForGroup(String groupName, List<String> groupMembersUserNames){
@@ -125,11 +129,21 @@ public class NotificationMailSender {
 
         LOG.warn("Events ###  " + activityEvents);
         LOG.warn("GroupMembers ### " + groupMembersUserNames.size() + " " + groupMembersUserNames);
+        Set<String> alreadyDoneEmails = new HashSet<String>();
+        // it's crazy but seems useful: do one first "useless" rendering. Otherwise the first run always has nulls in it!
+        String trash = emailDoc.getRenderedContent(emailDoc.getContent(), "xwiki/2.0");
+
         for (userName in groupMembersUserNames) {
+            LOG.warn("userName: ${userName}.");
             Document userDoc = wiki.getDocument(userName);
+            if(userName==null || userName.equals("null") || userDoc==null || userDoc.isNew() || userDoc.getObject("XWiki.XWikiUsers", false)==null || userDoc.getObject("XWiki.XWikiUsers", false).getProperty("email")==null) {
+                LOG.warn("User ${userName} is a member but not a valid user. Not sending a digest.");
+                continue;
+            }
             com.xpn.xwiki.api.Object userObj = userDoc.getObject("XWiki.XWikiUsers", false);
-            if (userObj == null || !userObj.getProperty("email")) continue;
             String to = userObj.getProperty("email").getValue();
+            if(alreadyDoneEmails.contains(to)) {LOG.warn("Already done."); continue;}
+            alreadyDoneEmails.add(to);
 
             wiki.context.vcontext.put("RECIPIENT_USERNAME",userName);
             wiki.context.vcontext.put("RECIPIENT_EMAIL",to);
@@ -142,7 +156,7 @@ public class NotificationMailSender {
                 sendMail(from, to, subject, text);
                 count++;
             } else {
-                LOG.warn("Not sending mail to " + to + " as the number of events (" + eventsCount + ") is not strictly positive.");
+                LOG.warn("Not sending mail to " + to + " as the number of displayed events (" + eventsCount + ") is not strictly positive.");
             }
         }
         return count;
@@ -180,11 +194,21 @@ public class NotificationMailSender {
 
         LOG.warn("Event ###  " + pluginEvent);
         LOG.warn("GroupMembers ### " + groupMembersUserNames.size() + " " + groupMembersUserNames);
+        Set<String> alreadyDoneEmails = new HashSet<String>();
+        // it's crazy but seems useful: do one first "useless" rendering. Otherwise the first run always has nulls in it!
+        String trash = emailDoc.getRenderedContent(emailDoc.getContent(), "xwiki/2.0");
+
         for (userName in groupMembersUserNames) {
+            LOG.warn("userName: \"${userName}\".");
             Document userDoc = wiki.getDocument(userName);
+            if(userDoc==null || userDoc.isNew() || userDoc.getObject("XWiki.XWikiUsers", false)==null || userDoc.getObject("XWiki.XWikiUsers", false).getProperty("email")==null) {
+                LOG.warn("User ${userDoc} is a member but not a valid user. Not notifying.");
+                continue;
+            }
             com.xpn.xwiki.api.Object userObj = userDoc.getObject("XWiki.XWikiUsers", true);
-            if (userObj == null || !userObj.getProperty("email")) continue;
             String to = userObj.getProperty("email").getValue();
+            if(alreadyDoneEmails.contains(to)) {LOG.warn("Already done."); continue;}
+            alreadyDoneEmails.add(to);
 
             wiki.context.vcontext.put("RECIPIENT_USERNAME",userName);
             wiki.context.vcontext.put("RECIPIENT_EMAIL",to);
