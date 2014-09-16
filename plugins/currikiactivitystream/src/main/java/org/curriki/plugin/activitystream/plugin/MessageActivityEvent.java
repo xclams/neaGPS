@@ -137,6 +137,10 @@ public class MessageActivityEvent extends ActivityEvent
         return result;
     }
 
+    public String getMailToUsers() {
+        return retrieveFromParam5("mailToUsers");
+    }
+
     public String getMailToGroup() {
         return retrieveFromParam5("mailToGroup");
     }

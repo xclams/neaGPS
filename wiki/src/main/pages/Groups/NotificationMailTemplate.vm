@@ -183,6 +183,7 @@
               #set($break=false)
 
               ## Created a message
+              #if($notificationMailSender.shouldUserSeeMessage($RECIPIENT_EMAIL, $RECIPIENT_USERNAME, $groupname, $event))
               #if($level=="message")
                 #if("$!{mailTo}" != "")
                   <!-- $notificationMailSender.eventTick() events -->
@@ -234,6 +235,8 @@
                   #set($trash=$context.put("EMAIL_SUBJECT", $msg.get("groups.notification_mail.message_activity_event.comment.email_subject", [$groupMemberName, $displayGroupname])))
                   <br/>
               #end
+              #end
+
 
             #elseif("${event.class}" == "class org.curriki.plugin.activitystream.plugin.ResourceActivityEvent")
               #set($assetTitle=$event.getParam1())
