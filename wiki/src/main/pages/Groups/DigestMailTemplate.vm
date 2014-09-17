@@ -5,7 +5,7 @@
 #set($groupname=$context.get("GROUPNAME"))
 #set($groupPageUrl="http://${hostname}/xwiki/bin/view/${groupname}/WebHome")
 #set($events=$context.get("EVENTS"))
-#set($digestEmailSender=$context.get("DIGEST_EMAIL_SENDER"))
+#set($mailSender=$context.get("DIGEST_EMAIL_SENDER"))
 {{html clean="false"}}
 <html lang="en">
 <head>
@@ -71,7 +71,7 @@
                         #end
                         <ul>
                             #foreach($event in $events)
-                                #set($date="${digestEmailSender.formatDate($event.date)} EDT")
+                                #set($date="${mailSender.formatDate($event.date)} EDT")
                                 #set($groupMember=$event.user)
                                 #set($userDoc=$xwiki.getDocument($groupMember))
                                 #set($userObj=$userDoc.getObject("XWiki.XWikiUsers"))
@@ -85,7 +85,7 @@
 
                                 #if("${event.class}" == "class org.curriki.plugin.activitystream.plugin.MemberActivityEvent")
                                   #if("${event.getType()}" == "create")
-                                    <!-- $digestEmailSender.eventTick() events -->
+                                    <!-- $mailSender.eventTick() events -->
                                     <li>
                                         $msg.get("groups.digestemail.member_activity_event", [$date, $groupMemberPageUrl,$groupMemberName,$groupMembersPageUrl])
                                     </li>
@@ -98,7 +98,7 @@
 
                                         ## Topics
                                         #if(($docType.contains("discussion-topic")) && ($event.getType().contains("create")))
-                                            <!-- $digestEmailSender.eventTick() events -->
+                                            <!-- $mailSender.eventTick() events -->
                                         <li>
                                             $msg.get("groups.digestemail.discussion_activity_event.topic.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])<br/><br/>
                                             <div style="border:thin"><i>$event.getMessageBodyTeaser()</i>##
@@ -111,7 +111,7 @@
 
                                         ## Answers
                                         #elseif(($docType.contains("discussion-answer")) && ($event.getType().contains("create")))
-                                            <!-- $digestEmailSender.eventTick() events -->
+                                            <!-- $mailSender.eventTick() events -->
                                         <li>
                                             $msg.get("groups.digestemail.discussion_activity_event.answer.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])<br/><br/>
                                             <div style="border:thin"><i>$event.getMessageBodyTeaser()</i>##
@@ -124,7 +124,7 @@
 
                                         ## Comments
                                         #elseif(($docType.contains("discussion-answer")) && ($event.getType().contains("addComment")))
-                                            <!-- $digestEmailSender.eventTick() events -->
+                                            <!-- $mailSender.eventTick() events -->
                                         <li>
                                             $msg.get("groups.digestemail.discussion_activity_event.comment.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])<br/><br/>
                                             <div style="border:thin"><i>$event.getMessageBodyTeaser()</i>##
@@ -141,24 +141,24 @@
                                     #set($recipientRole=$event.getRecipientRole())
                                     #set($toGroupMail=$event.getMailToGroup())
 
-                                    #if($notificationMailSender.shouldUserSeeMessage($RECIPIENT_EMAIL, $RECIPIENT_USERNAME, $groupname, $event))
+                                    #if($mailSender.shouldUserSeeMessage($RECIPIENT_EMAIL, $RECIPIENT_USERNAME, $groupname, $event))
                                         #if($level=="message")
-                                            <!-- $digestEmailSender.eventTick() events -->
+                                            <!-- $mailSender.eventTick() events -->
                                             <li>
                                                 #if("$!{mailTo}" != "")
-                                                    <!-- $digestEmailSender.eventTick() events -->
+                                                    <!-- $mailSender.eventTick() events -->
                                                     $msg.get("groups.digestemail.message_activity_event.message.to_members", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $mailTo])
                                                 #end
                                                 #if("$!{recipientRole}" != "")
-                                                    <!-- $digestEmailSender.eventTick() events -->
+                                                    <!-- $mailSender.eventTick() events -->
                                                     $msg.get("groups.digestemail.message_activity_event.message.to_role", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $recipientRole])
                                                 #end
                                                 #if("$!{toGroupMail}" != "")
-                                                    <!-- $digestEmailSender.eventTick() events -->
+                                                    <!-- $mailSender.eventTick() events -->
                                                     $msg.get("groups.digestemail.message_activity_event.message.to_group", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $toGroupMail])
                                                 #end
                                                 #if("$!{mailTo}" == "" && "$!{recipientRole}" == "" && "$!{toGroupMail}" == "")
-                                                    <!-- $digestEmailSender.eventTick() events -->
+                                                    <!-- $mailSender.eventTick() events -->
                                                     $msg.get("groups.digestemail.message_activity_event.message.to_none", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $toGroupMail])
                                                 #end
                                                 <br/>
@@ -180,7 +180,7 @@
 
                                 #elseif("${event.class}" == "class org.curriki.plugin.activitystream.plugin.ResourceActivityEvent")
                                     #set($assetTitle=$event.getParam1())
-                                    <!-- $digestEmailSender.eventTick() events -->
+                                    <!-- $mailSender.eventTick() events -->
                                     <li>
                                         $msg.get("groups.digestemail.resource_activity_event", [$date, $groupMemberPageUrl,$groupMemberName,$assetTitle,$url])
                                     </li>

@@ -99,9 +99,10 @@ public class NotificationMailSender {
     }
     public boolean shouldUserSeeMessage(String userEmail, String userName, String groupName, MessageActivityEvent event) {
         // $RECIPIENT_EMAIL, $RECIPIENT_USERNAME, $groupname, $event))
-        if(event!=null) LOG.warn("shouldUserSeeMessage: ${userEmail} ${userName} ${event} ${event.getMailTo()} ${event.getRecipientRole()} ${event.getMailToGroup()} ${event.getMailToUsers()}")
+        //if(event!=null) LOG.warn("shouldUserSeeMessage: ${userEmail} ${userName} ${event} ${event.getMailTo()} ${event.getRecipientRole()} ${event.getMailToGroup()} ${event.getMailToUsers()}")
+        //else LOG.warn("shouldUserSeeMessage: ${userEmail} ${userName} ${event}");
         boolean result = shouldUserSeeMessage1(userEmail, userName, groupName, event);
-        LOG.warn("shouldUserSeeMessage: ${result}.");
+        //LOG.warn("shouldUserSeeMessage: ${result}.");
         return result;
     }
 
@@ -113,7 +114,7 @@ public class NotificationMailSender {
 
         String roles = event.getRecipientRole().split(",| ") + "," + groupName + ".AdminGroup";
         if(event.getRecipientRole()) for(String role in roles) {
-            LOG.warn("Checking role document ${role}");
+            //LOG.warn("Checking role document ${role}");
             try {
                 Document roleDoc = wiki.getDocument(role);
                 if(roleDoc!=null && !roleDoc.isNew()) for(com.xpn.xwiki.api.Object obj in roleDoc.getObjects("XWiki.XWikiGroups")) {
@@ -139,11 +140,16 @@ public class NotificationMailSender {
         }
 
         if (groupMembersUserNames == null || groupMembersUserNames.size() == 0 || groupMembersUserNames.contains("")) {
-            groupMembersUserNames = this.getGroupMembersForDigestMail(groupName);
+            if(sinceHowLong<=A_DAY)
+                groupMembersUserNames = this.getGroupMembersForDigestMail(groupName);
+            else
+                groupMembersUserNames = this.getGroupMembersForWeeklyDigestMail(groupName);
         }
+        LOG.warn("Events ###  " + activityEvents);
+        LOG.warn("GroupMembers ### " + groupMembersUserNames.size() + " " + groupMembersUserNames);
 
         Space space = wiki.csm.getSpace(groupName);
-        wiki.context.put("DIGEST_TYPE", sinceHowLong <= A_DAY ? 'daily' : 'weekly');
+        wiki.context.put("DIGEST_TYPE", sinceHowLong <= A_DAY ? 'digest' : 'weekly');
         wiki.context.put("GROUPNAME", groupName);
         wiki.context.put("DISPLAY_GROUPNAME", space.getDisplayTitle());
         wiki.context.put("EVENTS", activityEvents);
@@ -154,8 +160,6 @@ public class NotificationMailSender {
         eventsCount = 0;
         int count = 0;
 
-        LOG.warn("Events ###  " + activityEvents);
-        LOG.warn("GroupMembers ### " + groupMembersUserNames.size() + " " + groupMembersUserNames);
         Set<String> alreadyDoneEmails = new HashSet<String>();
         // it's crazy but seems useful: do one first "useless" rendering. Otherwise the first run always has nulls in it!
         String trash = emailDoc.getRenderedContent(emailDoc.getContent(), "xwiki/2.0");
@@ -335,13 +339,14 @@ public class NotificationMailSender {
             Property property = obj.getProperty("notifications")
             String digestHow = null;
             if(property!=null) digestHow= property.value;
+            // LOG.warn("Inspecting notification status (${notificationSetting} for member ${member}: ${digestHow}.")
 
             if (notificationSetting == digestHow) {
                 result.add(member)
             }
 
-            // Default to daily for admins
-            else if(digestHow == null && memberIsAdmin && notificationSetting == "daily"){
+            // Default to digest for admins
+            else if(digestHow == null && memberIsAdmin && notificationSetting == "digest"){
                 result.add(member)
             }
 
