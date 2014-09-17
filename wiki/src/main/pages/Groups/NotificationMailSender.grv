@@ -99,7 +99,7 @@ public class NotificationMailSender {
     }
     public boolean shouldUserSeeMessage(String userEmail, String userName, String groupName, MessageActivityEvent event) {
         // $RECIPIENT_EMAIL, $RECIPIENT_USERNAME, $groupname, $event))
-        LOG.warn("shouldUserSeeMessage: ${userEmail} ${userName} ${event} ${event.getMailTo()} ${event.getRecipientRole()} ${event.getMailToGroup() ${event.getMailToUsers()}}")
+        if(event!=null) LOG.warn("shouldUserSeeMessage: ${userEmail} ${userName} ${event} ${event.getMailTo()} ${event.getRecipientRole()} ${event.getMailToGroup()} ${event.getMailToUsers()}")
         boolean result = shouldUserSeeMessage1(userEmail, userName, groupName, event);
         LOG.warn("shouldUserSeeMessage: ${result}.");
         return result;
@@ -107,12 +107,12 @@ public class NotificationMailSender {
 
     public boolean shouldUserSeeMessage1(String userEmail, String userName, String groupName, MessageActivityEvent event) {
         if(event.mailToGroup) return true;
-        // TODO: if admin, allow anyways
-        if(event.getMailToUsers()) for(String m in event.getMailTo().split(",| ")) {
-            if(userEmail.equals(m)) return true;
+        if(event.getMailToUsers()) for(String m in event.getMailToUsers().split(",| ")) {
+            if(userName.equals(m)) return true;
         }
 
-        if(event.getRecipientRole()) for(String role in event.getRecipientRole().split(",| ")) {
+        String roles = event.getRecipientRole().split(",| ") + "," + groupName + ".AdminGroup";
+        if(event.getRecipientRole()) for(String role in roles) {
             LOG.warn("Checking role document ${role}");
             try {
                 Document roleDoc = wiki.getDocument(role);
@@ -354,7 +354,13 @@ public class NotificationMailSender {
     }
 
     private void sendMail(String from, String to, String subject, String text) {
-        wiki.mailsender.sendHtmlMessage(from, to, null, null, subject, text, text.replaceAll("<[^>]*>", ""), []);
+        String plainText = text;
+        if(plainText.contains("<style")) {
+            int p = plainText.indexOf("<style"), q= plainText.indexOf("</style>");
+            plainText= plainText.substring(0, p) + plainText.substring(q+"</style>".length())
+        }
+        plainText = plainText.replaceAll("<[^>]*>", "");
+        wiki.mailsender.sendHtmlMessage(from, to, null, null, subject, text, plainText, []);
     }
 
 }
