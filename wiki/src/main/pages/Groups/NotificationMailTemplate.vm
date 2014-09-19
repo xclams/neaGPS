@@ -183,6 +183,10 @@
               #set($break=false)
 
               ## Created a message
+              <!--
+               params: ($RECIPIENT_EMAIL, $RECIPIENT_USERNAME, $groupname, $event)
+               should? $notificationMailSender.shouldUserSeeMessage($RECIPIENT_EMAIL, $RECIPIENT_USERNAME, $groupname, $event)
+              -->
               #if($notificationMailSender.shouldUserSeeMessage($RECIPIENT_EMAIL, $RECIPIENT_USERNAME, $groupname, $event))
               #if($level=="message")
                 #if("$!{mailTo}" != "")

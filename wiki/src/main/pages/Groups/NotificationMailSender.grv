@@ -99,22 +99,31 @@ public class NotificationMailSender {
     }
     public boolean shouldUserSeeMessage(String userEmail, String userName, String groupName, MessageActivityEvent event) {
         // $RECIPIENT_EMAIL, $RECIPIENT_USERNAME, $groupname, $event))
-        //if(event!=null) LOG.warn("shouldUserSeeMessage: ${userEmail} ${userName} ${event} ${event.getMailTo()} ${event.getRecipientRole()} ${event.getMailToGroup()} ${event.getMailToUsers()}")
-        //else LOG.warn("shouldUserSeeMessage: ${userEmail} ${userName} ${event}");
-        boolean result = shouldUserSeeMessage1(userEmail, userName, groupName, event);
-        //LOG.warn("shouldUserSeeMessage: ${result}.");
-        return result;
+        try {
+            if(event!=null) LOG.warn("shouldUserSeeMessage: ${userEmail} ${userName} ${event} ${event.getMailTo()} ${event.getRecipientRole()} ${event.getMailToGroup()} ${event.getMailToUsers()}")
+            else LOG.warn("shouldUserSeeMessage: ${userEmail} ${userName} ${event}");
+            boolean result = shouldUserSeeMessage1(userEmail, userName, groupName, event);
+            LOG.warn("shouldUserSeeMessage: ${result}.");
+            return result;
+        } catch (Exception ex) { ex.printStackTrace(); return false;
+        }
     }
 
     public boolean shouldUserSeeMessage1(String userEmail, String userName, String groupName, MessageActivityEvent event) {
         if(event.mailToGroup) return true;
-        if(event.getMailToUsers()) for(String m in event.getMailToUsers().split(",| ")) {
+        if(userName!=null && userName.equals(event.getUser())) return true;
+
+        def mailtoU = event.getMailToUsers();
+        if(mailtoU!=null) mailtoU = mailtoU.split(",| ");
+        if(mailtoU!=null && mailtoU.length>0) for(String m in mailtoU) {
             if(userName.equals(m)) return true;
         }
 
-        String roles = event.getRecipientRole().split(",| ") + "," + groupName + ".AdminGroup";
-        if(event.getRecipientRole()) for(String role in roles) {
-            //LOG.warn("Checking role document ${role}");
+        String recipientRole = event.getRecipientRole();
+        if(recipientRole==null) recipientRole = "";
+        String[] roles = (recipientRole + "," + groupName + ".AdminGroup").split(",| ");
+        for(String role in roles) {
+            LOG.warn("Checking role document ${role}");
             try {
                 Document roleDoc = wiki.getDocument(role);
                 if(roleDoc!=null && !roleDoc.isNew()) for(com.xpn.xwiki.api.Object obj in roleDoc.getObjects("XWiki.XWikiGroups")) {
@@ -157,7 +166,6 @@ public class NotificationMailSender {
 
         Document emailDoc = wiki.getDocument("Groups.DigestMailTemplate");
         String from = wiki.getXWikiPreference("admin_email");
-        eventsCount = 0;
         int count = 0;
 
         Set<String> alreadyDoneEmails = new HashSet<String>();
@@ -165,6 +173,7 @@ public class NotificationMailSender {
         String trash = emailDoc.getRenderedContent(emailDoc.getContent(), "xwiki/2.0");
 
         for (userName in groupMembersUserNames) {
+            eventsCount = 0;
             LOG.warn("userName: ${userName}.");
             try {
                 Document userDoc = wiki.getDocument(userName);
@@ -233,6 +242,7 @@ public class NotificationMailSender {
 
         for (userName in groupMembersUserNames) {
             try {
+                eventsCount = 0;
                 LOG.warn("userName: \"${userName}\".");
                 Document userDoc = wiki.getDocument(userName);
                 if(userDoc==null || userDoc.isNew() || userDoc.getObject("XWiki.XWikiUsers", false)==null || userDoc.getObject("XWiki.XWikiUsers", false).getProperty("email")==null) {
