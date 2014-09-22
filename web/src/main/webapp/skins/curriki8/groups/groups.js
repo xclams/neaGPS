@@ -201,7 +201,7 @@ function addAdmin(memberName, groupName) {
   return false;
 }
 function removeMember(memberName, groupName) {
-  var pars = "user=" + memberName + "&group=" + groupName  + "&action=remove&xpage=plain";
+  var pars = "user=" + memberName + "&group=" + groupName  + "&action=remove&code=3&xpage=plain";
   // call url to remove admin
   var myAjax = new Ajax.XWikiRequest( "Groups", "MembersService", {method: 'get', parameters: pars, onComplete: refreshPage});
   return false;
