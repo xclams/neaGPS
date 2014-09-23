@@ -110,7 +110,8 @@ public class NotificationMailSender {
     }
 
     public boolean shouldUserSeeMessage1(String userEmail, String userName, String groupName, MessageActivityEvent event) {
-        if(event.mailToGroup) return true;
+        return wiki.hasAccessLevel("view", userName, event.getPage());
+        /* if(event.mailToGroup) return true;
         if(userName!=null && userName.equals(event.getUser())) return true;
 
         def mailtoU = event.getMailToUsers();
@@ -131,7 +132,7 @@ public class NotificationMailSender {
                 }
             } catch (Exception ex) { ex.printStackTrace(); }
         }
-        return false;
+        return false;*/
     }
 
     public int sendDigestEmailForGroup(String groupName, String[] groupMembersUserNames) {

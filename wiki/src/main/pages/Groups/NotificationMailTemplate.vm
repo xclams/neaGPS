@@ -183,12 +183,9 @@
               #set($break=false)
 
               ## Created a message
-              <!--
-               params: ($RECIPIENT_EMAIL, $RECIPIENT_USERNAME, $groupname, $event)
-               should? $notificationMailSender.shouldUserSeeMessage($RECIPIENT_EMAIL, $RECIPIENT_USERNAME, $groupname, $event)
-              -->
               #if($notificationMailSender.shouldUserSeeMessage($RECIPIENT_EMAIL, $RECIPIENT_USERNAME, $groupname, $event))
               #if($level=="message")
+                #set($hasSome=false)
                 #if("$!{mailTo}" != "")
                   <!-- $notificationMailSender.eventTick() events -->
                   #set($break=true)
@@ -196,18 +193,12 @@
                 #end
                 #if("$!{recipientRole}" != "")
                   <!-- $notificationMailSender.eventTick() events -->
-                  #if($break)
-                    </br>
-                  #end
-                  #set($break=true)
+                  #if($break)</br>#end#set($break=true)
                   $msg.get("groups.notification_mail.message_activity_event.message.to_role", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $recipientRole])
                 #end
                 #if("$!{toGroupMail}" != "")
                   <!-- $notificationMailSender.eventTick() events -->
-                  #if($break)
-                    </br>
-                  #end
-                  #set($break=true)
+                        #if($break)</br>#end#set($break=true)
                   $msg.get("groups.notification_mail.message_activity_event.message.to_group", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $toGroupMail])
                 #end
                 #if("$!{mailTo}" == "" && "$!{recipientRole}" == "" && "$!{toGroupMail}" == "")
