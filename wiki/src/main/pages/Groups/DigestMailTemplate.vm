@@ -162,7 +162,7 @@
                                                     <!-- $mailSender.eventTick() events -->#if($hasSome)<br/>#end#set($hasSome=true)
                                                     $msg.get("groups.digestemail.message_activity_event.message.to_none", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $toGroupMail])
                                                 #end
-                                                <br/>
+                                                <br/><br/>
                                                 <div style="border:thin">
                                                     <i>$event.getMessageBodyTeaser()</i>##
                                                     #if($event.getMessageBodyTeaser().endsWith("…"))
