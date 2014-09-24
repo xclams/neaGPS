@@ -455,11 +455,15 @@ $msg.get("groups_members_admin_current_members_infotxt")##
     <p class="titleheader">
         <button class="titleheader-blue button-blue" ##
                 onclick="window.location ='../UserProfiles_${spaceName}/${context.getUserReference().name}';"
+                style="width:15em; text-align:center; background-color:#164891; line-height:0.7;"##
                 >$msg.get("groups_members_edit_user_settings")</button>##
     &nbsp;&nbsp;<button class="titleheader-blue button-blue"  ##
                 onclick="if (window.confirm(_(('groups_members_admin_current_membersettings_remove_confirm')))) {removeMember('XWiki.${context.getUserReference().name}','$spaceName');};return false;"
+                style="width:15em; text-align:center; background-color: width:15em; text-align:center; background-color:#164891; line-height:0.7"
                 >$msg.get("groups_members_leave_from_this_group")</button>
     </p>
+    ##<a href="../UserProfiles_${spaceName}/${context.getUserReference().name}">$msg.get("groups_members_edit_user_settings")</a>
+    ##<a href="javascript:void()" onclick="if (window.confirm('$msg.get("groups_members_admin_current_membersettings_remove_confirm")')) {removeMember('XWiki.${context.getUserReference().name}','$spaceName');};return false;">$msg.get("groups_members_leave_from_this_group")</a>##
     #end##
 #set($endIndex = $startIndex + $itemsPerPage - 1)
 #if($endIndex >= $totalCount)

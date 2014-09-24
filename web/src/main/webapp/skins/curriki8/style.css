@@ -4689,21 +4689,10 @@ a.button:hover, a.button:visited, button.button-orange:hover, input.button-orang
 	color: #FFF;
 }
 .button-blue, input.button-blue, button.button-blue{
-.button-blue:hover, .curriki .button-blue:visited, .curriki .button-blue:active, .curriki .button-blue {
-    cursor:pointer;
-    display:inline-block;
-    font-family:Helvetica,sans-serif;
-    font-size:11px;
-    padding:4px 10px 3px;
-    color: white !important;
-    text-decoration:none;
-    font-weight: bold;
-    background-color: #006699;
-    border: 1px solid #0700BC;
+	background-color:#5085B9;
+	border: 1px solid #0700BC;
+	color:#FFFFFF;
 }
-
-.button-blue { background-color: #006699 !important; border: 1px solid #0700BC; }
-.button-blue:hover { background-color:  #00CCFF !important; border: 1px solid #00CCFF !important; color:black !important;}
 
 /* Temp style */
 .cd-article .righttext a.button, input.button { padding: 6px; display: inline; }
