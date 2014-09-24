@@ -4688,11 +4688,25 @@ a.button:hover, a.button:visited, button.button-orange:hover, input.button-orang
 	border: 1px solid #B70009;
 	color: #FFF;
 }
-.button-blue, input.button-blue, button.button-blue{
-	background-color:#5085B9;
-	border: 1px solid #0700BC;
-	color:#FFFFFF;
+.button-blue:hover, .button-blue:visited, .button-blue:active, .button-blue {
+    cursor:pointer;
+    display:inline-block;
+    font-family:Helvetica, sans-serif;
+    font-size:11px;
+    font-weight: bold;
+    color: white !important;
+    text-decoration:none;
+
+    padding:4px 10px 3px;
+    width:15em;
+    text-align:center;
 }
+
+.button-blue { background-color: #006699 !important; border: 1px solid #0700BC; }
+
+.button-blue:hover { background-color:  #00CCFF !important; border: 1px solid #00CCFF !important; color:black !important;}
+
+
 
 /* Temp style */
 .cd-article .righttext a.button, input.button { padding: 6px; display: inline; }
