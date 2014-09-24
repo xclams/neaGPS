@@ -4691,20 +4691,32 @@ a.button:hover, a.button:visited, button.button-orange:hover, input.button-orang
 .button-blue:hover, .button-blue:visited, .button-blue:active, .button-blue {
     cursor:pointer;
     display:inline-block;
-    font-family:Helvetica, sans-serif;
-    font-size:11px;
-    font-weight: bold;
-    color: white !important;
-    text-decoration:none;
-
-    padding:4px 10px 3px;
-    width:15em;
-    text-align:center;
+    font-family:Helvetica,sans-serif;
 }
 
-.button-blue { background-color: #006699 !important; border: 1px solid #0700BC; }
+.button-blue {
+    background-color: #006699 !important;
+    border: 1px solid #0700BC !important;
+    color: white !important;
+    font-size:11px !important;
+    font-weight: bold;
+    text-decoration:none;
+    padding:4px 10px 3px !important;
+    width:15em !important;
+    text-align:center !important;
+}
 
-.button-blue:hover { background-color:  #00CCFF !important; border: 1px solid #00CCFF !important; color:black !important;}
+.button-blue:hover {
+    background-color:  #00CCFF !important;
+    border: 1px solid #00CCFF !important;
+    color:black !important;
+    font-size:11px !important;
+    font-weight: bold;
+    text-decoration:none;
+    padding:4px 10px 3px !important;
+    width:15em !important;
+    text-align:center !important;
+}
 
 
 
