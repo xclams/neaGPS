@@ -140,17 +140,13 @@ $s.getDescription()
             <p class="titleheader">
                 <button class="titleheader-blue button-blue" ##
                         onclick="window.location ='../UserProfiles_${m_groupName}/${context.getUserReference().name}';"
-                        style="width:15em; text-align:center; background-color:#164891; line-height:0.7;"##
                         >$msg.get("groups_members_edit_user_settings")</button>
             </p>
             <p class="titleheader">
                 <button class="titleheader-blue button-blue"  ##
                         onclick="if (window.confirm(_(('groups_members_admin_current_membersettings_remove_confirm')))) {removeMember('XWiki.${context.getUserReference().name}','$m_groupName');};return false;"
-                        style="width:15em; text-align:center; background-color: width:15em; text-align:center; background-color:#164891; line-height:0.7"
                         >$msg.get("groups_members_leave_from_this_group")</button>
             </p>
-            ##<a href="../UserProfiles_${m_groupName}/${context.getUserReference().name}">$msg.get("groups_members_edit_user_settings")</a>
-            ##<a href="javascript:void()" onclick="if (window.confirm('$msg.get("groups_members_admin_current_membersettings_remove_confirm")')) {removeMember('XWiki.${context.getUserReference().name}','$m_groupName');};return false;">$msg.get("groups_members_leave_from_this_group")</a>##
         #end##
     </p>
 </div>
@@ -204,17 +200,13 @@ $s.getDescription()
     <p class="titleheader">
         <button class="titleheader-blue button-blue" ##
                 onclick="window.location ='../UserProfiles_${m_groupName}/${profileDoc.name}';"
-                style="width:15em; text-align:center; background-color:#164891; line-height:0.7;"##
                 >$msg.get("groups_members_edit_user_settings")</button>
     </p>
     <p class="titleheader">
         <button class="titleheader-blue button-blue"  ##
                 onclick="if (window.confirm(_(('groups_members_admin_current_membersettings_remove_confirm')))) {removeMember('XWiki.${userdoc.name}','$m_groupName');};return false;"
-                style="width:15em; text-align:center; background-color: width:15em; text-align:center; background-color:#164891; line-height:0.7"
                 >$msg.get("groups_members_leave_from_this_group")</button>
     </p>
-        ##<a href="../UserProfiles_${m_groupName}/${userdoc.name}">$msg.get("groups_members_edit_user_settings")</a>
-        ##<a href="javascript:void()" onclick="if (window.confirm('$msg.get("groups_members_admin_current_membersettings_remove_confirm")')) {removeMember('$userdoc.fullName','${m_groupName}');};return false;">$msg.get("groups_members_leave_from_this_group")</a>##
 ## Get last 5 messages
 #set($sql = ", BaseObject as obj where obj.name=doc.fullName and obj.className='XWiki.ArticleClass' and doc.web='Messages_${m_groupName}' order by doc.creationDate desc")
 #set($messages = $xwiki.searchDocuments($sql, 100, 0))
