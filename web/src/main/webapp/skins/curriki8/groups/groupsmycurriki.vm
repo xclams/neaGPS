@@ -199,7 +199,7 @@ $s.getDescription()
         #set($profileDoc="UserProfiles_${m_groupName}.${userdoc.name}")##
     <p class="titleheader">
         <button class="titleheader-blue button-blue" ##
-                onclick="window.location ='../UserProfiles_${m_groupName}/${profileDoc.name}';"
+                onclick="window.location ='../UserProfiles_${m_groupName}/${userdoc.name}';"
                 >$msg.get("groups_members_edit_user_settings")</button>
     </p>
     <p class="titleheader">
