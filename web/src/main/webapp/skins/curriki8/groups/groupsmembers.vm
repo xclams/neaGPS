@@ -797,7 +797,7 @@ $msg.get("groups_members_join_infotxt",[$spaceTitle])
 $userprofile.display("profile","edit")
 </p>
 #if($sm.getRoles($spaceName).size() > 0) ## {
-<p>$msg.get("groups.members.selectroles")<br />
+<h3>$msg.get("groups.members.selectroles")</h3>
 <span class="instruction">$msg.get("groups.members.join.selectroles.info")</span><br />
 <select name="roles" multiple size=4>
 #groupRoleSelector($spaceName false false false)
@@ -810,7 +810,7 @@ $userprofile.display("allowNotifications","edit") $msg.get("groups_members_creat
 <br />
 $userprofile.display("allowNotificationsFromSelf","edit") $msg.get("groups_members_create_membersettings_changenotice")
 <br />
-    <p style="margin-top:1em">$msg.get("groups_members_profile_edit_notification_receive")</p>
+    <h3 style="margin-top:1em">$msg.get("groups_members_profile_edit_notification_receive")</h3>
     <div class="instruction">$msg.get("groups_members_profile_edit_notification_receive_description")</div>
     <p>
         <label class="xwiki-form-listclass"><input value="immediate" ##
