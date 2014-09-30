@@ -358,8 +358,6 @@ $profile
                                                          #if($notif=="none")checked #end ## no alerts.
                                                          name="XWiki.SpaceUserProfileClass_0_notifications" type="radio">$msg.get("groups_members_profile_edit_notification_receive_none")</label>
         </p>
-
-
 </form>
 #end
 
@@ -812,6 +810,18 @@ $userprofile.display("allowNotifications","edit") $msg.get("groups_members_creat
 <br />
 $userprofile.display("allowNotificationsFromSelf","edit") $msg.get("groups_members_create_membersettings_changenotice")
 <br />
+    <p style="margin-top:1em">$msg.get("groups_members_profile_edit_notification_receive")</p>
+    <div class="instruction">$msg.get("groups_members_profile_edit_notification_receive_description")</div>
+    <p>
+        <label class="xwiki-form-listclass"><input value="immediate" ##
+                  name="XWiki.SpaceUserProfileClass_0_notifications" type="radio">$msg.get("groups_members_profile_edit_notification_receive_immediate")</label>
+        <label class="xwiki-form-listclass"><input value="digest" ##
+                  name="XWiki.SpaceUserProfileClass_0_notifications" type="radio">$msg.get("groups_members_profile_edit_notification_receive_daily")</label>
+        <label class="xwiki-form-listclass"><input value="weekly" checked ##
+                  name="XWiki.SpaceUserProfileClass_0_notifications" type="radio">$msg.get("groups_members_profile_edit_notification_receive_weekly")</label>
+        <label class="xwiki-form-listclass"><input value="none" ##
+                  name="XWiki.SpaceUserProfileClass_0_notifications" type="radio">$msg.get("groups_members_profile_edit_notification_receive_none")</label>
+    </p>
 ## #verbatim_start
 ## <textarea name="profile" cols="80" rows="7"></textarea>
 ## #verbatim_end
