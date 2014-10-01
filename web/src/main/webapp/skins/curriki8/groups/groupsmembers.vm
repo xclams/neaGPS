@@ -450,7 +450,7 @@ $msg.get("groups_members_admin_current_members_nomembers")
 $msg.get("groups_members_admin_current_members_infotxt")##
     #set($profileDoc="UserProfiles_${spaceName}.${context.getUserReference().name}")##
     #if($xwiki.exists("${profileDoc}"))##
-    <p class="titleheader">
+    <p class="">
         <button class="titleheader-blue button-blue" ##
                 onclick="window.location ='../UserProfiles_${spaceName}/${context.getUserReference().name}';"
                 >$msg.get("groups_members_edit_user_settings")</button>##

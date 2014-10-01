@@ -137,7 +137,7 @@ $s.getDescription()
     <p>
         #set($profileDoc="UserProfiles_${spaceName}.${context.getUserReference().name}")##
         #if($xwiki.exists("${profileDoc}"))##
-            <p class="titleheader">
+            <p class="">
                 <button class="titleheader-blue button-blue" ##
                         onclick="window.location ='../UserProfiles_${m_groupName}/${context.getUserReference().name}';"
                         >$msg.get("groups_members_edit_user_settings")</button>
@@ -197,7 +197,7 @@ $s.getDescription()
 </div>
 #if("$context.user" == "$!userdoc.fullName" ) ## {
         #set($profileDoc="UserProfiles_${m_groupName}.${userdoc.name}")##
-    <p class="titleheader">
+    <p class="">
         <button class="titleheader-blue button-blue" ##
                 onclick="window.location ='../UserProfiles_${m_groupName}/${userdoc.name}';"
                 >$msg.get("groups_members_edit_user_settings")</button>
