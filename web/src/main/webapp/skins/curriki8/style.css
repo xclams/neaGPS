@@ -4707,9 +4707,9 @@ a.button:hover, a.button:visited, button.button-orange:hover, input.button-orang
 }
 
 .button-blue:hover {
-    background-color:  #00CCFF !important;
-    border: 1px solid #00CCFF !important;
-    color:black !important;
+    background-color: #0d4c9c !important;
+    border: 1px solid #00ccff !important;
+    color: #fff !important;
     font-size:11px !important;
     font-weight: bold;
     text-decoration:none;
