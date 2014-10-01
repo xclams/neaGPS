@@ -172,6 +172,7 @@ public class NotificationMailSender {
         Set<String> alreadyDoneEmails = new HashSet<String>();
         // it's crazy but seems useful: do one first "useless" rendering. Otherwise the first run always has nulls in it!
         String trash = emailDoc.getRenderedContent(emailDoc.getContent(), "xwiki/2.0");
+        LOG.warn("EmailDoc in " + emailDoc + ".");
 
         for (userName in groupMembersUserNames) {
             eventsCount = 0;
@@ -199,6 +200,8 @@ public class NotificationMailSender {
                     count++;
                 } else {
                     LOG.warn("Not sending mail to " + to + " as the number of displayed events (" + eventsCount + ") is not strictly positive.");
+                    //LOG.warn("rendered content: ");
+                    //LOG.warn(text);
                 }
             } catch (Exception ex) { ex.printStackTrace(); }
         }
@@ -275,15 +278,32 @@ public class NotificationMailSender {
 
     // #### Public Helper for the views ####
 
+
     public String formatDate(Date date) {
         String result = "";
         if (date != null) {
-            String dateFormatString = this.sinceHowLong <= A_DAY ? "hh:mm a" : "MM/dd/YYYY hh:mm a";
-            SimpleDateFormat isoFormat = new SimpleDateFormat(dateFormatString)
-            isoFormat.setTimeZone(TimeZone.getTimeZone("EST5EDT"));
-            result = isoFormat.format(date)
+            SimpleDateFormat df =  this.sinceHowLong <= A_DAY ? getDateFormatDaily() : getDateFormatWeekly();
+            synchronized (df) {
+                result = df.format(date)
+            }
         }
         return result;
+    }
+
+    SimpleDateFormat isoFormatDaily = null, isoFormatWeekly = null;
+    private SimpleDateFormat getDateFormatDaily() {
+        if(isoFormatDaily!=null) return isoFormatDaily;
+        String dateFormatString = "hh:mm a";
+        isoFormatDaily = new SimpleDateFormat(dateFormatString)
+        isoFormatDaily.setTimeZone(TimeZone.getTimeZone("EST5EDT"));
+        return isoFormatDaily;
+    }
+    private SimpleDateFormat getDateFormatWeekly() {
+        if(isoFormatWeekly!=null) return isoFormatWeekly;
+        String dateFormatString = "MM/dd/yyyy hh:mm a";
+        isoFormatWeekly = new SimpleDateFormat(dateFormatString)
+        isoFormatWeekly.setTimeZone(TimeZone.getTimeZone("EST5EDT"));
+        return isoFormatWeekly;
     }
 
     public void setSinceHowLong(String s) {

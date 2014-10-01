@@ -7,63 +7,63 @@
         #set($users=$request.users)
         #if($users)#set($users=$users.split(",| "))#end
 
-        {{html clean="false"}}
+    {{html clean="false"}}
     <h3 xmlns="http://www.w3.org/1999/html">Done..</h3>
-        <p>
+    <p>
         #foreach($u in $users)
             $u <br>
         #end
 
         #if($request.type == "daily")
 
-          #if(${groupname.contains("*")})
-            #set($count=$notificationMailsender.sendDigestEmailToAllGroupsMatching($groupname, $users))
-          #else
-            #set($count=$notificationMailsender.sendDigestEmailForGroup($groupname,$users))
-          #end
-          Daily was choosen.. <br>
+            #if(${groupname.contains("*")})
+                #set($count=$notificationMailsender.sendDigestEmailToAllGroupsMatching($groupname, $users))
+            #else
+                #set($count=$notificationMailsender.sendDigestEmailForGroup($groupname,$users))
+            #end
+            Daily was choosen.. <br>
         #elseif($request.type == "weekly")
 
-          #if(${groupname.contains("*")})
-            #set($count=$notificationMailsender.sendWeeklyDigestEmailToAllGroupsMatching($groupname, $users))
-          #else
-            #set($count=$notificationMailsender.sendWeeklyDigestEmailForGroup($groupname,$users))
-          #end
-          Weekly was choosen.. <br>
+            #if(${groupname.contains("*")})
+                #set($count=$notificationMailsender.sendWeeklyDigestEmailToAllGroupsMatching($groupname, $users))
+            #else
+                #set($count=$notificationMailsender.sendWeeklyDigestEmailForGroup($groupname,$users))
+            #end
+            Weekly was choosen.. <br>
         #end
 
         Sent ${count} E-Mails.
         </br>
         </br>
         <a href="$doc.name">Back</a>
-        </p>
-        {{/html}}
+    </p>
+    {{/html}}
     #else
-        {{html clean="false"}}
-        <h3>Generate and send digest E-Mails to all users of a group. (or a list you specify below) </h3>
-        <p>
-          <form action="DigestEmailSenderTrigger">
-            E.g "<a href="/xwiki/bin/view/Group_Test/WebHome">Group_Test</a>" (without quotes); a * at end means a wildcard:<br>
-            <br>
-            <label>Group-Name: </label><br>
-            <input name="groupname" type="text"/><br>
-            <br>
-            <label>Digest Type: </label><br>
-            <input name="type" value="daily"  type="radio" checked/> Daily <br>
-            <input name="type" value="weekly" type="radio"/> Weekly <br>
-            <br>
-            <label>Receiver: </label> E.g "XWiki.flixt" (without quotes), if you leave this empty the mails is sent to all users of the group.<br>
-            <input name="users" type="text"/><br>
-            <br>
-            <input type="submit" value ="Generate Mails"/>
-          </form>
-        </p>
-        {{/html}}
+    {{html clean="false"}}
+    <h3>Generate and send digest E-Mails to all users of a group. (or a list you specify below) </h3>
+    <p>
+    <form action="DigestEmailSenderTrigger">
+        E.g "<a href="/xwiki/bin/view/Group_Test/WebHome">Group_Test</a>" (without quotes); a * at end means a wildcard:<br>
+        <br>
+        <label>Group-Name: </label><br>
+        <input name="groupname" type="text"/><br>
+        <br>
+        <label>Digest Type: </label><br>
+        <input name="type" value="daily"  type="radio" checked/> Daily <br>
+        <input name="type" value="weekly" type="radio"/> Weekly <br>
+        <br>
+        <label>Receiver: </label> E.g "XWiki.flixt" (without quotes), if you leave this empty the mails is sent to all users of the group.<br>
+        <input name="users" type="text"/><br>
+        <br>
+        <input type="submit" value ="Generate Mails"/>
+    </form>
+    </p>
+    {{/html}}
     #end
 #else
-    {{html clean="false"}}
-    <h3>Not authorized!</h3>
-    <p>You don't have enough rights to see this page.</p>
-    {{/html}}
+{{html clean="false"}}
+<h3>Not authorized!</h3>
+<p>You don't have enough rights to see this page.</p>
+{{/html}}
 #end
 {{/velocity}}
