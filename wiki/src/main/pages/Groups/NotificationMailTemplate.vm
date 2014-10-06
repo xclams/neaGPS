@@ -13,7 +13,7 @@
   <!-- So that mobile webkit will display zoomed in -->
   <meta name="format-detection" content="telephone=no">
   <!-- disable auto telephone linking in iOS -->
-  <title>Hi there! Curriki wants to keep you up to date with your groups. The following activities happened in the past
+  <title>Hi there! NEA GPS Network wants to keep you up to date with your groups. The following activities happened in the past
     24 hours in your ${displayGroupname} group.</title>
   <style type="text/css">
     .ReadMsgBody {
