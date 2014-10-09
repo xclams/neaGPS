@@ -176,7 +176,13 @@
                                         ##    $msg.get("groups.digestemail.message_activity_event.comment", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url])
                                         ##    <div style="border:thin">$event.getMessageBodyTeaser()</div>
                                         ##</li>
-                                        #end
+                                        #elseif(($level=="comment"))
+                                        <li><!-- $mailSender.eventTick() events -->
+                                            $msg.get("groups.digestemail.message_activity_event.comment", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url])
+                                            <br/><br/>
+                                            #set($body=$event.getMessageBodyTeaser())##
+                                            <div style="border:thin">$body</div>
+                                         <br/></li>#end
                                     #end
 
                                 #elseif("${event.class}" == "class org.curriki.plugin.activitystream.plugin.ResourceActivityEvent")

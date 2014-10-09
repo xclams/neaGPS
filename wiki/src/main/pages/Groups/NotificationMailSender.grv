@@ -328,7 +328,8 @@ public class NotificationMailSender {
 
         // Return 25 Events if the query ask for events from less than a day, 100 otherwise
         int numberOfevents = this.sinceHowLong <= A_DAY ? 25 : 100;
-        return activityStream.searchEvents("act.stream='" + streamName + "'  and act.date > ${dateStr} and act.type!='update' and (act.param3!='comment' or act.type!='create')", false, numberOfevents, 0)
+        return activityStream.searchEvents("act.stream='" + streamName + "'  and act.date > ${dateStr} and act.type!='update' ", false, numberOfevents, 0)
+        // and (act.param3!='comment' or act.type!='create')
     }
 
     private List<String> getGroupMembersByGroupName(String groupName) {
