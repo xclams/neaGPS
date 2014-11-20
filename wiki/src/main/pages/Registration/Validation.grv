@@ -29,8 +29,12 @@ public class Validation {
     }
 
     public boolean isValidUsername(String account, boolean echoErrors) {
-        if (account.length()>=3 && account.replaceAll("[a-zA-Z0-9]","").equals("")) {
-            if (xwiki.exists("XWiki.${account}") || "superadmin".equals("${account}")) {
+        String rest = account.replaceAll("[a-zA-Z0-9]","");
+        if (account.length()>=3 && rest.equals("")) {
+            String hql = "lower(doc.name)='${account.toLowerCase()}' and doc.web='XWiki'";
+            List similarDocnames = xwiki.searchDocuments(hql);
+            System.out.println("query \"${hql}\" SimilarDocnames: " + similarDocnames);
+            if (!similarDocnames.isEmpty()) {
                 if(echoErrors && warningFields!=null) {
                     addError("join.error.login_not_unique");
                     addWarning("username");
@@ -67,7 +71,7 @@ public class Validation {
 
 
         // Check to see if the email address is already used
-        def query = ",BaseObject as obj, StringProperty as prop where doc.fullName=obj.name and doc.space='XWiki' and obj.className='XWiki.XWikiUsers' and obj.id=prop.id.id and prop.id.name='email' and prop.value='"+email+"'";
+        def query = ",BaseObject as obj, StringProperty as prop where doc.fullName=obj.name and doc.space='XWiki' and obj.className='XWiki.XWikiUsers' and obj.id=prop.id.id and prop.id.name='email' and lower(prop.value)='"+email.toLowerCase()+"'";
         List docs = xwiki.searchDocuments(query);
         if (!docs.isEmpty()) {
             foundAccountName = docs.get(0);
@@ -79,12 +83,6 @@ public class Validation {
 
         addOk("email");
         return true;
-    }
-
-    public boolean isValidEmailConfirmation(String email_confirmation, boolean echoErrors){
-        // The email_confirmation field is a honeypot for spam bots, since the double opt in
-        // for emails is turned of for GPS
-        return echoErrors ? (email_confirmation == null || "".equals(email_confirmation)) : true;
     }
 
     public boolean isValidPassword(String ps, boolean echoErrors ) {
@@ -158,22 +156,19 @@ public class Validation {
         }
         if(country=="US") {
             if(!(postalCode) || postalCode.length()>5 || postalCode.length()<2 || !isDigitsOnly(postalCode)) {
-                if(echoErrors)
-                    addError("join.error.requireZipCode");
-                addWarning("postalCode");
+                if(echoErrors) addWarning("postalCode");
+                addError("join.error.requireZipCode");
                 return false;
             }
             if(!city || !state) {
-                if(echoErrors)
-                    addError("join.error.requireValidZipCode");
-                addWarning("postalCode");
+                if(echoErrors) addWarning("postalCode");
+                addError("join.error.requireValidZipCode");
                 return false;
             }
         } else {
             if(state==null || state.length()<=1) {
-                if(echoErrors)
-                    addError("join.error.region_missing");
-                addWarning("state");
+                addError("join.error.region_missing");
+                addWarning("state")
                 return false;
             };
         }
