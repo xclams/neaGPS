@@ -308,11 +308,16 @@
 ###
 ###
 #macro(displayTopicAddForm $space)
+    #verbatim_start()
     #set($newTopicName = $space + "." + $xwiki.getUniquePageName($space, 'Topic'))
     #set($newTopicDoc = $xwiki.getDocument($newTopicName))
-    #verbatim_start()<!-- $newTopicDoc.setTitle("Temporary topic by $context.user")
-    $newTopicDoc.saveWithProgrammingRights("staging") staged draft document on $newTopicDoc.fullName -->#verbatim_end()
     #if($newTopicDoc.hasAccessLevel("edit"))
+        <!-- $newTopicDoc.setTitle("Temporary topic by $context.user")
+    $newTopicDoc.saveWithProgrammingRights("staging") staged draft document on $newTopicDoc.fullName -->
+        #set($hql="select doc.fullName from XWikiDocument as doc where doc.web = ? and doc.title LIKE 'Temporary topic by%' and doc.creationDate < ? ")
+        #set($cal = $datetool.systemCalendar)$cal.add(7,-3)
+        #set($olderTempDocs=$xwiki.search($hql,5000, 0, [$space,$datetool.toDate($cal)]))
+        #foreach($x in $olderTempDocs)$xwiki.getDocument($x).deleteWithProgrammingRights()#end
     <div class="addconversation-container addtopic-container">
      <div class="addconversation-container-button addtopic-container-button">
       <a href="$doc.getURL('view', 'viewer=conversations&amp;action=addconversation')" class="addconversation-activator">$msg.get('conversations.topic.add.activator')</a>
