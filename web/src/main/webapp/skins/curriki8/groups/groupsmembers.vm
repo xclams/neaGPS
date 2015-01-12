@@ -309,17 +309,25 @@ $profile
 </div><p style="height:20px">&nbsp;</p>
 <form action="$xwiki.getURL("Groups.SaveSpaceUserProfileService")" method="post" onsubmit="document.getElementById('${divid}').parentNode.className = 'groups-members-member'; new iframe(this,{update:'${divid}'}); return false;" style="padding-top:0">
     <div class="groups-members-member-buttons">
-        <input type="button"  class="button-grey" value="$msg.get("groups_members_admin_current_membersettings_cancel_link")" onclick="cancelEditProfile('${memberName}','${spaceName}','${divid}');" /><input type="submit" class="button-orange" value="$msg.get("groups_members_admin_current_membersettings_save_link")" />
+        #if($viewingFullPageGroupProfileEdit)
+            <input type="button"  class="button-grey" value="$msg.get("groups_members_admin_current_membersettings_cancel_link")" onclick="window.location.replace('/xwiki/bin/view/${spaceName}/Members')" />##
+        #else
+            <input type="button"  class="button-grey" value="$msg.get("groups_members_admin_current_membersettings_cancel_link")" onclick="cancelEditProfile('${memberName}','${spaceName}','${divid}');" />##
+        #end
+        <input type="submit" class="button-orange" value="$msg.get("groups_members_admin_current_membersettings_save_link")" />
     </div>
     <input type="hidden" name="user" value="$!memberName" />
     <input type="hidden" name="space" value="$!spaceName" />
     <input type="hidden" name="divid" value="$!divid" />
     <input type="hidden" name="xpage" value="plain" />
+    #if($viewingFullPageGroupProfileEdit)
+        <input type="hidden" name="xredirect" value="/xwiki/bin/view/${spaceName}/Members"/>
+    #end
     #verbatim_end
     $uprofile.display("profile","edit")
     #verbatim_start
     #if($sm.getRoles($spaceName).size() > 0) ## {
-        <div class="select-roles">$msg.get("groups.members.selectroles")</div>
+        <h3 style="margin-top:1em">$msg.get("groups.members.selectroles")</h3>
         <div class="instruction">$msg.get("groups.members.selectroles.info")</div>
         <select name="roles" multiple size=4>
             #groupRoleSelector($spaceName false false $memberName)
@@ -332,10 +340,7 @@ $profile
     $uprofile.display("allowNotifications","edit") $msg.get("groups_members_create_membersettings_email")
     $uprofile.display("allowNotificationsFromSelf","edit") $msg.get("groups_members_create_membersettings_changenotice") #verbatim_start
     #set($displayedUserIsAdmin=$sm.isAdmin($spaceName, $memberName))##
-    #if($sm.isAdmin($spaceName, $memberName) && ($sm.isAdmin($spaceName, $context.getUser()) || $hasGlobalAdmin))
-        <div class="select-roles">$msg.get("groups_members_profile_edit_notification_receive")</div>
-    ## Group Activity Notifications
-    #end
+    <h3 style="margin-top:1em">$msg.get("groups_members_profile_edit_notification_receive")</h3>
         <div class="instruction">$msg.get("groups_members_profile_edit_notification_receive_description")</div>
         <p>
             #set($notif=$!doc.getObject("XWiki.SpaceUserProfileClass").getProperty("notifications").value)##
@@ -353,7 +358,6 @@ $profile
                                                          #if($notif=="none")checked #end ## no alerts.
                                                          name="XWiki.SpaceUserProfileClass_0_notifications" type="radio">$msg.get("groups_members_profile_edit_notification_receive_none")</label>
         </p>
-
 </form>
 #end
 
@@ -446,7 +450,14 @@ $msg.get("groups_members_admin_current_members_nomembers")
 $msg.get("groups_members_admin_current_members_infotxt")##
     #set($profileDoc="UserProfiles_${spaceName}.${context.getUserReference().name}")##
     #if($xwiki.exists("${profileDoc}"))##
-    <a href="../UserProfiles_${spaceName}/${context.getUserReference().name}">Edit your profile in this group</a>##
+    <p class="">
+        <button class="titleheader-blue button-blue" ##
+                onclick="window.location ='../UserProfiles_${spaceName}/${context.getUserReference().name}';"
+                >$msg.get("groups_members_edit_user_settings")</button>##
+    &nbsp;&nbsp;<button class="titleheader-blue button-blue"  ##
+                onclick="if (window.confirm(_(('groups_members_admin_current_membersettings_remove_confirm')))) {removeMember('XWiki.${context.getUserReference().name}','$spaceName');};return false;"
+                >$msg.get("groups_members_leave_from_this_group")</button>
+    </p>
     #end##
 #set($endIndex = $startIndex + $itemsPerPage - 1)
 #if($endIndex >= $totalCount)
@@ -786,7 +797,7 @@ $msg.get("groups_members_join_infotxt",[$spaceTitle])
 $userprofile.display("profile","edit")
 </p>
 #if($sm.getRoles($spaceName).size() > 0) ## {
-<p>$msg.get("groups.members.selectroles")<br />
+<h3>$msg.get("groups.members.selectroles")</h3>
 <span class="instruction">$msg.get("groups.members.join.selectroles.info")</span><br />
 <select name="roles" multiple size=4>
 #groupRoleSelector($spaceName false false false)
@@ -799,6 +810,18 @@ $userprofile.display("allowNotifications","edit") $msg.get("groups_members_creat
 <br />
 $userprofile.display("allowNotificationsFromSelf","edit") $msg.get("groups_members_create_membersettings_changenotice")
 <br />
+    <h3 style="margin-top:1em">$msg.get("groups_members_profile_edit_notification_receive")</h3>
+    <div class="instruction">$msg.get("groups_members_profile_edit_notification_receive_description")</div>
+    <p>
+        <label class="xwiki-form-listclass"><input value="immediate" ##
+                  name="XWiki.SpaceUserProfileClass_0_notifications" type="radio">$msg.get("groups_members_profile_edit_notification_receive_immediate")</label>
+        <label class="xwiki-form-listclass"><input value="digest" ##
+                  name="XWiki.SpaceUserProfileClass_0_notifications" type="radio">$msg.get("groups_members_profile_edit_notification_receive_daily")</label>
+        <label class="xwiki-form-listclass"><input value="weekly" checked ##
+                  name="XWiki.SpaceUserProfileClass_0_notifications" type="radio">$msg.get("groups_members_profile_edit_notification_receive_weekly")</label>
+        <label class="xwiki-form-listclass"><input value="none" ##
+                  name="XWiki.SpaceUserProfileClass_0_notifications" type="radio">$msg.get("groups_members_profile_edit_notification_receive_none")</label>
+    </p>
 ## #verbatim_start
 ## <textarea name="profile" cols="80" rows="7"></textarea>
 ## #verbatim_end
@@ -911,6 +934,7 @@ $xwiki.addTooltipJS()
 #verbatim_start
 #set($sm=$xwiki.csm)
 #set($spaceName=$request.space)
+#if($spaceName)#else#set($spaceName=$request.group)#end
 #set($memberName=$request.user)
 #set($actionCode=$request.code)
 #if((!$hasGlobalAdmin)&&(!$sm.isAdmin($spaceName, $context.user))&&(!(($actionCode == 3)&&($memberName==$context.user))))
@@ -1065,15 +1089,12 @@ $msg.get("groups_members_request_bio_instruction")
 #tooltip("bio-tooltip",$msg.get("groups_members_request_bio_tooltip"))
 <textarea name="profile" cols="80" rows="7"></textarea>
 #if($sm.getRoles($spaceName).size() > 0) ## {
-<div class="select-roles">
-$msg.get("groups.members.selectroles")
-</div>
+<h3 style="margin-top:1em">$msg.get("groups.members.selectroles")</h3>
 <div class="instruction">$msg.get("groups.members.invite.selectroles.info")</div>
 <select name="roles" multiple size=4>
 #groupRoleSelector($spaceName false false false)
 </select>
 #end ## }
-
 <br />
 <input type="checkbox" name="allowNotifications" value="1" checked /> $msg.get("groups_members_create_membersettings_email") #tooltip("email-tooltip",$msg.get("groups_members_create_membersettings_email_tooltip"))<br />
 <input type="checkbox" name="allowNotificationsFromSelf" value="1" checked /> $msg.get("groups_members_create_membersettings_changenotice") <br />
@@ -1137,10 +1158,14 @@ $xwiki.addTooltipJS()
   #addUserToRole($role $memberName)
 #end ## }
 #end ## }
+#if($request.xredirect && $request.xredirect.startsWith("/xwiki/bin/view/Group_"))
+    $response.sendRedirect($request.xredirect)
+#else
 <div class="groups-members-member-saveinfo">
-$msg.get("groups_members_membersettings_savedone")
+    $msg.get("groups_members_membersettings_savedone")
 </div>
-#groupsdisplaymemberinfo($memberName,$spaceName,$request.divid)#else
+    #groupsdisplaymemberinfo($memberName,$spaceName,$request.divid)#end
+#else
 $msg.groups_needsadminrights
 #end
 #end

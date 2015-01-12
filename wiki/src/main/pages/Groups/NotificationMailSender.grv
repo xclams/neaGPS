@@ -5,6 +5,7 @@ import com.xpn.xwiki.api.XWiki
 import com.xpn.xwiki.plugin.activitystream.api.ActivityEvent
 import com.xpn.xwiki.plugin.spacemanager.api.Space
 import org.curriki.plugin.activitystream.plugin.CurrikiActivityStreamPluginApi
+import org.curriki.plugin.activitystream.plugin.MessageActivityEvent
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.text.SimpleDateFormat
@@ -53,12 +54,23 @@ public class NotificationMailSender {
 
     // #### Public API for the notification sending ####
 
-    public int sendWeeklyDigestEmailTooAllGroupsMatching(String pattern, List<String> groupMembersUserNames){
+    // ### the list variants are for groovy (e.g. the scheduler)
+    // ### the array variants are for velocity (e.g. the manual trigger)
+
+    public int sendWeeklyDigestEmailToAllGroupsMatching(String pattern, String[] groupMembersUserNames) {
+        this.sendWeeklyDigestEmailToAllGroupsMatching(pattern, Arrays.asList(groupMembersUserNames));
+    }
+
+    public int sendWeeklyDigestEmailToAllGroupsMatching(String pattern, List<String> groupMembersUserNames){
         int oldSinceHowLong = this.sinceHowLong;
         this.sinceHowLong = A_WEEK;
         int count = sendDigestEmailToAllGroupsMatching(pattern, groupMembersUserNames)
         this.sinceHowLong = oldSinceHowLong;
         return count;
+    }
+
+    public int sendDigestEmailToAllGroupsMatching(String pattern, String[] groupMembersUserNames) {
+        sendDigestEmailToAllGroupsMatching(pattern, Arrays.asList(groupMembersUserNames))
     }
 
     public int sendDigestEmailToAllGroupsMatching(String pattern, List<String> groupMembersUserNames) {
@@ -74,12 +86,57 @@ public class NotificationMailSender {
         return count;
     }
 
+    public int sendWeeklyDigestEmailForGroup(String groupName, String[] groupMembersUserNames){
+        return sendWeeklyDigestEmailForGroup(groupName, Arrays.asList(groupMembersUserNames));
+    }
+
     public int sendWeeklyDigestEmailForGroup(String groupName, List<String> groupMembersUserNames){
         int oldSinceHowLong = this.sinceHowLong;
         this.sinceHowLong = A_WEEK;
         int count = sendDigestEmailForGroup(groupName, groupMembersUserNames);
         this.sinceHowLong = oldSinceHowLong;
         return count;
+    }
+    public boolean shouldUserSeeMessage(String userEmail, String userName, String groupName, MessageActivityEvent event) {
+        // $RECIPIENT_EMAIL, $RECIPIENT_USERNAME, $groupname, $event))
+        try {
+            if(event!=null) LOG.warn("shouldUserSeeMessage: ${userEmail} ${userName} ${event} ${event.getMailTo()} ${event.getRecipientRole()} ${event.getMailToGroup()} ${event.getMailToUsers()}")
+            else LOG.warn("shouldUserSeeMessage: ${userEmail} ${userName} ${event}");
+            boolean result = shouldUserSeeMessage1(userEmail, userName, groupName, event);
+            LOG.warn("shouldUserSeeMessage: ${result}.");
+            return result;
+        } catch (Exception ex) { ex.printStackTrace(); return false;
+        }
+    }
+
+    public boolean shouldUserSeeMessage1(String userEmail, String userName, String groupName, MessageActivityEvent event) {
+        return wiki.hasAccessLevel("view", userName, event.getPage());
+        /* if(event.mailToGroup) return true;
+        if(userName!=null && userName.equals(event.getUser())) return true;
+
+        def mailtoU = event.getMailToUsers();
+        if(mailtoU!=null) mailtoU = mailtoU.split(",| ");
+        if(mailtoU!=null && mailtoU.length>0) for(String m in mailtoU) {
+            if(userName.equals(m)) return true;
+        }
+
+        String recipientRole = event.getRecipientRole();
+        if(recipientRole==null) recipientRole = "";
+        String[] roles = (recipientRole + "," + groupName + ".AdminGroup").split(",| ");
+        for(String role in roles) {
+            LOG.warn("Checking role document ${role}");
+            try {
+                Document roleDoc = wiki.getDocument(role);
+                if(roleDoc!=null && !roleDoc.isNew()) for(com.xpn.xwiki.api.Object obj in roleDoc.getObjects("XWiki.XWikiGroups")) {
+                    if(userName.equals(obj.getProperty("member").value)) return true;
+                }
+            } catch (Exception ex) { ex.printStackTrace(); }
+        }
+        return false;*/
+    }
+
+    public int sendDigestEmailForGroup(String groupName, String[] groupMembersUserNames) {
+        return this.sendDigestEmailForGroup(groupName, Arrays.asList(groupMembersUserNames))
     }
 
     public int sendDigestEmailForGroup(String groupName, List<String> groupMembersUserNames) {
@@ -93,38 +150,60 @@ public class NotificationMailSender {
         }
 
         if (groupMembersUserNames == null || groupMembersUserNames.size() == 0 || groupMembersUserNames.contains("")) {
-            groupMembersUserNames = this.getGroupMembersForDigestMail(groupName);
+            if(sinceHowLong<=A_DAY)
+                groupMembersUserNames = this.getGroupMembersForDigestMail(groupName);
+            else
+                groupMembersUserNames = this.getGroupMembersForWeeklyDigestMail(groupName);
         }
+        LOG.warn("Events ###  " + activityEvents);
+        LOG.warn("GroupMembers ### " + groupMembersUserNames.size() + " " + groupMembersUserNames);
 
         Space space = wiki.csm.getSpace(groupName);
-        wiki.context.put("DIGEST_TYPE", sinceHowLong <= A_DAY ? 'daily' : 'weekly');
+        wiki.context.put("DIGEST_TYPE", sinceHowLong <= A_DAY ? 'digest' : 'weekly');
         wiki.context.put("GROUPNAME", groupName);
         wiki.context.put("DISPLAY_GROUPNAME", space.getDisplayTitle());
         wiki.context.put("EVENTS", activityEvents);
         wiki.context.put("DIGEST_EMAIL_SENDER", this);
 
         Document emailDoc = wiki.getDocument("Groups.DigestMailTemplate");
-        String subject = wiki.renderText(emailDoc.title, emailDoc);
         String from = wiki.getXWikiPreference("admin_email");
-        eventsCount = 0;
-        String text = emailDoc.getRenderedContent(emailDoc.getContent(), "xwiki/2.0");
-
-
-        LOG.warn("Events ###  " + activityEvents);
-        LOG.warn("GroupMembers ### " + groupMembersUserNames.size() + " " + groupMembersUserNames);
         int count = 0;
-        for (groupAdminUserName in groupMembersUserNames) {
-            Document groupAdminUserDoc = wiki.getDocument(groupAdminUserName);
-            com.xpn.xwiki.api.Object userObj = groupAdminUserDoc.getObject("XWiki.XWikiUsers", true);
-            if (userObj == null || !userObj.getProperty("email")) continue;
-            String to = userObj.getProperty("email").getValue();
-            if (eventsCount > 0) {
-                LOG.warn("Sending mail to " + to);
-                sendMail(from, to, subject, text);
-                count++;
-            } else {
-                LOG.warn("Not sending mail to " + to + " as the number of events (" + eventsCount + ") is not strictly positive.");
-            }
+
+        Set<String> alreadyDoneEmails = new HashSet<String>();
+        // it's crazy but seems useful: do one first "useless" rendering. Otherwise the first run always has nulls in it!
+        String trash = emailDoc.getRenderedContent(emailDoc.getContent(), "xwiki/2.0");
+        LOG.warn("EmailDoc in " + emailDoc + ".");
+
+        for (userName in groupMembersUserNames) {
+            eventsCount = 0;
+            LOG.warn("userName: ${userName}.");
+            try {
+                Document userDoc = wiki.getDocument(userName);
+                if(userName==null || userName.equals("null") || userDoc==null || userDoc.isNew() || userDoc.getObject("XWiki.XWikiUsers", false)==null || userDoc.getObject("XWiki.XWikiUsers", false).getProperty("email")==null) {
+                    LOG.warn("User ${userName} is a member but not a valid user. Not sending a digest.");
+                    continue;
+                }
+                com.xpn.xwiki.api.Object userObj = userDoc.getObject("XWiki.XWikiUsers", false);
+                String to = userObj.getProperty("email").getValue();
+                if(alreadyDoneEmails.contains(to)) {LOG.warn("Already done."); continue;}
+                alreadyDoneEmails.add(to);
+
+                wiki.context.vcontext.put("RECIPIENT_USERNAME",userName);
+                wiki.context.vcontext.put("RECIPIENT_EMAIL",to);
+                wiki.context.vcontext.put("RECIPIENT_FIRST_AND_LAST","${userObj.getProperty("first_name").getValue()} ${userObj.getProperty("last_name").getValue()}");
+
+                String subject = wiki.renderText(emailDoc.title, emailDoc);
+                String text = emailDoc.getRenderedContent(emailDoc.getContent(), "xwiki/2.0");
+                if (eventsCount > 0) {
+                    LOG.warn("Sending mail to " + to);
+                    sendMail(from, to, subject, text);
+                    count++;
+                } else {
+                    LOG.warn("Not sending mail to " + to + " as the number of displayed events (" + eventsCount + ") is not strictly positive.");
+                    //LOG.warn("rendered content: ");
+                    //LOG.warn(text);
+                }
+            } catch (Exception ex) { ex.printStackTrace(); }
         }
         return count;
     }
@@ -158,22 +237,40 @@ public class NotificationMailSender {
 
         Document emailDoc = wiki.getDocument("Groups.NotificationMailTemplate");
         String from = wiki.getXWikiPreference("admin_email");
-        String text = emailDoc.getRenderedContent(emailDoc.getContent(), "xwiki/2.0");
-        String subject = wiki.context.get("EMAIL_SUBJECT");
 
         LOG.warn("Event ###  " + pluginEvent);
         LOG.warn("GroupMembers ### " + groupMembersUserNames.size() + " " + groupMembersUserNames);
-        for (groupAdminUserName in groupMembersUserNames) {
-            Document groupAdminUserDoc = wiki.getDocument(groupAdminUserName);
-            com.xpn.xwiki.api.Object userObj = groupAdminUserDoc.getObject("XWiki.XWikiUsers", true);
-            if (userObj == null || !userObj.getProperty("email")) continue;
-            String to = userObj.getProperty("email").getValue();
-            if (eventsCount > 0) {
-                LOG.warn("Sending mail to " + to);
-                sendMail(from, to, subject, text);
-            } else {
-                LOG.warn("Not sending mail to " + to + " as the number of events (" + eventsCount + ") is not strictly positive.");
-            }
+        Set<String> alreadyDoneEmails = new HashSet<String>();
+        // it's crazy but seems useful: do one first "useless" rendering. Otherwise the first run always has nulls in it!
+        String trash = emailDoc.getRenderedContent(emailDoc.getContent(), "xwiki/2.0");
+
+        for (userName in groupMembersUserNames) {
+            try {
+                eventsCount = 0;
+                LOG.warn("userName: \"${userName}\".");
+                Document userDoc = wiki.getDocument(userName);
+                if(userDoc==null || userDoc.isNew() || userDoc.getObject("XWiki.XWikiUsers", false)==null || userDoc.getObject("XWiki.XWikiUsers", false).getProperty("email")==null) {
+                    LOG.warn("User ${userDoc} is a member but not a valid user. Not notifying.");
+                    continue;
+                }
+                com.xpn.xwiki.api.Object userObj = userDoc.getObject("XWiki.XWikiUsers", true);
+                String to = userObj.getProperty("email").getValue();
+                if(alreadyDoneEmails.contains(to)) {LOG.warn("Already done."); continue;}
+                alreadyDoneEmails.add(to);
+
+                wiki.context.vcontext.put("RECIPIENT_USERNAME",userName);
+                wiki.context.vcontext.put("RECIPIENT_EMAIL",to);
+                wiki.context.vcontext.put("RECIPIENT_FIRST_AND_LAST","${userObj.getProperty("first_name").getValue()} ${userObj.getProperty("last_name").getValue()}");
+
+                String text = emailDoc.getRenderedContent(emailDoc.getContent(), "xwiki/2.0");
+                String subject = wiki.context.get("EMAIL_SUBJECT");
+                if (eventsCount > 0) {
+                    LOG.warn("Sending mail to " + to);
+                    sendMail(from, to, subject, text);
+                } else {
+                    LOG.warn("Not sending mail to " + to + " as the number of events (" + eventsCount + ") is not strictly positive.");
+                }
+            } catch (Exception ex) { ex.printStackTrace(); }
         }
         return groupMembersUserNames.size();
 
@@ -181,15 +278,32 @@ public class NotificationMailSender {
 
     // #### Public Helper for the views ####
 
+
     public String formatDate(Date date) {
         String result = "";
         if (date != null) {
-            String dateFormatString = this.sinceHowLong <= A_DAY ? "hh:mm a" : "MM/dd/YYYY hh:mm a";
-            SimpleDateFormat isoFormat = new SimpleDateFormat(dateFormatString)
-            isoFormat.setTimeZone(TimeZone.getTimeZone("EST5EDT"));
-            result = isoFormat.format(date)
+            SimpleDateFormat df =  this.sinceHowLong <= A_DAY ? getDateFormatDaily() : getDateFormatWeekly();
+            synchronized (df) {
+                result = df.format(date)
+            }
         }
         return result;
+    }
+
+    SimpleDateFormat isoFormatDaily = null, isoFormatWeekly = null;
+    private SimpleDateFormat getDateFormatDaily() {
+        if(isoFormatDaily!=null) return isoFormatDaily;
+        String dateFormatString = "hh:mm a";
+        isoFormatDaily = new SimpleDateFormat(dateFormatString)
+        isoFormatDaily.setTimeZone(TimeZone.getTimeZone("EST5EDT"));
+        return isoFormatDaily;
+    }
+    private SimpleDateFormat getDateFormatWeekly() {
+        if(isoFormatWeekly!=null) return isoFormatWeekly;
+        String dateFormatString = "MM/dd/yyyy hh:mm a";
+        isoFormatWeekly = new SimpleDateFormat(dateFormatString)
+        isoFormatWeekly.setTimeZone(TimeZone.getTimeZone("EST5EDT"));
+        return isoFormatWeekly;
     }
 
     public void setSinceHowLong(String s) {
@@ -214,7 +328,8 @@ public class NotificationMailSender {
 
         // Return 25 Events if the query ask for events from less than a day, 100 otherwise
         int numberOfevents = this.sinceHowLong <= A_DAY ? 25 : 100;
-        return activityStream.searchEvents("act.stream='" + streamName + "'  and act.date > ${dateStr} and act.type!='update' and (act.param3!='comment' or act.type!='create')", false, numberOfevents, 0)
+        return activityStream.searchEvents("act.stream='" + streamName + "'  and act.date > ${dateStr} and act.type!='update' ", false, numberOfevents, 0)
+        // and (act.param3!='comment' or act.type!='create')
     }
 
     private List<String> getGroupMembersByGroupName(String groupName) {
@@ -256,13 +371,14 @@ public class NotificationMailSender {
             Property property = obj.getProperty("notifications")
             String digestHow = null;
             if(property!=null) digestHow= property.value;
+            // LOG.warn("Inspecting notification status (${notificationSetting} for member ${member}: ${digestHow}.")
 
             if (notificationSetting == digestHow) {
                 result.add(member)
             }
 
-            // Default to daily for admins
-            else if(digestHow == null && memberIsAdmin && notificationSetting == "daily"){
+            // Default to digest for admins
+            else if(digestHow == null && memberIsAdmin && notificationSetting == "digest"){
                 result.add(member)
             }
 
@@ -275,7 +391,13 @@ public class NotificationMailSender {
     }
 
     private void sendMail(String from, String to, String subject, String text) {
-        wiki.mailsender.sendHtmlMessage(from, to, null, null, subject, text, text.replaceAll("<[^>]*>", ""), []);
+        String plainText = text;
+        if(plainText.contains("<style")) {
+            int p = plainText.indexOf("<style"), q= plainText.indexOf("</style>");
+            plainText= plainText.substring(0, p) + plainText.substring(q+"</style>".length())
+        }
+        plainText = plainText.replaceAll("<[^>]*>", "");
+        wiki.mailsender.sendHtmlMessage(from, to, null, null, subject, text, plainText, []);
     }
 
 }

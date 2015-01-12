@@ -619,7 +619,7 @@
             #set($as = $xwiki.activitystream)##
             #if($request.toMember)
               #set($mailToList = $xwiki.arrayList)
-              #set($mailTo = "")
+              #set($mailTo = "")#set($mailToUsers="")
               #if($request.selectedMembersList.trim().length() > 0)
                   #foreach($member in $request.selectedMembersList.split(","))
                       #set($profile = $sm.getSpaceUserProfile($spaceName, $member))
@@ -631,12 +631,14 @@
                           #if(!$mailToList.contains($groupMemberName))
                               #set($ok = $mailToList.add($groupMemberName))
                               #set($mailTo = $mailTo + $groupMemberName + ",")
+                              #set($mailToUsers=$mailToUsers+$member+",")
                           #end
                       #end
 
                   #end
               #end
               $as.setTempAttribute("mailTo", "${mailTo}")##
+              $as.setTempAttribute("mailToUsers","${mailToUsers}")
             #end
             #if($request.toRole)
               $as.setTempAttribute("recipientRole", "${request.selectedRolesList}")##

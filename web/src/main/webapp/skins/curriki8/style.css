@@ -4688,11 +4688,37 @@ a.button:hover, a.button:visited, button.button-orange:hover, input.button-orang
 	border: 1px solid #B70009;
 	color: #FFF;
 }
-.button-blue, input.button-blue, button.button-blue{
-	background-color:#5085B9;
-	border: 1px solid #0700BC;
-	color:#FFFFFF;
+.button-blue:hover, .button-blue:visited, .button-blue:active, .button-blue {
+    cursor:pointer;
+    display:inline-block;
+    font-family:Helvetica,sans-serif;
 }
+
+.button-blue {
+    background-color: #006699 !important;
+    border: 1px solid #0700BC !important;
+    color: white !important;
+    font-size:11px !important;
+    font-weight: bold;
+    text-decoration:none;
+    padding:4px 10px 3px !important;
+    width:15em !important;
+    text-align:center !important;
+}
+
+.button-blue:hover {
+    background-color: #0d4c9c !important;
+    border: 1px solid #00ccff !important;
+    color: #fff !important;
+    font-size:11px !important;
+    font-weight: bold;
+    text-decoration:none;
+    padding:4px 10px 3px !important;
+    width:15em !important;
+    text-align:center !important;
+}
+
+
 
 /* Temp style */
 .cd-article .righttext a.button, input.button { padding: 6px; display: inline; }

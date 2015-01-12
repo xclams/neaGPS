@@ -29,8 +29,12 @@ public class Validation {
     }
 
     public boolean isValidUsername(String account, boolean echoErrors) {
-        if (account.length()>=3 && account.replaceAll("[a-zA-Z0-9]","").equals("")) {
-            if (xwiki.exists("XWiki.${account}") || "superadmin".equals("${account}")) {
+        String rest = account.replaceAll("[a-zA-Z0-9]","");
+        if (account.length()>=3 && rest.equals("")) {
+            String hql = "lower(doc.name)='${account.toLowerCase()}' and doc.web='XWiki'";
+            List similarDocnames = xwiki.searchDocuments(hql);
+            System.out.println("query \"${hql}\" SimilarDocnames: " + similarDocnames);
+            if (!similarDocnames.isEmpty()) {
                 if(echoErrors && warningFields!=null) {
                     addError("join.error.login_not_unique");
                     addWarning("username");
@@ -67,7 +71,7 @@ public class Validation {
 
 
         // Check to see if the email address is already used
-        def query = ",BaseObject as obj, StringProperty as prop where doc.fullName=obj.name and doc.space='XWiki' and obj.className='XWiki.XWikiUsers' and obj.id=prop.id.id and prop.id.name='email' and prop.value='"+email+"'";
+        def query = ",BaseObject as obj, StringProperty as prop where doc.fullName=obj.name and doc.space='XWiki' and obj.className='XWiki.XWikiUsers' and obj.id=prop.id.id and prop.id.name='email' and lower(prop.value)='"+email.toLowerCase()+"'";
         List docs = xwiki.searchDocuments(query);
         if (!docs.isEmpty()) {
             foundAccountName = docs.get(0);
@@ -124,7 +128,7 @@ public class Validation {
         addWarning("memberType");
         return false;
     }
-    
+
     public boolean isValidAgree(String ag, boolean echoErrors) {
         if(ag!=null &&
                 (ag.equalsIgnoreCase("on") || ag.equalsIgnoreCase("true") || ag.equalsIgnoreCase("checked"))) {
@@ -170,7 +174,7 @@ public class Validation {
         }
         return true;
     }
-    
+
     public boolean isValidNEAOccupation(String ps, boolean echoErrors) {
         if(ps!=null && ps.length()>4 && !ps.contains(" ")) {
             addOk("neaoccupation");
@@ -181,7 +185,7 @@ public class Validation {
         addWarning("neaoccupation");
         return false;
     }
-    
+
     public boolean isValidNEAAffiliate(String ps, boolean echoErrors) {
         if(ps!=null && ps.trim()!="" && ps!="-") {
             addOk("neaaffiliate");
@@ -192,7 +196,7 @@ public class Validation {
         addWarning("neaaffiliate");
         return false;
     }
-    
+
     public boolean isValidNEAProfession(String ps, boolean echoErrors) {
         if(ps!=null && ps.length()>2 && !ps.contains(" ")) {
             addOk("neaprofession");
@@ -203,7 +207,7 @@ public class Validation {
         addWarning("neaprofession");
         return false;
     }
-    
+
     private void addWarning(String warning) {
         if(warningFields!=null) warningFields.add(warning);
     }

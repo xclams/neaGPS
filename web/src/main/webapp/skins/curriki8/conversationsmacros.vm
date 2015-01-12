@@ -311,6 +311,8 @@
     #verbatim_start()
     #set($newTopicName = $space + "." + $xwiki.getUniquePageName($space, 'Topic'))
     #set($newTopicDoc = $xwiki.getDocument($newTopicName))
+    #verbatim_start()<!-- $newTopicDoc.setTitle("Temporary topic by $context.user")
+    $newTopicDoc.saveWithProgrammingRights("staging") staged draft document on $newTopicDoc.fullName -->#verbatim_end()
     #if($newTopicDoc.hasAccessLevel("edit"))
         <!-- $newTopicDoc.setTitle("Temporary topic by $context.user")
     $newTopicDoc.saveWithProgrammingRights("staging") staged draft document on $newTopicDoc.fullName -->

@@ -209,6 +209,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
 
         Map<String, String> paramsMap = new HashMap<String, String>();
         paramsMap.put("mailTo", (String) getTempAttribute("mailTo"));
+        paramsMap.put("mailToUsers", (String) getTempAttribute("mailToUsers"));
         paramsMap.put("recipientRole", (String) getTempAttribute("recipientRole"));
         paramsMap.put("mailToGroup", (String) getTempAttribute("mailToGroup"));
         Gson gson = new Gson();
