@@ -366,6 +366,12 @@
   #set($newAnswerName = $doc.space + "." + $xwiki.getUniquePageName($doc.space, "${doc.name}Answer"))
   #set($newAnswerDoc = $xwiki.getDocument($newAnswerName))
   #if($newAnswerDoc.hasAccessLevel("edit"))
+      $newAnswerDoc.setTitle("Temporary answer by $context.user")
+      $newAnswerDoc.saveWithProgrammingRights("staging")
+      #set($hql="select doc.fullName from XWikiDocument as doc where doc.web = ? and doc.title LIKE 'Temporary answer by%' and doc.creationDate < ? ")
+      #set($cal = $datetool.systemCalendar)$cal.add(7,-3)
+      #set($olderTempDocs=$xwiki.search($hql,5000, 0, [$space,$datetool.toDate($cal)]))
+      #foreach($x in $olderTempDocs)$xwiki.getDocument($x).deleteWithProgrammingRights()#end
   <div class="addconversation-container addanswer-container">
     <div class="addconversation-container-button addanswer-container-button">
      <a href="$doc.getURL('view', 'viewer=conversations&amp;action=addconversation')" class="addconversation-activator">$msg.get('conversation.add.activator')</a>
