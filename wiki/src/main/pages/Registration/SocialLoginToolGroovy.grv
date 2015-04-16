@@ -44,7 +44,7 @@ public class SocialLoginToolGroovy {
     Object validation;
     def targets;
     def profile = null;
-    boolean hasAuthenticated = false;
+    boolean hasAuthenticated = false, autoCreateUser=false;
     private SocialAuthManager sAManager = null;
 
 
@@ -162,7 +162,7 @@ public class SocialLoginToolGroovy {
             //if(request.framed=="true")
             maybeXpage="&xpage=popup";
             String targetUrl = "http://" + xwiki.getXWiki().Param('curriki.system.hostname', 'broken-url') +"/xwiki/bin" +
-                    request.getPathInfo()  + '?callback=1' +maybeXpage; //+ maybeRedirect ;
+                    request.getPathInfo()  + '?callbackCurriki=1' + maybeXpage //+ maybeRedirect ;
 
             sAManager.setPermission(request.provider, Permission.AUTHENTICATE_ONLY);
             String url = sAManager.getAuthenticationUrl(request.provider, targetUrl);
@@ -590,7 +590,7 @@ public class SocialLoginToolGroovy {
         else if(!request.callback && request.provider) {
             return "bounceToProvider";
         }
-        else if (request.callback){
+        else if (request.callbackCurriki){
             return "processAuthReturn";
         } else if(request.xaction && request.xaction=='creationForm')
             return "creationForm";
