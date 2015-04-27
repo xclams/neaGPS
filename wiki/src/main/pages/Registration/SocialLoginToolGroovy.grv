@@ -166,6 +166,8 @@ public class SocialLoginToolGroovy {
 
             sAManager.setPermission(request.provider, Permission.AUTHENTICATE_ONLY);
             String url = sAManager.getAuthenticationUrl(request.provider, targetUrl);
+            int p = url.indexOf('?'), q = url.lastIndexOf('?');
+            if(p>-1 && q>p) url = url.substring(0,p) + url.substring(q);
             url = url + (url.indexOf('?')>=0 ? '&' : '?') + 'display=popup';
             System.out.println("Redirecting to " + url);
 
